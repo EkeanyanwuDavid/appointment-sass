@@ -1,0 +1,39 @@
+import mongoose, { Document, Schema } from "mongoose";
+
+export interface IBusiness extends Document {
+  ownerId: mongoose.Types.ObjectId;
+  name: string;
+  slug: string;
+  category: string;
+  description: string;
+  phone: string;
+  address: string;
+  city: string;
+  isActive: boolean;
+  createdAt: Date;
+}
+
+const BusinessSchema = new Schema<IBusiness>(
+  {
+    ownerId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    name: { type: String, required: true, trim: true },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    category: { type: String, required: true },
+    description: { type: String, default: "" },
+    phone: { type: String, required: true },
+    address: { type: String, required: true },
+    city: { type: String, required: true },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true },
+);
+
+const Business = mongoose.model<IBusiness>("Business", BusinessSchema);
+
+export default Business;
