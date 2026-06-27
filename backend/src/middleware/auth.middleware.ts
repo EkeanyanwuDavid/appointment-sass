@@ -1,10 +1,10 @@
-import { Response, NextFunction } from "express";
+import { Response, NextFunction, RequestHandler } from "express";
 import jwt from "jsonwebtoken";
-import { AuthRequest, JwtPayload } from "../types/index";
+import { JwtPayload } from "../types/index";
 import User from "../models/User";
 import { env } from "../config/env";
 
-const protect = async (req: AuthRequest, res: Response, next: NextFunction) => {
+const protect: RequestHandler = async (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
 

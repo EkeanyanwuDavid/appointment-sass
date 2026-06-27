@@ -4,6 +4,8 @@ import helmet from "helmet";
 import { env } from "./src/config/env";
 import connectDB from "./src/config/db";
 import chalk from "chalk";
+import passport from "./src/config/passport";
+import session from "express-session";
 import errorHandler from "./src/middleware/error.middleware";
 import authRoutes from "./src/routes/auth.routes";
 import businessRoutes from "./src/routes/business.route";
@@ -22,6 +24,14 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: env.sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
+app.use(passport.initialize());
 
 //routes
 app.use("/api/auth", authRoutes);
