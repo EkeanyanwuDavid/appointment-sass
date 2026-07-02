@@ -17,13 +17,14 @@ requiredEnvVars.forEach((envVar) => {
 });
 
 export const env = {
-  port: process.env.PORT as string,
+  port: process.env.PORT || "5000",
   mongodbUri: process.env.MONGODB_URI as string,
-  jwtSecret: process.env.JWT_SECRET as string,
-  jwtExpiresIn: process.env.JWT_EXPIRES_IN as string,
-  nodeEnv: process.env.NODE_ENV as string,
-  googleClientId: process.env.GOOGLE_CLIENT_ID as string,
-  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-  sessionSecret: process.env.SESSION_SECRET as string,
-  clientUrl: process.env.CLIENT_URL as string,
+  jwtSecret: process.env.JWT_SECRET || "dev-jwt-secret",
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
+  nodeEnv: process.env.NODE_ENV || "development",
+  googleClientId: process.env.GOOGLE_CLIENT_ID || "",
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+  sessionSecret: process.env.SESSION_SECRET || "dev-session-secret",
+  clientUrl: process.env.CLIENT_URL || "http://localhost:5173",
+  backendUrl: process.env.BACKEND_URL || "http://localhost:5000",
 };

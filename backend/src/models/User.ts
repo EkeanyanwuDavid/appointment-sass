@@ -23,8 +23,8 @@ const UserSchema = new Schema<IUser>(
       lowercase: true,
       trim: true,
     },
-    password: { type: String, required: true, minlength: 6 },
-    phone: { type: String, required: true },
+    password: { type: String, default: "" },
+    phone: { type: String, default: "" },
     role: {
       type: String,
       enum: ["customer", "business_owner", "staff"],

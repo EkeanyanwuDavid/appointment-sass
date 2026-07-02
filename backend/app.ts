@@ -43,7 +43,7 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/leaves", leaveRoutes);
 
 app.get("/", (req, res) => {
-  res.json({ message: "Booking SaaS API is running" });
+  res.json({ message: "Bkly API is running" });
 });
 
 app.use(errorHandler);
