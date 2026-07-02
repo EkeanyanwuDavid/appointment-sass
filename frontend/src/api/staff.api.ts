@@ -1,0 +1,7 @@
+import api from './axios'
+
+export const getStaff = () => api.get('/staff')
+export const addStaff = (data: object) => api.post('/staff', data)
+export const removeStaff = (id: string) => api.delete(`/staff/${id}`)
+export const getStaffBookings = (staffId: string) =>
+  api.get(`/bookings/staff/${staffId}`)
