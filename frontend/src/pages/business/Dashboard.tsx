@@ -27,12 +27,12 @@ type SidebarProps = {
   handleLogout: () => void
 }
 
-const DefaultDashboardContent = () => (
+const DefaultDashboardContent = ({ user }: { user: User | null }) => (
   <div className="space-y-6">
     <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
       <p className="text-sm font-medium text-blue-600">Business overview</p>
       <h2 className="mt-1 text-2xl font-semibold text-zinc-900">
-        Welcome back
+        Welcome back{user?.name ? `, ${user.name}` : ''}
       </h2>
       <p className="mt-2 text-sm text-zinc-600">
         Manage your services, staff, and appointments from one place.
@@ -177,7 +177,7 @@ const BusinessLayout = ({ children }: { children?: React.ReactNode }) => {
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto p-6">
-          {children ?? <DefaultDashboardContent />}
+          {children ?? <DefaultDashboardContent user={user} />}
         </main>
       </div>
     </div>

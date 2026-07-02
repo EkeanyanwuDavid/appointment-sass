@@ -15,7 +15,7 @@ const Register = () => {
     email: '',
     password: '',
     phone: '',
-    role: 'customer',
+    role: '',
   })
   const [showPassword, setShowPassword] = useState(false)
 
@@ -27,6 +27,11 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!form.role) {
+      toast.error('Please select your role to create an account.')
+      return
+    }
 
     const result = await dispatch(registerUser(form))
 
@@ -141,13 +146,18 @@ const Register = () => {
                 name="role"
                 value={form.role}
                 onChange={handleChange}
+                required
                 className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
               >
+                <option value="">Select your role</option>
                 <option value="customer">
                   Customer — I want to book appointments
                 </option>
                 <option value="business_owner">
                   Business owner — I want to accept bookings
+                </option>
+                <option value="staff">
+                  Staff member — added by a business owner
                 </option>
               </select>
             </div>
@@ -175,12 +185,23 @@ const Register = () => {
           </div>
 
           <button
-            onClick={() =>
-              (window.location.href = `${
-                import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-              }/auth/google`)
-            }
-            className="w-full flex items-center justify-center gap-3 border border-zinc-200 rounded-lg px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors"
+            onClick={() => {
+              if (!form.role) {
+                toast.error(
+                  'Please select your role before continuing with Google.'
+                )
+                return
+              }
+
+              const role = form.role
+              const url = new URL(
+                `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/auth/google`
+              )
+              url.searchParams.set('role', role)
+              window.location.href = url.toString()
+            }}
+            disabled={!form.role}
+            className="w-full flex items-center justify-center gap-3 border border-zinc-200 rounded-lg px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors disabled:cursor-not-allowed disabled:opacity-60"
           >
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path

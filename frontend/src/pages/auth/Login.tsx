@@ -15,6 +15,9 @@ const Login = () => {
     password: '',
   })
   const [showPassword, setShowPassword] = useState(false)
+  const [googleRole, setGoogleRole] = useState<
+    'customer' | 'business_owner' | 'staff' | ''
+  >('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -117,13 +120,47 @@ const Login = () => {
             <div className="flex-1 h-px bg-zinc-200" />
           </div>
 
+          <div className="mb-3">
+            <label className="mb-1.5 block text-sm font-medium text-zinc-900">
+              Continue as
+            </label>
+            <select
+              value={googleRole}
+              onChange={(e) =>
+                setGoogleRole(
+                  e.target.value as 'customer' | 'business_owner' | 'staff' | ''
+                )
+              }
+              className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm text-zinc-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600"
+              required
+            >
+              <option value="">Select your role</option>
+              <option value="customer">Customer</option>
+              <option value="business_owner">Business owner</option>
+              <option value="staff">Staff member</option>
+            </select>
+            <p className="mt-2 text-xs text-zinc-500">
+              Choose your role before continuing with Google.
+            </p>
+          </div>
+
           <button
-            onClick={() =>
-              (window.location.href = `${
-                import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-              }/auth/google`)
-            }
-            className="w-full flex items-center justify-center gap-3 border border-zinc-200 rounded-lg px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors mb-4"
+            onClick={() => {
+              if (!googleRole) {
+                toast.error(
+                  'Please select your role before continuing with Google.'
+                )
+                return
+              }
+
+              const url = new URL(
+                `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/auth/google`
+              )
+              url.searchParams.set('role', googleRole)
+              window.location.href = url.toString()
+            }}
+            disabled={!googleRole}
+            className="w-full flex items-center justify-center gap-3 border border-zinc-200 rounded-lg px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors mb-4 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path

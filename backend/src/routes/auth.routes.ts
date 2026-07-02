@@ -12,15 +12,24 @@ router.post("/register", register);
 router.post("/login", login);
 router.get("/me", protect as RequestHandler, getMe as RequestHandler);
 
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] }),
-);
+router.get("/google", (req, res, next) => {
+  const role = (req.query.role as string | undefined) || "customer";
+
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    state: role,
+  })(req, res, next);
+});
 
 router.get("/google/callback", (req, res, next) => {
+  const state =
+    (req.query.state as string | undefined) ||
+    (req.query.role as string | undefined) ||
+    "customer";
+
   passport.authenticate(
     "google",
-    { session: false, failWithError: true },
+    { session: false, failWithError: true, state },
     (err: unknown, user: IUser | false | null, info: unknown) => {
       if (err) {
         console.error("Google OAuth error:", err);

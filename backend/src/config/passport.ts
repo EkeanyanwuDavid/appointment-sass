@@ -1,7 +1,14 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Request } from "express";
 import User from "../models/User";
 import { env } from "./env";
+
+const getGoogleRole = (role?: string) => {
+  if (role === "business_owner") return "business_owner";
+  if (role === "staff") return "staff";
+  return "customer";
+};
 
 if (env.googleClientId && env.googleClientSecret) {
   passport.use(
@@ -10,12 +17,26 @@ if (env.googleClientId && env.googleClientSecret) {
         clientID: env.googleClientId,
         clientSecret: env.googleClientSecret,
         callbackURL: `${env.backendUrl}/api/auth/google/callback`,
+        passReqToCallback: true,
       },
-      async (accessToken, refreshToken, profile, done) => {
+      async (
+        req: Request,
+        accessToken: string,
+        refreshToken: string,
+        profile: any,
+        done: any,
+      ) => {
         try {
+          const selectedRole = getGoogleRole(
+            (req.query.state as string | undefined) ||
+              (req.query.role as string | undefined),
+          );
+
           let user = await User.findOne({ googleId: profile.id });
 
           if (user) {
+            user.role = selectedRole;
+            await user.save();
             return done(null, user);
           }
 
@@ -24,6 +45,7 @@ if (env.googleClientId && env.googleClientSecret) {
           if (user) {
             user.googleId = profile.id;
             user.avatar = profile.photos?.[0].value || "";
+            user.role = selectedRole;
             await user.save();
             return done(null, user);
           }
@@ -35,7 +57,7 @@ if (env.googleClientId && env.googleClientSecret) {
             avatar: profile.photos?.[0].value || "",
             password: Math.random().toString(36).slice(-16),
             phone: "",
-            role: "business_owner",
+            role: selectedRole,
           });
 
           return done(null, user);
