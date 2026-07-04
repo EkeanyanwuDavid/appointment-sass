@@ -214,6 +214,19 @@ const Settings = () => {
                 'Save changes'
               )}
             </button>
+            <div className="bg-white border border-red-200 rounded-xl p-5 shadow-sm">
+              <h2 className="text-sm font-medium text-red-600 mb-2">
+                Danger zone
+              </h2>
+
+              <p className="text-xs text-zinc-500 mb-4">
+                Permanently delete your workspace and all associated data.
+              </p>
+
+              <button className="bg-red-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-red-700 transition-colors">
+                Delete workspace
+              </button>
+            </div>
           </form>
         </div>
       </div>

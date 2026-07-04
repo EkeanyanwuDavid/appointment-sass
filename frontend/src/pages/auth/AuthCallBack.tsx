@@ -32,6 +32,11 @@ const AuthCallback = () => {
           const user = JSON.parse(userParam)
           dispatch(setCredentials({ user, token }))
 
+          if (user.mustChangePassword) {
+            navigate('/change-password')
+            return
+          }
+
           const role = user.role
           if (role === 'business_owner') navigate('/business/dashboard')
           else if (role === 'staff') navigate('/staff/dashboard')
@@ -42,6 +47,10 @@ const AuthCallback = () => {
         const res = await api.get('/auth/me')
         dispatch(setCredentials({ user: res.data.user, token }))
 
+        if (res.data.user.mustChangePassword) {
+          navigate('/change-password')
+          return
+        }
         const role = res.data.user.role
         if (role === 'business_owner') navigate('/business/dashboard')
         else if (role === 'staff') navigate('/staff/dashboard')

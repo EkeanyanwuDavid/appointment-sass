@@ -31,7 +31,9 @@ const Login = () => {
     if (loginUser.fulfilled.match(result)) {
       toast.success('Welcome back!')
       const user = result.payload.user
-      if (user.role === 'business_owner') navigate('/business/dashboard')
+      console.log('LOGGED IN USER:', user)
+      if (user.mustChangePassword) navigate('/change-password')
+      else if (user.role === 'business_owner') navigate('/business/dashboard')
       else if (user.role === 'staff') navigate('/staff/dashboard')
       else navigate('/')
     } else {

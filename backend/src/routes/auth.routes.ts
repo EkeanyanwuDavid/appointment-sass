@@ -1,5 +1,10 @@
 import { Router, RequestHandler } from "express";
-import { register, login, getMe } from "../controllers/auth.controller";
+import {
+  register,
+  login,
+  getMe,
+  changePassword,
+} from "../controllers/auth.controller";
 import protect from "../middleware/auth.middleware";
 import passport from "../config/passport";
 import jwt from "jsonwebtoken";
@@ -11,7 +16,11 @@ const router = Router();
 router.post("/register", register);
 router.post("/login", login);
 router.get("/me", protect as RequestHandler, getMe as RequestHandler);
-
+router.put(
+  "/change-password",
+  protect as RequestHandler,
+  changePassword as RequestHandler,
+);
 router.get("/google", (req, res, next) => {
   const role = (req.query.role as string | undefined) || "customer";
 

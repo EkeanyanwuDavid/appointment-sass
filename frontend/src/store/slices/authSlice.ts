@@ -8,6 +8,7 @@ export interface User {
   email: string
   role: 'customer' | 'business_owner' | 'staff'
   avatar: string
+  mustChangePassword?: boolean
 }
 
 export interface AuthState {

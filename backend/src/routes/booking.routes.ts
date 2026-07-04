@@ -20,12 +20,7 @@ router.get(
   authorize("business_owner"),
   getBusinessBookings,
 );
-router.get(
-  "/staff/:staffId",
-  protect,
-  authorize("staff", "business_owner"),
-  getStaffBookings,
-);
+router.get("/staff/my", protect, authorize("staff"), getStaffBookings);
 router.put(
   "/:id/status",
   protect,

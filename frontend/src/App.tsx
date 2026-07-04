@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
+import ChangePassword from './pages/auth/ChangePassword'
 import Dashboard from './pages/business/Dashboard'
 import AuthCallback from './pages/auth/AuthCallBack'
 import Home from './pages/customer/Home'
@@ -10,6 +11,8 @@ import ManageBookings from './pages/business/ManageBookings'
 import CreateBusiness from './pages/business/CreateBusiness'
 import Settings from './pages/business/Settings'
 
+import StaffDashboard from './pages/staff/StaffDashboard'
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -17,6 +20,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Login />} />
+        <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/home" element={<Home />} />
         <Route path="/business/dashboard" element={<Dashboard />} />
         <Route path="/business/services" element={<ManageServices />} />
@@ -24,6 +28,9 @@ const App = () => {
         <Route path="/business/bookings" element={<ManageBookings />} />
         <Route path="/business/setup" element={<CreateBusiness />} />
         <Route path="/business/settings" element={<Settings />} />
+
+        {/* Staff */}
+        <Route path="/staff/dashboard" element={<StaffDashboard />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
       </Routes>
     </BrowserRouter>

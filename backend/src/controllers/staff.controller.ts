@@ -23,7 +23,9 @@ export const addStaff = asyncHandler(
         phone,
         password: "password123",
         role: "staff",
+        mustChangePassword: true,
       });
+      console.log("CREATED USER", userAccount);
     }
 
     const existingStaff = await Staff.findOne({

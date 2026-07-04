@@ -60,9 +60,28 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      mustChangePassword: user.mustChangePassword,
     },
   });
 });
+
+export const changePassword = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const { newPassword } = req.body;
+
+    const user = await User.findById(req.user?._id);
+    if (!user) {
+      res.status(404).json({ success: false, message: "User not found" });
+      return;
+    }
+
+    user.password = newPassword;
+    user.mustChangePassword = false;
+    await user.save();
+
+    res.status(200).json({ success: true, message: "Password updated" });
+  },
+);
 
 export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
   const user = await User.findById(req.user?._id).select("-password");

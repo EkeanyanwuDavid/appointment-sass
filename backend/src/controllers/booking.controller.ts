@@ -114,7 +114,12 @@ export const getBusinessBookings = asyncHandler(
 
 export const getStaffBookings = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const bookings = await Booking.find({ staffId: req.params.staffId })
+    const staff = await Staff.findOne({ userId: req.user?._id });
+    if (!staff) {
+      res.status(404).json({ success: false, message: "Staff not found" });
+      return;
+    }
+    const bookings = await Booking.find({ staffId: staff._id })
       .populate("customerId", "name email phone")
       .populate("serviceId", "name price durationMins")
       .sort({ date: -1 });
