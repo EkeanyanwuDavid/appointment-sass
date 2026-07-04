@@ -7,3 +7,5 @@ export const updateService = (id: string, data: object) =>
 export const deleteService = (id: string) => api.delete(`/services/${id}`)
 export const getServicesBySlug = (slug: string) =>
   api.get(`/services/public/${slug}`)
+export const toggleService = (id: string, isActive: boolean) =>
+  api.put(`/services/${id}`, { isActive })

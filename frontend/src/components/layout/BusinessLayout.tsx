@@ -10,6 +10,7 @@ import {
   CalendarDays,
   LogOut,
   Menu,
+  Settings,
   User as UserIcon,
 } from 'lucide-react'
 
@@ -18,6 +19,7 @@ const navItems = [
   { label: 'Services', icon: Scissors, path: '/business/services' },
   { label: 'Staff', icon: Users, path: '/business/staff' },
   { label: 'Bookings', icon: CalendarDays, path: '/business/bookings' },
+  { label: 'Settings', icon: Settings, path: '/business/settings' },
 ]
 
 type SidebarProps = {
@@ -65,10 +67,17 @@ const Sidebar = ({
     <div className="border-t border-zinc-800 pt-4 mt-4">
       <div className="flex items-center gap-3 px-2 mb-3">
         {user?.avatar ? (
-          <img src={user.avatar} className="w-8 h-8 rounded-full" />
+          <img
+            src={user.avatar}
+            alt={user.name}
+            referrerPolicy="no-referrer"
+            className="w-8 h-8 rounded-full object-cover"
+          />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center">
-            <UserIcon size={16} className="text-zinc-400" />
+          <div className="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center text-sm font-semibold text-white">
+            {user?.name?.charAt(0) || (
+              <UserIcon size={16} className="text-zinc-400" />
+            )}
           </div>
         )}
         <div className="flex-1 min-w-0">

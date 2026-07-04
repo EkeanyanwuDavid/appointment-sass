@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import type { Booking } from '../../types/index'
 import BusinessLayout from '../../components/layout/BusinessLayout'
+import { useNavigate } from 'react-router-dom'
+import type { Booking } from '../../types/index'
 import { getMyBusiness } from '../../api/business.api'
 import { getBusinessBookings } from '../../api/booking.api'
 import { getStaff } from '../../api/staff.api'
@@ -18,16 +19,19 @@ import {
 
 const Dashboard = () => {
   const { user } = useAppSelector((state) => state.auth)
+  const navigate = useNavigate()
   const [bookings, setBookings] = useState<Booking[]>([])
   const [staffCount, setStaffCount] = useState(0)
   const [serviceCount, setServiceCount] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
+  const [hasBusiness, setHasBusiness] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const businessRes = await getMyBusiness()
         const biz = businessRes.data.business
+        setHasBusiness(true)
 
         const [bookingsRes, staffRes, servicesRes] = await Promise.all([
           getBusinessBookings(biz._id),
@@ -38,15 +42,17 @@ const Dashboard = () => {
         setBookings(bookingsRes.data.bookings)
         setStaffCount(staffRes.data.staff.length)
         setServiceCount(servicesRes.data.services.length)
-      } catch (err) {
-        console.error(err)
+      } catch (err: unknown) {
+        const error = err as { response?: { status?: number } }
+        if (error.response?.status === 404) {
+          setHasBusiness(false)
+        }
       } finally {
         setIsLoading(false)
       }
     }
-
     fetchData()
-  }, [])
+  }, [navigate])
 
   const getChartData = () => {
     const last7Days = Array.from({ length: 7 }, (_, i) => {
@@ -75,6 +81,30 @@ const Dashboard = () => {
 
   const pendingBookings = bookings.filter((b) => b.status === 'pending').length
   const recentBookings = bookings.slice(0, 5)
+
+  if (!hasBusiness && !isLoading) {
+    return (
+      <BusinessLayout>
+        <div className="mx-auto max-w-3xl py-16 px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl border border-zinc-200 bg-white p-10 text-center shadow-sm">
+            <h1 className="text-2xl font-semibold text-zinc-900 mb-3">
+              Create your business profile
+            </h1>
+            <p className="text-sm text-zinc-500 mb-6">
+              Your account is signed in, but you still need to set up a business
+              to manage services and bookings.
+            </p>
+            <button
+              onClick={() => navigate('/business/setup')}
+              className="inline-flex items-center justify-center rounded-full bg-blue-600 px-5 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+            >
+              Set up business
+            </button>
+          </div>
+        </div>
+      </BusinessLayout>
+    )
+  }
 
   if (isLoading) {
     return (
