@@ -11,6 +11,7 @@ import ManageBookings from './pages/business/ManageBookings'
 import CreateBusiness from './pages/business/CreateBusiness'
 import Settings from './pages/business/Settings'
 
+import BookingPage from './pages/customer/BookingPage'
 import StaffDashboard from './pages/staff/StaffDashboard'
 
 const App = () => {
@@ -31,6 +32,10 @@ const App = () => {
 
         {/* Staff */}
         <Route path="/staff/dashboard" element={<StaffDashboard />} />
+
+        {/* Customer */}
+        <Route path="/book/:slug" element={<BookingPage />} />
+
         <Route path="/auth/callback" element={<AuthCallback />} />
       </Routes>
     </BrowserRouter>

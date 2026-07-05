@@ -6,6 +6,7 @@ import {
   getStaffBookings,
   updateBookingStatus,
   cancelBooking,
+  getSlots,
 } from "../controllers/booking.controller";
 import protect from "../middleware/auth.middleware";
 import authorize from "../middleware/role.middleware";
@@ -20,6 +21,7 @@ router.get(
   authorize("business_owner"),
   getBusinessBookings,
 );
+router.get("/slots", getSlots);
 router.get("/staff/my", protect, authorize("staff"), getStaffBookings);
 router.put(
   "/:id/status",

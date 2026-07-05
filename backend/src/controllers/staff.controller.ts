@@ -83,3 +83,21 @@ export const removeStaff = asyncHandler(
     res.status(200).json({ success: true, message: "Staff removed" });
   },
 );
+
+// staff.controller.ts
+export const getStaffBySlug = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const business = await Business.findOne({ slug: req.params.slug });
+    if (!business) {
+      res.status(404).json({ success: false, message: "Business not found" });
+      return;
+    }
+
+    const staff = await Staff.find({
+      businessId: business._id,
+      isActive: true,
+    }).select("name _id");
+
+    res.status(200).json({ success: true, staff });
+  },
+);

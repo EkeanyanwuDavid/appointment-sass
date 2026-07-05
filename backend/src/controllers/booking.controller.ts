@@ -4,6 +4,7 @@ import Service from "../models/Service";
 import Staff from "../models/Staff";
 import Leave from "../models/Leave";
 import Availability from "../models/Availability";
+import { getAvailableSlots } from "../models/Slots";
 import { AuthRequest } from "../types/index";
 import asyncHandler from "../utils/asyncHandler";
 
@@ -170,5 +171,33 @@ export const cancelBooking = asyncHandler(
     await booking.save();
 
     res.status(200).json({ success: true, booking });
+  },
+);
+
+export const getSlots = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const { staffId, serviceId, date } = req.query;
+
+    if (!staffId || !serviceId || !date) {
+      res.status(400).json({
+        success: false,
+        message: "staffId, serviceId, and date are required",
+      });
+      return;
+    }
+
+    try {
+      const slots = await getAvailableSlots({
+        staffId: staffId as string,
+        serviceId: serviceId as string,
+        date: date as string,
+      });
+
+      res.status(200).json({ success: true, slots });
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Failed to get slots";
+      res.status(404).json({ success: false, message });
+    }
   },
 );

@@ -40,7 +40,7 @@ const Register = () => {
       const user = result.payload.user
       if (user.role === 'business_owner') navigate('/business/dashboard')
       else if (user.role === 'staff') navigate('/staff/dashboard')
-      else navigate('/')
+      else navigate('/home')
     } else {
       toast.error(result.payload as string)
     }
