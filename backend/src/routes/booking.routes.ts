@@ -5,6 +5,7 @@ import {
   getBusinessBookings,
   getStaffBookings,
   updateBookingStatus,
+  markBookingComplete,
   cancelBooking,
   getSlots,
 } from "../controllers/booking.controller";
@@ -31,4 +32,5 @@ router.put(
 );
 router.put("/:id/cancel", protect, authorize("customer"), cancelBooking);
 
+router.put("/:id/complete", protect, authorize("staff"), markBookingComplete);
 export default router;

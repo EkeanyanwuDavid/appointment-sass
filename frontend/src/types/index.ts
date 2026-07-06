@@ -7,6 +7,7 @@ export interface Business {
   phone: string
   address: string
   city: string
+  imageUrl: string
   isActive: boolean
   ownerId: string
   createdAt: string
@@ -37,7 +38,13 @@ export interface Booking {
   customerId: { _id: string; name: string; email: string; phone: string }
   businessId: { _id: string; name: string; slug: string }
   staffId: { _id: string; name: string }
-  serviceId: { _id: string; name: string; price: number; durationMins: number }
+  serviceId: {
+    _id: string
+    name: string
+    price: number
+    durationMins: number
+    currency: string
+  }
   date: string
   startTime: string
   endTime: string

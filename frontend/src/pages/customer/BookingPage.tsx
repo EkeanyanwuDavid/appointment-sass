@@ -14,6 +14,7 @@ import { getServicesBySlug } from '../../api/service.api'
 import { getStaffBySlug } from '../../api/staff.api'
 import { getAvailableSlots, createBooking } from '../../api/booking.api'
 import type { Business, Service, Staff } from '../../types/index'
+import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import {
   CalendarCheck,
@@ -174,7 +175,13 @@ const BookingPage = () => {
   return (
     <div className="min-h-screen bg-zinc-50 px-4 py-8">
       <div className="max-w-lg mx-auto">
-        {/* Business header */}
+        <Link
+          to="/home"
+          className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 mb-4 transition-colors"
+        >
+          <ChevronLeft size={16} />
+          Back to home
+        </Link>
         <div className="mb-6 text-center">
           <div className="flex items-center justify-center gap-2 mb-3">
             <div className="bg-blue-600 text-white p-2 rounded-xl">
@@ -210,7 +217,6 @@ const BookingPage = () => {
             </button>
           )}
 
-          {/* Step 1: Service */}
           {step === 'service' && (
             <div>
               <h2 className="text-base font-semibold text-zinc-900 mb-4">
@@ -251,7 +257,6 @@ const BookingPage = () => {
             </div>
           )}
 
-          {/* Step 2: Staff */}
           {step === 'staff' && (
             <div>
               <h2 className="text-base font-semibold text-zinc-900 mb-4">
@@ -281,8 +286,6 @@ const BookingPage = () => {
               )}
             </div>
           )}
-
-          {/* Step 3: Date & Time */}
           {step === 'datetime' && (
             <div>
               <h2 className="text-base font-semibold text-zinc-900 mb-4">
@@ -336,7 +339,6 @@ const BookingPage = () => {
             </div>
           )}
 
-          {/* Step 4: Confirm */}
           {step === 'confirm' && (
             <div>
               <h2 className="text-base font-semibold text-zinc-900 mb-4">

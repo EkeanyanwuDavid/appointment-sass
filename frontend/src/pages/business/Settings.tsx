@@ -17,6 +17,7 @@ const Settings = () => {
     address: '',
     city: '',
     category: '',
+    imageUrl: '',
   })
 
   useEffect(() => {
@@ -32,6 +33,7 @@ const Settings = () => {
           address: biz.address,
           city: biz.city,
           category: biz.category,
+          imageUrl: biz.imgUrl || '',
         })
       } catch {
         toast.error('Failed to load business info')
@@ -122,7 +124,22 @@ const Settings = () => {
                 className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
             </div>
-
+            <div>
+              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                Cover image URL
+              </label>
+              <input
+                type="url"
+                value={form.imageUrl}
+                onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
+                placeholder="https://example.com/your-photo.jpg"
+                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              />
+              <p className="text-xs text-zinc-400 mt-1">
+                Paste a link to an image (e.g. from Imgur, Google Drive, or your
+                own hosting)
+              </p>
+            </div>
             <div>
               <label className="block text-sm font-medium text-zinc-900 mb-1.5">
                 Category

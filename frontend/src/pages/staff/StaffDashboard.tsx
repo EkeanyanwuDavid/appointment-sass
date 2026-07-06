@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getStaffBookings } from '../../api/staff.api'
+import { getStaffBookings, markBookingComplete } from '../../api/staff.api'
 import { requestLeave, getMyLeaves } from '../../api/leave.api'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { logout } from '../../store/slices/authSlice'
@@ -89,6 +89,17 @@ const StaffDashboard = () => {
   const upcomingBookings = bookings.filter(
     (b) => b.status === 'pending' || b.status === 'confirmed'
   )
+
+  const handleMarkComplete = async (id: string) => {
+    try {
+      await markBookingComplete(id)
+      toast.success('Booking marked as complete')
+      fetchData()
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } }
+      toast.error(error.response?.data?.message || 'Failed to update booking')
+    }
+  }
 
   if (isLoading) {
     return (
@@ -189,11 +200,21 @@ const StaffDashboard = () => {
                       {booking.startTime} - {booking.endTime}
                     </p>
                   </div>
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full font-medium capitalize ${statusColors[booking.status]}`}
-                  >
-                    {booking.status}
-                  </span>
+                  <div className="flex flex-col items-end gap-2">
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full font-medium capitalize ${statusColors[booking.status]}`}
+                    >
+                      {booking.status}
+                    </span>
+                    {booking.status === 'confirmed' && (
+                      <button
+                        onClick={() => handleMarkComplete(booking._id)}
+                        className="text-xs text-blue-600 font-medium hover:underline"
+                      >
+                        Mark Complete
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

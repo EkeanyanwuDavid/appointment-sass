@@ -9,6 +9,7 @@ export interface IBusiness extends Document {
   phone: string;
   address: string;
   city: string;
+  imageUrl: string;
   isActive: boolean;
   createdAt: Date;
 }
@@ -29,6 +30,7 @@ const BusinessSchema = new Schema<IBusiness>(
     phone: { type: String, required: true },
     address: { type: String, required: true },
     city: { type: String, required: true },
+    imageUrl: { type: String, default: "" },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true },

@@ -4,6 +4,7 @@ import {
   createBusiness,
   getMyBusiness,
   updateBusiness,
+  getAllBusinesses,
   getBusinessBySlug,
 } from "../controllers/business.controller";
 
@@ -15,6 +16,7 @@ const router = Router();
 router.post("/", protect, authorize("business_owner"), createBusiness);
 router.get("/me", protect, authorize("business_owner"), getMyBusiness);
 router.put("/me", protect, authorize("business_owner"), updateBusiness);
+router.get("/public", getAllBusinesses);
 router.get("/:slug", getBusinessBySlug);
 
 export default router;

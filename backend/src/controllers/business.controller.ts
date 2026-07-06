@@ -68,3 +68,23 @@ export const getBusinessBySlug = asyncHandler(
     res.status(200).json({ success: true, business });
   },
 );
+
+export const getAllBusinesses = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const { search, category } = req.query;
+
+    const filter: Record<string, unknown> = { isActive: true };
+
+    if (category && category !== "all") {
+      filter.category = category;
+    }
+
+    if (search) {
+      filter.name = { $regex: search as string, $options: "i" };
+    }
+
+    const businesses = await Business.find(filter).sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, businesses });
+  },
+);

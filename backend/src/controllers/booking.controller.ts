@@ -4,7 +4,7 @@ import Service from "../models/Service";
 import Staff from "../models/Staff";
 import Leave from "../models/Leave";
 import Availability from "../models/Availability";
-import { getAvailableSlots } from "../models/Slots";
+import { getAvailableSlots } from "../utils/slots";
 import { AuthRequest } from "../types/index";
 import asyncHandler from "../utils/asyncHandler";
 
@@ -94,7 +94,7 @@ export const getMyBookings = asyncHandler(
     const bookings = await Booking.find({ customerId: req.user?._id })
       .populate("businessId", "name slug")
       .populate("staffId", "name")
-      .populate("serviceId", "name price durationMins")
+      .populate("serviceId", "name price durationMins currency")
       .sort({ date: -1 });
 
     res.status(200).json({ success: true, bookings });
@@ -106,7 +106,7 @@ export const getBusinessBookings = asyncHandler(
     const bookings = await Booking.find({ businessId: req.params.businessId })
       .populate("customerId", "name email phone")
       .populate("staffId", "name")
-      .populate("serviceId", "name price durationMins")
+      .populate("serviceId", "name price durationMins currency")
       .sort({ date: -1 });
 
     res.status(200).json({ success: true, bookings });
@@ -122,7 +122,7 @@ export const getStaffBookings = asyncHandler(
     }
     const bookings = await Booking.find({ staffId: staff._id })
       .populate("customerId", "name email phone")
-      .populate("serviceId", "name price durationMins")
+      .populate("serviceId", "name price durationMins currency")
       .sort({ date: -1 });
 
     res.status(200).json({ success: true, bookings });
@@ -199,5 +199,38 @@ export const getSlots = asyncHandler(
         err instanceof Error ? err.message : "Failed to get slots";
       res.status(404).json({ success: false, message });
     }
+  },
+);
+
+export const markBookingComplete = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const staff = await Staff.findOne({ userId: req.user?._id });
+    if (!staff) {
+      res.status(404).json({ success: false, message: "Staff not found" });
+      return;
+    }
+
+    const booking = await Booking.findOne({
+      _id: req.params.id,
+      staffId: staff._id,
+    });
+
+    if (!booking) {
+      res.status(404).json({ success: false, message: "Booking not found" });
+      return;
+    }
+
+    if (booking.status !== "confirmed") {
+      res.status(400).json({
+        success: false,
+        message: "Only confirmed bookings can be marked complete",
+      });
+      return;
+    }
+
+    booking.status = "completed";
+    await booking.save();
+
+    res.status(200).json({ success: true, booking });
   },
 );
