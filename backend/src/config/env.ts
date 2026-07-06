@@ -8,6 +8,8 @@ const requiredEnvVars = [
   "JWT_SECRET",
   "JWT_EXPIRES_IN",
   "NODE_ENV",
+  "PAYSTACK_SECRET_KEY",
+  "PAYSTACK_PUBLIC_KEY",
 ];
 
 requiredEnvVars.forEach((envVar) => {
@@ -27,4 +29,6 @@ export const env = {
   sessionSecret: process.env.SESSION_SECRET || "dev-session-secret",
   clientUrl: process.env.CLIENT_URL || "http://localhost:5173",
   backendUrl: process.env.BACKEND_URL || "http://localhost:5000",
+  paystackSecretKey: process.env.PAYSTACK_SECRET_KEY || "",
+  paystackPublicKey: process.env.PAYSTACK_PUBLIC_KEY || "",
 };

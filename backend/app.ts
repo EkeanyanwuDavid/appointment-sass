@@ -14,6 +14,7 @@ import serviceRoutes from "./src/routes/service.routes";
 import availabilityRoutes from "./src/routes/availability.routes";
 import bookingRoutes from "./src/routes/booking.routes";
 import leaveRoutes from "./src/routes/leave.routes";
+import paymentRoutes from "./src/routes/payment.routes";
 const app = express();
 
 // connect to db
@@ -41,7 +42,7 @@ app.use("/api/services", serviceRoutes);
 app.use("/api/availability", availabilityRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/leaves", leaveRoutes);
-
+app.use("/api/payments", paymentRoutes);
 app.get("/", (req, res) => {
   res.json({ message: "Bkly API is running" });
 });
