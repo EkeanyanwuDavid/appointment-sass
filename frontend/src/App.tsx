@@ -14,7 +14,8 @@ import Settings from './pages/business/Settings'
 import StaffDashboard from './pages/staff/StaffDashboard'
 
 import BookingPage from './pages/customer/BookingPage'
-import MyBookings from './pages/customer/MyBooking'
+import MyBookings from './pages/customer/MyBookings'
+import PaymentCallBack from './pages/customer/PaymentCallBack'
 const App = () => {
   return (
     <BrowserRouter>
@@ -37,6 +38,7 @@ const App = () => {
         {/* Customer */}
         <Route path="/book/:slug" element={<BookingPage />} />
         <Route path="/my-bookings" element={<MyBookings />} />
+        <Route path="/payment/callback" element={<PaymentCallBack />} />
         {/* Auth Callback */}
         <Route path="/auth/callback" element={<AuthCallback />} />
       </Routes>

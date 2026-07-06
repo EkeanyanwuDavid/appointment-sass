@@ -4,6 +4,7 @@ import type { Booking } from '../../types/index'
 import { toast } from 'sonner'
 import { Link } from 'react-router-dom'
 import { CalendarDays, Clock, X, ChevronLeft } from 'lucide-react'
+import { initializePayment } from '../../api/payment.api'
 
 const statusColors = {
   pending: 'bg-amber-50 text-amber-700',
@@ -16,7 +17,7 @@ const MyBookings = () => {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [cancellingId, setCancellingId] = useState<string | null>(null)
-
+  const [confirmCancelId, setConfirmCancelId] = useState<string | null>(null)
   const fetchBookings = async () => {
     try {
       const res = await getMyBookings()
@@ -36,7 +37,6 @@ const MyBookings = () => {
   }, [])
 
   const handleCancel = async (id: string) => {
-    if (!confirm('Cancel this booking?')) return
     setCancellingId(id)
     try {
       await cancelBooking(id)
@@ -47,6 +47,21 @@ const MyBookings = () => {
       toast.error(error.response?.data?.message || 'Failed to cancel booking')
     } finally {
       setCancellingId(null)
+      setConfirmCancelId(null)
+    }
+  }
+
+  const [payingId, setPayingId] = useState<string | null>(null)
+
+  const handlePayNow = async (id: string) => {
+    setPayingId(id)
+    try {
+      const res = await initializePayment(id)
+      window.location.assign(res.data.authorizationUrl)
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } }
+      toast.error(error.response?.data?.message || 'Failed to start payment')
+      setPayingId(null)
     }
   }
 
@@ -122,16 +137,34 @@ const MyBookings = () => {
 
                   {(booking.status === 'pending' ||
                     booking.status === 'confirmed') && (
-                    <button
-                      onClick={() => handleCancel(booking._id)}
-                      disabled={cancellingId === booking._id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-xs font-medium hover:bg-red-100 transition-colors disabled:opacity-50"
-                    >
-                      <X size={13} />
-                      {cancellingId === booking._id
-                        ? 'Cancelling...'
-                        : 'Cancel'}
-                    </button>
+                    <div className="flex flex-col gap-2 items-end">
+                      {booking.paymentStatus === 'unpaid' &&
+                        (booking.status === 'pending' ||
+                          booking.status === 'confirmed') && (
+                          <button
+                            onClick={() => handlePayNow(booking._id)}
+                            disabled={payingId === booking._id}
+                            className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                          >
+                            {payingId === booking._id
+                              ? 'Redirecting...'
+                              : 'Pay now'}
+                          </button>
+                        )}
+                      {(booking.status === 'pending' ||
+                        booking.status === 'confirmed') && (
+                        <button
+                          onClick={() => setConfirmCancelId(booking._id)}
+                          disabled={cancellingId === booking._id}
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-xs font-medium hover:bg-red-100 transition-colors disabled:opacity-50"
+                        >
+                          <X size={13} />
+                          {cancellingId === booking._id
+                            ? 'Cancelling...'
+                            : 'Cancel'}
+                        </button>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>
@@ -139,6 +172,36 @@ const MyBookings = () => {
           </div>
         )}
       </div>
+      {confirmCancelId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setConfirmCancelId(null)}
+          />
+          <div className="relative bg-white rounded-xl shadow-lg w-full max-w-sm p-6">
+            <h2 className="text-base font-semibold text-zinc-900 mb-2">
+              Cancel this booking?
+            </h2>
+            <p className="text-sm text-zinc-500 mb-6">
+              This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmCancelId(null)}
+                className="flex-1 border border-zinc-200 text-zinc-700 rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-zinc-50 transition-colors"
+              >
+                Keep booking
+              </button>
+              <button
+                onClick={() => handleCancel(confirmCancelId)}
+                className="flex-1 bg-red-500 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-red-700 transition-colors"
+              >
+                Yes, cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

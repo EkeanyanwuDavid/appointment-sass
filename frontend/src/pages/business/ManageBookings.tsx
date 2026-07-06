@@ -91,6 +91,11 @@ const ManageBookings = () => {
             }`}
           >
             Bookings
+            {bookings.filter((b) => b.status === 'pending').length > 0 && (
+              <span className="ml-2 bg-amber-100 text-amber-700 text-center text-xs px-1.5 py-0.5 rounded-full">
+                {bookings.filter((b) => b.status === 'pending').length}
+              </span>
+            )}
           </button>
           <button
             onClick={() => setActiveTab('leaves')}
