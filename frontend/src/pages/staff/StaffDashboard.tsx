@@ -199,6 +199,11 @@ const StaffDashboard = () => {
                     <p className="text-xs text-zinc-500">
                       {booking.startTime} - {booking.endTime}
                     </p>
+                    {booking.locationNotes && (
+                      <p className="text-xs text-zinc-500 italic">
+                        Note: {booking.locationNotes}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col items-end gap-2">
                     <span

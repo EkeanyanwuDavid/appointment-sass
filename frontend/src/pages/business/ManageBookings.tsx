@@ -182,6 +182,11 @@ const ManageBookings = () => {
                         <p className="text-xs font-medium text-zinc-900">
                           ₦{booking.serviceId?.price?.toLocaleString()}
                         </p>
+                        {booking.locationNotes && (
+                          <p className="text-xs text-zinc-500 italic mt-1">
+                            Note: {booking.locationNotes}
+                          </p>
+                        )}
                       </div>
 
                       {booking.status === 'pending' && (

@@ -11,6 +11,7 @@ export interface IBooking extends Document {
   status: "pending" | "confirmed" | "cancelled" | "completed";
   paymentStatus: "unpaid" | "paid" | "refunded";
   paymentRef: string;
+  locationNotes: string;
   createdAt: Date;
 }
 
@@ -38,9 +39,9 @@ const BookingSchema = new Schema<IBooking>(
       default: "unpaid",
     },
     paymentRef: { type: String, default: "" },
+    locationNotes: { type: String, default: "" },
   },
   { timestamps: true },
 );
-
 const Booking = mongoose.model<IBooking>("Booking", BookingSchema);
 export default Booking;

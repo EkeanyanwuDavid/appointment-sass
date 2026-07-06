@@ -10,7 +10,8 @@ import asyncHandler from "../utils/asyncHandler";
 
 export const createBooking = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { businessId, staffId, serviceId, date, startTime } = req.body;
+    const { businessId, staffId, serviceId, date, startTime, locationNotes } =
+      req.body;
 
     const service = await Service.findById(serviceId);
     if (!service) {
@@ -83,6 +84,7 @@ export const createBooking = asyncHandler(
       endTime,
       status: "pending",
       paymentStatus: "unpaid",
+      locationNotes: locationNotes || "",
     });
 
     res.status(201).json({ success: true, booking });

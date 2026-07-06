@@ -52,6 +52,7 @@ export interface Booking {
   paymentStatus: 'unpaid' | 'paid' | 'refunded'
   paymentRef: string
   createdAt: string
+  locationNotes: string
 }
 
 export interface Leave {

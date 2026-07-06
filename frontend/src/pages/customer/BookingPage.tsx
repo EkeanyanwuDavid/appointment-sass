@@ -24,6 +24,7 @@ import {
   ChevronLeft,
   Loader2,
   Check,
+  MapPin,
 } from 'lucide-react'
 
 const STEPS = ['service', 'staff', 'datetime', 'confirm'] as const
@@ -42,7 +43,7 @@ const BookingPage = () => {
   const [business, setBusiness] = useState<Business | null>(null)
   const [services, setServices] = useState<Service[]>([])
   const [staffList, setStaffList] = useState<Staff[]>([])
-
+  const [locationNotes, setLocationNotes] = useState('')
   const [selectedDateInput, setSelectedDateInput] = useState('')
   const [slots, setSlots] = useState<string[]>([])
   const [isLoadingSlots, setIsLoadingSlots] = useState(false)
@@ -130,6 +131,7 @@ const BookingPage = () => {
         serviceId: booking.selectedService._id,
         date: booking.selectedDate,
         startTime: booking.selectedTime,
+        locationNotes,
       })
       toast.success('Booking confirmed!')
       dispatch(clearBooking())
@@ -192,8 +194,11 @@ const BookingPage = () => {
             {business.name}
           </h1>
           <p className="text-sm text-zinc-500 mt-1">{business.description}</p>
+          <div className="flex items-center justify-center gap-1.5 text-xs text-zinc-400 mt-2">
+            <MapPin size={13} />
+            {business.address}, {business.city}
+          </div>
         </div>
-
         {/* Step indicator */}
         <div className="flex items-center gap-2 mb-6">
           {STEPS.map((s, i) => (
@@ -387,7 +392,18 @@ const BookingPage = () => {
                   </span>
                 </div>
               </div>
-
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                  Notes or address (optional)
+                </label>
+                <textarea
+                  value={locationNotes}
+                  onChange={(e) => setLocationNotes(e.target.value)}
+                  placeholder="e.g. Please come to 15 Allen Avenue, or any special instructions"
+                  rows={3}
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
+                />
+              </div>
               <button
                 onClick={handleConfirmBooking}
                 disabled={isBooking}
