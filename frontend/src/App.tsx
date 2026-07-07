@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import LandingPage from './pages/auth/LandingPage'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import ChangePassword from './pages/auth/ChangePassword'
@@ -22,7 +23,6 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Login />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/home" element={<Home />} />
         <Route path="/business/dashboard" element={<Dashboard />} />
@@ -41,6 +41,9 @@ const App = () => {
         <Route path="/payment/callback" element={<PaymentCallBack />} />
         {/* Auth Callback */}
         <Route path="/auth/callback" element={<AuthCallback />} />
+
+        {/* Landing Page */}
+        <Route path="/" element={<LandingPage />} />
       </Routes>
     </BrowserRouter>
   )
