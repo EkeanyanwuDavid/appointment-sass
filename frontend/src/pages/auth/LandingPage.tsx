@@ -336,15 +336,15 @@ const LandingPage = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
               href="tel:+2348012345678"
-              className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors w-full sm:w-auto"
+              className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-all hover:translate-y-2 w-full sm:w-auto"
             >
-              <PhoneCall className="text-red-600" size={16} />
+              <PhoneCall className="text-yellow-600" size={16} />
               +234 801 234 5678
             </a>
 
             <a
               href="mailto:support@bkly.com"
-              className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors w-full sm:w-auto"
+              className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-all hover:translate-y-2 w-full sm:w-auto"
             >
               <Mail className="text-green-700" size={16} />
               support@bkly.com
