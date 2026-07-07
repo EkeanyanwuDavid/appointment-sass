@@ -12,11 +12,11 @@ import {
   Clock,
   LogOut,
   Plus,
-  User,
   X,
   Loader2,
   MapPin,
   PhoneCall,
+  Check,
 } from 'lucide-react'
 
 const statusColors = {
@@ -181,11 +181,14 @@ const StaffDashboard = () => {
               {bookings.map((booking) => (
                 <div
                   key={booking._id}
-                  className="flex items-start justify-between gap-4 py-3 border-b border-zinc-100 last:border-0"
+                  className="flex items-start justify-between gap-4 py-3 px-2 -mx-2 rounded-lg border-b border-zinc-100 last:border-0 hover:bg-zinc-50/50 transition-colors"
                 >
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <User size={13} className="text-zinc-400" />
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-semibold text-xs shrink-0">
+                        {booking.customerId?.name?.charAt(0).toUpperCase() ||
+                          'C'}
+                      </div>
                       <p className="text-sm font-medium text-zinc-900">
                         {booking.customerId?.name || 'Customer'}
                       </p>
@@ -225,9 +228,10 @@ const StaffDashboard = () => {
                     {booking.status === 'confirmed' && (
                       <button
                         onClick={() => handleMarkComplete(booking._id)}
-                        className="text-xs text-blue-600 font-medium hover:underline"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium hover:bg-blue-100 transition-colors"
                       >
-                        Mark Complete
+                        <Check size={13} />
+                        Mark complete
                       </button>
                     )}
                   </div>
@@ -260,7 +264,7 @@ const StaffDashboard = () => {
               {leaves.map((leave) => (
                 <div
                   key={leave._id}
-                  className="flex items-center justify-between gap-4 py-3 border-b border-zinc-100 last:border-0"
+                  className="flex items-center justify-between gap-4 py-3 px-2 -mx-2 rounded-lg border-b border-zinc-100 last:border-0 hover:bg-zinc-50/50 transition-colors"
                 >
                   <div>
                     <p className="text-sm text-zinc-900 capitalize">
