@@ -119,8 +119,8 @@ const LandingPage = () => {
           No more waiting rooms
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 max-w-2xl mx-auto">
-          Book a professional who comes to{' '}
-          <span className="text-blue-600">you</span>
+          <span className="text-blue-600 animate-pulse">Book</span> a
+          professional who comes to you
         </h1>
         <p className="text-zinc-500 mt-4 max-w-lg mx-auto">
           Bkly connects you with barbers, caterers, stylists, and more booked in
@@ -241,7 +241,7 @@ const LandingPage = () => {
             return (
               <div
                 key={cat.value}
-                className={`bg-linear-to-br ${categoryStyles[cat.value].gradient} rounded-xl p-5 text-white flex flex-col items-center justify-center gap-2 aspect-square`}
+                className={`bg-linear-to-br ${categoryStyles[cat.value].gradient} rounded-xl p-5 text-white flex flex-col items-center justify-center gap-2 `}
               >
                 <Icon size={28} />
                 <p className="text-sm font-medium text-center">{cat.label}</p>
