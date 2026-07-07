@@ -15,6 +15,8 @@ import {
   User,
   X,
   Loader2,
+  MapPin,
+  PhoneCall,
 } from 'lucide-react'
 
 const statusColors = {
@@ -198,6 +200,15 @@ const StaffDashboard = () => {
                     </p>
                     <p className="text-xs text-zinc-500">
                       {booking.startTime} - {booking.endTime}
+                    </p>
+                    <p className="text-xs flex items-center gap-1.5 text-zinc-500 mt-1">
+                      <MapPin size={13} />
+                      {booking.customerAddress}
+                    </p>
+
+                    <p className="text-xs flex items-center gap-1.5 text-zinc-500">
+                      <PhoneCall size={13} />
+                      {booking.customerPhone}
                     </p>
                     {booking.locationNotes && (
                       <p className="text-xs text-zinc-500 italic">

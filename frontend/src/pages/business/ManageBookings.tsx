@@ -5,7 +5,15 @@ import { getBusinessBookings, updateBookingStatus } from '../../api/booking.api'
 import { getBusinessLeaves, updateLeaveStatus } from '../../api/leave.api'
 import type { Booking, Leave } from '../../types/index'
 import { toast } from 'sonner'
-import { CalendarDays, Clock, User, Check, X as XIcon } from 'lucide-react'
+import {
+  CalendarDays,
+  Clock,
+  User,
+  Check,
+  X as XIcon,
+  MapPin,
+  PhoneCall,
+} from 'lucide-react'
 
 const statusColors = {
   pending: 'bg-amber-50 text-amber-700',
@@ -182,8 +190,17 @@ const ManageBookings = () => {
                         <p className="text-xs font-medium text-zinc-900">
                           ₦{booking.serviceId?.price?.toLocaleString()}
                         </p>
+                        <p className="text-xs flex items-center gap-1.5 text-zinc-500 mt-1">
+                          <MapPin size={13} />
+                          {booking.customerAddress}
+                        </p>
+
+                        <p className="text-xs flex items-center gap-1.5 text-zinc-500">
+                          <PhoneCall size={13} />
+                          {booking.customerPhone}
+                        </p>
                         {booking.locationNotes && (
-                          <p className="text-xs text-zinc-500 italic mt-1">
+                          <p className="text-xs text-zinc-500 italic">
                             Note: {booking.locationNotes}
                           </p>
                         )}

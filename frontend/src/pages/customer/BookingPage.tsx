@@ -43,6 +43,8 @@ const BookingPage = () => {
   const [business, setBusiness] = useState<Business | null>(null)
   const [services, setServices] = useState<Service[]>([])
   const [staffList, setStaffList] = useState<Staff[]>([])
+  const [customerAddress, setCustomerAddress] = useState('')
+  const [customerPhone, setCustomerPhone] = useState('')
   const [locationNotes, setLocationNotes] = useState('')
   const [selectedDateInput, setSelectedDateInput] = useState('')
   const [slots, setSlots] = useState<string[]>([])
@@ -123,6 +125,16 @@ const BookingPage = () => {
       return
     }
 
+    if (!customerAddress.trim()) {
+      toast.error('Please enter your address so staff can reach you')
+      return
+    }
+
+    if (!customerPhone.trim()) {
+      toast.error('Please enter a phone number so staff can contact you')
+      return
+    }
+
     setIsBooking(true)
     try {
       await createBooking({
@@ -131,6 +143,8 @@ const BookingPage = () => {
         serviceId: booking.selectedService._id,
         date: booking.selectedDate,
         startTime: booking.selectedTime,
+        customerAddress,
+        customerPhone,
         locationNotes,
       })
       toast.success('Booking confirmed!')
@@ -394,13 +408,45 @@ const BookingPage = () => {
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-zinc-900 mb-1.5">
-                  Notes or address (optional)
+                  Your address <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  value={customerAddress}
+                  onChange={(e) => setCustomerAddress(e.target.value)}
+                  placeholder="e.g. 15 Allen Avenue, Ikeja, Lagos"
+                  rows={2}
+                  required
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
+                />
+                <p className="text-xs text-zinc-400 mt-1">
+                  Staff will come to this location
+                </p>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                  Phone number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  placeholder="08012345678"
+                  required
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                />
+                <p className="text-xs text-zinc-400 mt-1">
+                  In case staff need to reach you
+                </p>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                  Additional notes (optional)
                 </label>
                 <textarea
                   value={locationNotes}
                   onChange={(e) => setLocationNotes(e.target.value)}
-                  placeholder="e.g. Please come to 15 Allen Avenue, or any special instructions"
-                  rows={3}
+                  placeholder="e.g. Gate code, landmark, or special instructions"
+                  rows={2}
                   className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
                 />
               </div>

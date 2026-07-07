@@ -10,8 +10,16 @@ import asyncHandler from "../utils/asyncHandler";
 
 export const createBooking = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { businessId, staffId, serviceId, date, startTime, locationNotes } =
-      req.body;
+    const {
+      businessId,
+      staffId,
+      serviceId,
+      date,
+      startTime,
+      customerAddress,
+      customerPhone,
+      locationNotes,
+    } = req.body;
 
     const service = await Service.findById(serviceId);
     if (!service) {
@@ -74,6 +82,17 @@ export const createBooking = asyncHandler(
       return;
     }
 
+    if (!customerAddress) {
+      res.status(400).json({ success: false, message: "Address is required" });
+      return;
+    }
+
+    if (!customerPhone) {
+      res
+        .status(400)
+        .json({ success: false, message: "Phone number is required" });
+      return;
+    }
     const booking = await Booking.create({
       customerId: req.user?._id,
       businessId,
@@ -84,6 +103,8 @@ export const createBooking = asyncHandler(
       endTime,
       status: "pending",
       paymentStatus: "unpaid",
+      customerAddress,
+      customerPhone,
       locationNotes: locationNotes || "",
     });
 
