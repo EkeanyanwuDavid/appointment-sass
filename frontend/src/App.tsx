@@ -10,6 +10,9 @@ import ManageServices from './pages/business/ManageService'
 import ManageStaff from './pages/business/ManageStaff'
 import ManageBookings from './pages/business/ManageBookings'
 import CreateBusiness from './pages/business/CreateBusiness'
+
+import ForgotPassword from './pages/auth/ForgotPassword'
+import ResetPassword from './pages/auth/ResetPassword'
 import Settings from './pages/business/Settings'
 
 import StaffDashboard from './pages/staff/StaffDashboard'
@@ -21,9 +24,6 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/home" element={<Home />} />
         <Route path="/business/dashboard" element={<Dashboard />} />
         <Route path="/business/services" element={<ManageServices />} />
@@ -39,8 +39,14 @@ const App = () => {
         <Route path="/book/:slug" element={<BookingPage />} />
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/payment/callback" element={<PaymentCallBack />} />
-        {/* Auth Callback */}
+
+        {/* Auth  */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         {/* Landing Page */}
         <Route path="/" element={<LandingPage />} />
