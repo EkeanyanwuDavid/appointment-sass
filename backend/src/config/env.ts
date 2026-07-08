@@ -31,4 +31,9 @@ export const env = {
   backendUrl: process.env.BACKEND_URL || "http://localhost:5000",
   paystackSecretKey: process.env.PAYSTACK_SECRET_KEY || "",
   paystackPublicKey: process.env.PAYSTACK_PUBLIC_KEY || "",
+  emailHost: process.env.EMAIL_HOST || "",
+  emailPort: Number(process.env.EMAIL_PORT) || 2525,
+  emailUser: process.env.EMAIL_USER || "",
+  emailPass: process.env.EMAIL_PASS || "",
+  emailFrom: process.env.EMAIL_FROM || "noreply@bkly.com",
 };

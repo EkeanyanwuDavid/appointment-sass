@@ -4,13 +4,15 @@ import {
   login,
   getMe,
   changePassword,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/auth.controller";
 import protect from "../middleware/auth.middleware";
 import passport from "../config/passport";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
 import { IUser } from "../models/User";
-
+import sendEmail from "../utils/sendEmail";
 const router = Router();
 
 router.post("/register", register);
@@ -21,6 +23,8 @@ router.put(
   protect as RequestHandler,
   changePassword as RequestHandler,
 );
+router.post("/forgot-password", forgotPassword);
+router.put("/reset-password/:token", resetPassword);
 router.get("/google", (req, res, next) => {
   const role = (req.query.role as string | undefined) || "customer";
 
@@ -28,6 +32,15 @@ router.get("/google", (req, res, next) => {
     scope: ["profile", "email"],
     state: role,
   })(req, res, next);
+});
+
+router.get("/test-email", async (req, res) => {
+  await sendEmail({
+    to: "test@example.com",
+    subject: "Test email from Bkly",
+    html: "<h1>It works!</h1><p>This is a test email.</p>",
+  });
+  res.json({ success: true, message: "Email attempt sent, check Mailtrap" });
 });
 
 router.get("/google/callback", (req, res, next) => {

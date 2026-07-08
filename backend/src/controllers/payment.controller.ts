@@ -4,6 +4,11 @@ import Booking from "../models/Booking";
 import { AuthRequest } from "../types/index";
 import asyncHandler from "../utils/asyncHandler";
 import { env } from "../config/env";
+import sendEmail from "../utils/sendEmail";
+import {
+  bookingConfirmationTemplate,
+  newBookingNotificationTemplate,
+} from "../utils/emailTemplates";
 
 const PAYSTACK_BASE_URL = "https://api.paystack.co";
 
@@ -90,7 +95,13 @@ export const verifyPayment = asyncHandler(
       }
 
       const bookingId = data.metadata?.bookingId;
-      const booking = await Booking.findById(bookingId);
+      const booking = await Booking.findById(bookingId)
+        .populate({
+          path: "businessId",
+          select: "name ownerId",
+          populate: { path: "ownerId", select: "name email" },
+        })
+        .populate("serviceId", "name price currency");
 
       if (!booking) {
         res.status(404).json({ success: false, message: "Booking not found" });
@@ -100,6 +111,45 @@ export const verifyPayment = asyncHandler(
       booking.paymentStatus = "paid";
       booking.paymentRef = reference as string;
       await booking.save();
+
+      const business = booking.businessId as unknown as {
+        name: string;
+        ownerId: { name: string; email: string };
+      };
+      const service = booking.serviceId as unknown as {
+        name: string;
+        price: number;
+        currency: string;
+      };
+
+      sendEmail({
+        to: req.user!.email,
+        subject: "Your Bkly booking is confirmed",
+        html: bookingConfirmationTemplate({
+          customerName: req.user!.name,
+          businessName: business.name,
+          serviceName: service.name,
+          date: booking.date.toDateString(),
+          startTime: booking.startTime,
+          price: service.price,
+          currency: service.currency,
+        }),
+      });
+
+      // Notify the business owner
+      sendEmail({
+        to: business.ownerId.email,
+        subject: "New paid booking on Bkly",
+        html: newBookingNotificationTemplate({
+          ownerName: business.ownerId.name,
+          customerName: req.user!.name,
+          serviceName: service.name,
+          date: booking.date.toDateString(),
+          startTime: booking.startTime,
+          price: service.price,
+          currency: service.currency,
+        }),
+      });
 
       res.status(200).json({ success: true, booking });
     } catch (err: unknown) {

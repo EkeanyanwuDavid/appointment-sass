@@ -10,6 +10,8 @@ export interface IUser extends Document {
   googleId: string;
   avatar: string;
   mustChangePassword: boolean;
+  resetPasswordToken: string;
+  resetPasswordExpires: Date | null;
   createdAt: Date;
   comparePassword(password: string): Promise<boolean>;
 }
@@ -34,6 +36,8 @@ const UserSchema = new Schema<IUser>(
     googleId: { type: String, default: "" },
     avatar: { type: String, default: "" },
     mustChangePassword: { type: Boolean, default: false },
+    resetPasswordToken: { type: String, default: "", select: false },
+    resetPasswordExpires: { type: Date, default: null, select: false },
   },
   { timestamps: true },
 );

@@ -4,6 +4,7 @@ import helmet from "helmet";
 import { env } from "./src/config/env";
 import connectDB from "./src/config/db";
 import chalk from "chalk";
+import { transporter } from "./src/utils/sendEmail";
 import passport from "./src/config/passport";
 import session from "express-session";
 import errorHandler from "./src/middleware/error.middleware";
@@ -15,6 +16,7 @@ import availabilityRoutes from "./src/routes/availability.routes";
 import bookingRoutes from "./src/routes/booking.routes";
 import leaveRoutes from "./src/routes/leave.routes";
 import paymentRoutes from "./src/routes/payment.routes";
+import reviewRoutes from "./src/routes/review.routes";
 const app = express();
 
 // connect to db
@@ -43,6 +45,10 @@ app.use("/api/availability", availabilityRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/leaves", leaveRoutes);
 app.use("/api/payments", paymentRoutes);
+
+// reviews
+app.use("/api/reviews", reviewRoutes);
+
 app.get("/", (req, res) => {
   res.json({ message: "Bkly API is running" });
 });
@@ -53,4 +59,9 @@ app.listen(env.port, () => {
   console.log(chalk.cyan(`✓ Server running on port ${env.port}`));
 });
 
+transporter.verify((error) => {
+  if (error)
+    console.error(chalk.red("✗ Email transporter error:"), error.message);
+  else console.log(chalk.yellow("✓ Email transporter ready"));
+});
 export default app;

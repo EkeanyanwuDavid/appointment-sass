@@ -7,6 +7,8 @@ import Availability from "../models/Availability";
 import { getAvailableSlots } from "../utils/slots";
 import { AuthRequest } from "../types/index";
 import asyncHandler from "../utils/asyncHandler";
+import sendEmail from "../utils/sendEmail";
+import { bookingCancellationTemplate } from "../utils/emailTemplates";
 
 export const createBooking = asyncHandler(
   async (req: AuthRequest, res: Response) => {
@@ -176,7 +178,9 @@ export const cancelBooking = asyncHandler(
     const booking = await Booking.findOne({
       _id: req.params.id,
       customerId: req.user?._id,
-    });
+    })
+      .populate("businessId", "name")
+      .populate("serviceId", "name");
 
     if (!booking) {
       res.status(404).json({ success: false, message: "Booking not found" });
@@ -193,10 +197,24 @@ export const cancelBooking = asyncHandler(
     booking.status = "cancelled";
     await booking.save();
 
+    const business = booking.businessId as unknown as { name: string };
+    const service = booking.serviceId as unknown as { name: string };
+
+    sendEmail({
+      to: req.user!.email,
+      subject: "Your Bkly booking was cancelled",
+      html: bookingCancellationTemplate({
+        customerName: req.user!.name,
+        businessName: business.name,
+        serviceName: service.name,
+        date: booking.date.toDateString(),
+        startTime: booking.startTime,
+      }),
+    });
+
     res.status(200).json({ success: true, booking });
   },
 );
-
 export const getSlots = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const { staffId, serviceId, date } = req.query;
