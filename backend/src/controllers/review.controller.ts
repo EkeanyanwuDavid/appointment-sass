@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import mongoose from "mongoose";
+
 import Booking from "../models/Booking";
 import Review from "../models/Review";
 import Staff from "../models/Staff";
@@ -66,6 +68,86 @@ export const getMyReviews = asyncHandler(
   },
 );
 
+export const getBusinessReviewStats = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { businessId } = req.params;
+
+    const reviews = await Review.find({ businessId });
+
+    const totalReviews = reviews.length;
+
+    const averageRating =
+      totalReviews === 0
+        ? 0
+        : reviews.reduce((sum, review) => sum + review.rating, 0) /
+          totalReviews;
+
+    const distribution = {
+      5: reviews.filter((r) => r.rating === 5).length,
+      4: reviews.filter((r) => r.rating === 4).length,
+      3: reviews.filter((r) => r.rating === 3).length,
+      2: reviews.filter((r) => r.rating === 2).length,
+      1: reviews.filter((r) => r.rating === 1).length,
+    };
+
+    const topStaff = await Review.aggregate([
+      {
+        $match: {
+          businessId: new mongoose.Types.ObjectId(businessId as string),
+        },
+      },
+      {
+        $group: {
+          _id: "$staffId",
+          averageRating: {
+            $avg: "$rating",
+          },
+          totalReviews: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          averageRating: -1,
+        },
+      },
+      {
+        $limit: 5,
+      },
+      {
+        $lookup: {
+          from: "staffs",
+          localField: "_id",
+          foreignField: "_id",
+          as: "staff",
+        },
+      },
+      {
+        $unwind: "$staff",
+      },
+      {
+        $project: {
+          _id: 0,
+          name: "$staff.name",
+          averageRating: {
+            $round: ["$averageRating", 1],
+          },
+          totalReviews: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      averageRating: Math.round(averageRating * 10) / 10,
+      totalReviews,
+      distribution,
+      topStaff,
+    });
+  },
+);
+
 export const getBusinessReviews = asyncHandler(
   async (req: Request, res: Response) => {
     const { businessId } = req.params;
@@ -86,6 +168,23 @@ export const getBusinessReviews = asyncHandler(
       reviews,
       averageRating: Math.round(averageRating * 10) / 10,
       totalReviews,
+    });
+  },
+);
+
+export const getRecentBusinessReviews = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { businessId } = req.params;
+
+    const reviews = await Review.find({ businessId })
+      .populate("customerId", "name")
+      .populate("serviceId", "name")
+      .sort({ createdAt: -1 })
+      .limit(2);
+
+    res.status(200).json({
+      success: true,
+      reviews,
     });
   },
 );
@@ -134,13 +233,11 @@ export const getStaffReviews = asyncHandler(
     }
 
     if (req.user?.role === "staff") {
-      // Staff can only view their own reviews
       if (staff.userId.toString() !== req.user._id.toString()) {
         res.status(403).json({ success: false, message: "Not authorized" });
         return;
       }
     } else if (req.user?.role === "business_owner") {
-      // Business owners can only view reviews for their own staff
       const business = staff.businessId as unknown as {
         ownerId: { toString(): string };
       };

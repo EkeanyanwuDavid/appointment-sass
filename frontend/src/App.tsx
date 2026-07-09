@@ -10,6 +10,7 @@ import ManageServices from './pages/business/ManageService'
 import ManageStaff from './pages/business/ManageStaff'
 import ManageBookings from './pages/business/ManageBookings'
 import CreateBusiness from './pages/business/CreateBusiness'
+import Ratings from './pages/business/Rating'
 
 import ForgotPassword from './pages/auth/ForgotPassword'
 import ResetPassword from './pages/auth/ResetPassword'
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/business/staff" element={<ManageStaff />} />
         <Route path="/business/bookings" element={<ManageBookings />} />
         <Route path="/business/setup" element={<CreateBusiness />} />
+        <Route path="/business/ratings" element={<Ratings />} />
         <Route path="/business/settings" element={<Settings />} />
 
         {/* Staff */}

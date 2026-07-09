@@ -11,6 +11,7 @@ import {
   LogOut,
   Menu,
   Settings,
+  Star,
   User as UserIcon,
 } from 'lucide-react'
 
@@ -19,6 +20,7 @@ const navItems = [
   { label: 'Services', icon: Scissors, path: '/business/services' },
   { label: 'Staff', icon: Users, path: '/business/staff' },
   { label: 'Bookings', icon: CalendarDays, path: '/business/bookings' },
+  { label: 'Reviews', icon: Star, path: '/business/ratings' },
   { label: 'Settings', icon: Settings, path: '/business/settings' },
 ]
 

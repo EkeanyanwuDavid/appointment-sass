@@ -3,6 +3,8 @@ import {
   createReview,
   getMyReviews,
   getBusinessReviews,
+  getRecentBusinessReviews,
+  getBusinessReviewStats,
   getStaffReviews,
   getMyStaffReviews,
 } from "../controllers/review.controller";
@@ -13,6 +15,8 @@ const router = Router();
 
 router.post("/", protect, authorize("customer"), createReview);
 router.get("/my", protect, authorize("customer"), getMyReviews);
+router.get("/business/:businessId/recent", getRecentBusinessReviews);
+router.get("/business/:businessId/stats", getBusinessReviewStats);
 router.get("/business/:businessId", getBusinessReviews);
 router.get("/staff/my", protect, authorize("staff"), getMyStaffReviews);
 router.get(

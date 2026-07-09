@@ -6,7 +6,10 @@ import { getMyBusiness } from '../../api/business.api'
 import { getBusinessBookings } from '../../api/booking.api'
 import { getStaff } from '../../api/staff.api'
 import { getServices } from '../../api/service.api'
-import { getBusinessReviews } from '../../api/review.api'
+import {
+  getBusinessReviews,
+  getRecentBusinessReviews,
+} from '../../api/review.api'
 import { useAppSelector } from '../../store/hooks'
 import { CalendarDays, Users, Scissors, TrendingUp, Star } from 'lucide-react'
 import {
@@ -37,19 +40,25 @@ const Dashboard = () => {
         const biz = businessRes.data.business
         setHasBusiness(true)
 
-        const [bookingsRes, staffRes, servicesRes, reviewsRes] =
-          await Promise.all([
-            getBusinessBookings(biz._id),
-            getStaff(),
-            getServices(),
-            getBusinessReviews(biz._id),
-          ])
+        const [
+          bookingsRes,
+          staffRes,
+          servicesRes,
+          reviewsRes,
+          recentReviewsRes,
+        ] = await Promise.all([
+          getBusinessBookings(biz._id),
+          getStaff(),
+          getServices(),
+          getBusinessReviews(biz._id),
+          getRecentBusinessReviews(biz._id),
+        ])
 
         setBookings(bookingsRes.data.bookings)
         setStaffCount(staffRes.data.staff.length)
         setServiceCount(servicesRes.data.services.length)
         setAverageRating(reviewsRes.data.averageRating)
-        setReviews(reviewsRes.data.reviews)
+        setReviews(recentReviewsRes.data.reviews)
         setTotalReviews(reviewsRes.data.totalReviews)
       } catch (err: unknown) {
         const error = err as { response?: { status?: number } }
@@ -196,7 +205,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-between mb-3">
               <p className="text-sm text-zinc-500">Rating</p>
               <div className="p-2 bg-amber-50 rounded-lg">
-                <Star size={16} className="text-amber-600 fill-amber-600" />
+                <Star size={16} className="text-amber-500 fill-amber-500" />
               </div>
             </div>
             <p className="text-2xl font-semibold text-zinc-900">
@@ -312,7 +321,7 @@ const Dashboard = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {reviews.slice(0, 5).map((review) => (
+              {reviews.map((review) => (
                 <div
                   key={review._id}
                   className="py-3 border-b border-zinc-100 last:border-0"
