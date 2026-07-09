@@ -19,7 +19,9 @@ export const initializePayment = asyncHandler(
     const booking = await Booking.findOne({
       _id: bookingId,
       customerId: req.user?._id,
-    }).populate("serviceId", "price currency");
+    })
+      .populate("serviceId", "price currency")
+      .populate("businessId", "paystackSubaccountCode");
 
     if (!booking) {
       res.status(404).json({ success: false, message: "Booking not found" });
@@ -34,7 +36,10 @@ export const initializePayment = asyncHandler(
     }
 
     const service = booking.serviceId as unknown as { price: number };
-    const amountInKobo = service.price * 100;
+    const business = booking.businessId as unknown as {
+      paystackSubaccountCode: string;
+    };
+    const amountInKobo = service.price * 100; // Paystack expects amount in kobo
 
     try {
       const response = await axios.post(
@@ -46,6 +51,9 @@ export const initializePayment = asyncHandler(
             bookingId: booking._id.toString(),
           },
           callback_url: `${env.clientUrl}/payment/callback`,
+          ...(business.paystackSubaccountCode && {
+            subaccount: business.paystackSubaccountCode,
+          }),
         },
         {
           headers: {
@@ -122,6 +130,7 @@ export const verifyPayment = asyncHandler(
         currency: string;
       };
 
+      // Fire-and-forget: don't block the payment response on email delivery
       sendEmail({
         to: req.user!.email,
         subject: "Your Bkly booking is confirmed",
@@ -136,7 +145,7 @@ export const verifyPayment = asyncHandler(
         }),
       });
 
-      // Notify the business owner
+      // Notify the business owner too
       sendEmail({
         to: business.ownerId.email,
         subject: "New paid booking on Bkly",

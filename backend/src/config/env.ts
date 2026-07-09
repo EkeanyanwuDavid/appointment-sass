@@ -32,8 +32,9 @@ export const env = {
   paystackSecretKey: process.env.PAYSTACK_SECRET_KEY || "",
   paystackPublicKey: process.env.PAYSTACK_PUBLIC_KEY || "",
   emailHost: process.env.EMAIL_HOST || "",
-  emailPort: Number(process.env.EMAIL_PORT) || 2525,
+  emailPort: Number(process.env.EMAIL_PORT) || 587,
   emailUser: process.env.EMAIL_USER || "",
   emailPass: process.env.EMAIL_PASS || "",
-  emailFrom: process.env.EMAIL_FROM || "noreply@bkly.com",
+  emailFrom: process.env.EMAIL_FROM || "Bkly noreply@bkly.com",
+  platformFeePercentage: Number(process.env.PLATFORM_FEE_PERCENTAGE) || 10,
 };

@@ -11,6 +11,11 @@ export interface Business {
   isActive: boolean
   ownerId: string
   createdAt: string
+  paystackSubaccountCode: string
+  settlementBankCode: string
+  settlementBankName: string
+  accountNumber: string
+  accountName: string
 }
 
 export interface Service {

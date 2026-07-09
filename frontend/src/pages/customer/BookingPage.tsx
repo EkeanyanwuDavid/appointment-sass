@@ -66,34 +66,12 @@ const BookingPage = () => {
         setBusiness(businessRes.data.business)
         dispatch(setSelectedBusiness(businessRes.data.business))
         setServices(servicesRes.data.services)
-
-        // Reviews are non-critical — don't block the booking flow if this fails
         getBusinessReviews(businessRes.data.business._id)
           .then((reviewsRes) => {
             setAverageRating(reviewsRes.data.averageRating)
             setTotalReviews(reviewsRes.data.totalReviews)
           })
           .catch(() => {})
-      } catch {
-        toast.error('Business not found')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    void loadBusiness()
-  }, [slug, dispatch])
-
-  useEffect(() => {
-    const loadBusiness = async () => {
-      if (!slug) return
-      try {
-        const [businessRes, servicesRes] = await Promise.all([
-          getBusinessBySlug(slug),
-          getServicesBySlug(slug),
-        ])
-        setBusiness(businessRes.data.business)
-        dispatch(setSelectedBusiness(businessRes.data.business))
-        setServices(servicesRes.data.services)
       } catch {
         toast.error('Business not found')
       } finally {
