@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react'
 import BusinessLayout from '../../components/layout/BusinessLayout'
 import { useNavigate } from 'react-router-dom'
-import type { Booking, Review } from '../../types/index'
+import type { Booking } from '../../types/index'
 import { getMyBusiness } from '../../api/business.api'
 import { getBusinessBookings } from '../../api/booking.api'
 import { getStaff } from '../../api/staff.api'
 import { getServices } from '../../api/service.api'
-import {
-  getBusinessReviews,
-  getRecentBusinessReviews,
-} from '../../api/review.api'
+import { getBusinessReviews } from '../../api/review.api'
 import { useAppSelector } from '../../store/hooks'
 import { CalendarDays, Users, Scissors, TrendingUp, Star } from 'lucide-react'
 import {
@@ -26,7 +23,6 @@ const Dashboard = () => {
   const navigate = useNavigate()
   const [bookings, setBookings] = useState<Booking[]>([])
   const [staffCount, setStaffCount] = useState(0)
-  const [reviews, setReviews] = useState<Review[]>([])
   const [serviceCount, setServiceCount] = useState(0)
   const [averageRating, setAverageRating] = useState(0)
   const [totalReviews, setTotalReviews] = useState(0)
@@ -40,25 +36,19 @@ const Dashboard = () => {
         const biz = businessRes.data.business
         setHasBusiness(true)
 
-        const [
-          bookingsRes,
-          staffRes,
-          servicesRes,
-          reviewsRes,
-          recentReviewsRes,
-        ] = await Promise.all([
-          getBusinessBookings(biz._id),
-          getStaff(),
-          getServices(),
-          getBusinessReviews(biz._id),
-          getRecentBusinessReviews(biz._id),
-        ])
+        const [bookingsRes, staffRes, servicesRes, reviewsRes] =
+          await Promise.all([
+            getBusinessBookings(biz._id),
+            getStaff(),
+            getServices(),
+            getBusinessReviews(biz._id),
+          ])
 
         setBookings(bookingsRes.data.bookings)
         setStaffCount(staffRes.data.staff.length)
         setServiceCount(servicesRes.data.services.length)
         setAverageRating(reviewsRes.data.averageRating)
-        setReviews(recentReviewsRes.data.reviews)
+
         setTotalReviews(reviewsRes.data.totalReviews)
       } catch (err: unknown) {
         const error = err as { response?: { status?: number } }
@@ -312,53 +302,27 @@ const Dashboard = () => {
         </div>
         {/* Recent reviews */}
         <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm outline-none">
-          <h2 className="text-sm font-medium text-zinc-900 mb-4">
-            Recent reviews
-          </h2>
-          {reviews.length === 0 ? (
-            <div className="flex items-center justify-center h-24 text-sm text-zinc-400">
-              No reviews yet
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm text-zinc-500">Rating</p>
+            <div className="p-2 bg-amber-50 rounded-lg">
+              <Star size={16} className="text-amber-500 fill-amber-500" />
             </div>
-          ) : (
-            <div className="space-y-4">
-              {reviews.map((review) => (
-                <div
-                  key={review._id}
-                  className="py-3 border-b border-zinc-100 last:border-0"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-sm font-medium text-zinc-900">
-                      {review.customerId?.name || 'Customer'}
-                    </p>
-                    <div className="flex items-center gap-0.5">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          size={12}
-                          className={
-                            i < review.rating
-                              ? 'fill-amber-400 text-amber-400'
-                              : 'text-zinc-200'
-                          }
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs text-zinc-400 mb-1.5">
-                    {review.serviceId?.name} •{' '}
-                    {new Date(review.createdAt).toLocaleDateString('en-NG', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                    })}
-                  </p>
-                  {review.comment && (
-                    <p className="text-sm text-zinc-600">{review.comment}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+          </div>
+
+          <p className="text-2xl font-semibold text-zinc-900">
+            {totalReviews > 0 ? averageRating : '—'}
+          </p>
+
+          <p className="text-xs text-zinc-400 mt-1">
+            {totalReviews} review{totalReviews === 1 ? '' : 's'}
+          </p>
+
+          <button
+            onClick={() => navigate('/business/ratings')}
+            className="text-xs text-blue-600 hover:text-blue-700 mt-3 font-medium"
+          >
+            View ratings →
+          </button>
         </div>
       </div>
     </BusinessLayout>

@@ -154,29 +154,43 @@ const Ratings = () => {
         {/* Top staff */}
         <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-5">
-            <Users size={17} />
-            <h2 className="text-sm font-medium">Top performing staff</h2>
+            <Users size={17} className="text-zinc-500" />
+            <h2 className="text-sm font-medium text-zinc-900">
+              Top performing staff
+            </h2>
           </div>
 
           {topStaff.length === 0 ? (
-            <p className="text-sm text-zinc-400">No staff ratings yet</p>
+            <div className="flex flex-col items-center justify-center h-28 text-zinc-400">
+              <Search size={24} className="mb-2 text-zinc-300" />
+              <p className="text-sm">No staff ratings yet</p>
+            </div>
           ) : (
             <div className="space-y-3">
               {topStaff.map((staff, index) => (
                 <div
                   key={index}
-                  className="flex justify-between items-center py-2 border-b border-zinc-100 last:border-0"
+                  className="flex items-center justify-between py-3 border-b border-zinc-100 last:border-0"
                 >
-                  <div>
-                    <p className="text-sm font-medium">{staff.name}</p>
-                    <p className="text-xs text-zinc-400">
-                      {staff.totalReviews} reviews
-                    </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-7 h-7 rounded-full bg-zinc-50 border border-zinc-200 flex items-center justify-center text-xs font-medium text-zinc-500">
+                      {index + 1}
+                    </div>
+
+                    <div>
+                      <p className="text-sm font-medium text-zinc-900">
+                        {staff.name}
+                      </p>
+
+                      <p className="text-xs text-zinc-400">
+                        {staff.totalReviews} reviews
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-1 text-sm">
+                  <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-full text-xs font-medium text-amber-700">
                     {staff.averageRating}
-                    <Star size={13} className="fill-amber-400 text-amber-400" />
+                    <Star size={12} className="fill-amber-400 text-amber-400" />
                   </div>
                 </div>
               ))}
@@ -186,9 +200,20 @@ const Ratings = () => {
 
         {/* Customer reviews */}
         <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
-          <h2 className="text-sm font-medium text-zinc-900 mb-5">
-            Customer reviews
-          </h2>
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h2 className="text-sm font-medium text-zinc-900">
+                Customer reviews
+              </h2>
+              <p className="text-xs text-zinc-400 mt-1">
+                Feedback from your customers
+              </p>
+            </div>
+
+            <span className="text-xs text-zinc-500 bg-zinc-50 border border-zinc-200 px-3 py-1 rounded-full">
+              {reviews.length} reviews
+            </span>
+          </div>
 
           {reviews.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-32 text-zinc-400">
@@ -196,16 +221,30 @@ const Ratings = () => {
               <p className="text-sm">No reviews yet</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {reviews.map((review) => (
                 <div
                   key={review._id}
-                  className="py-4 border-b border-zinc-100 last:border-0"
+                  className="border border-zinc-100 rounded-xl p-4 hover:border-zinc-200 transition-colors"
                 >
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium text-zinc-900">
-                      {review.customerId?.name || 'Customer'}
-                    </p>
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-sm font-medium">
+                        {(review.customerId?.name || 'C')
+                          .charAt(0)
+                          .toUpperCase()}
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-medium text-zinc-900">
+                          {review.customerId?.name || 'Customer'}
+                        </p>
+
+                        <p className="text-xs text-zinc-400">
+                          {review.serviceId?.name}
+                        </p>
+                      </div>
+                    </div>
 
                     <div className="flex items-center gap-0.5">
                       {Array.from({ length: 5 }).map((_, index) => (
@@ -222,20 +261,19 @@ const Ratings = () => {
                     </div>
                   </div>
 
-                  <p className="text-xs text-zinc-400 mt-1">
-                    {review.serviceId?.name} •{' '}
+                  {review.comment && (
+                    <p className="text-sm text-zinc-600 mt-4 leading-relaxed">
+                      "{review.comment}"
+                    </p>
+                  )}
+
+                  <p className="text-xs text-zinc-400 mt-3">
                     {new Date(review.createdAt).toLocaleDateString('en-NG', {
                       day: 'numeric',
                       month: 'short',
                       year: 'numeric',
                     })}
                   </p>
-
-                  {review.comment && (
-                    <p className="text-sm text-zinc-600 mt-2">
-                      {review.comment}
-                    </p>
-                  )}
                 </div>
               ))}
             </div>
