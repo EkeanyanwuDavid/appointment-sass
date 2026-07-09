@@ -40,6 +40,7 @@ const AuthCallback = () => {
           const role = user.role
           if (role === 'business_owner') navigate('/business/dashboard')
           else if (role === 'staff') navigate('/staff/dashboard')
+          else if (role === 'admin') navigate('/admin/dashboard')
           else navigate('/home')
           return
         }
@@ -54,6 +55,7 @@ const AuthCallback = () => {
         const role = res.data.user.role
         if (role === 'business_owner') navigate('/business/dashboard')
         else if (role === 'staff') navigate('/staff/dashboard')
+        else if (role === 'admin') navigate('/admin/dashboard')
         else navigate('/home')
       } catch {
         navigate('/login')

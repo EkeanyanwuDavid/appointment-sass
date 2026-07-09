@@ -21,6 +21,10 @@ import StaffDashboard from './pages/staff/StaffDashboard'
 import BookingPage from './pages/customer/BookingPage'
 import MyBookings from './pages/customer/MyBookings'
 import PaymentCallBack from './pages/customer/PaymentCallBack'
+
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminBusinesses from './pages/admin/AdminBusiness'
+import AdminUsers from './pages/admin/AdminUsers'
 const App = () => {
   return (
     <BrowserRouter>
@@ -41,6 +45,11 @@ const App = () => {
         <Route path="/book/:slug" element={<BookingPage />} />
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/payment/callback" element={<PaymentCallBack />} />
+
+        {/* Admin */}
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/businesses" element={<AdminBusinesses />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
 
         {/* Auth  */}
         <Route path="/login" element={<Login />} />

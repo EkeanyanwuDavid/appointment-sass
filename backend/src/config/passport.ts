@@ -35,8 +35,6 @@ if (env.googleClientId && env.googleClientSecret) {
           let user = await User.findOne({ googleId: profile.id });
 
           if (user) {
-            user.role = selectedRole;
-            await user.save();
             return done(null, user);
           }
 
