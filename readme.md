@@ -135,5 +135,5 @@ appointment-saas/
 
 **Ekeanyanwu David**
 
-- Portfolio: _daichisamaporfolio.netlify.app_
+- Portfolio: *https://daichisamaporfolio.netlify.app*
 - GitHub: *https://github.com/EkeanyanwuDavid/*
