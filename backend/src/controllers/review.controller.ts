@@ -57,11 +57,50 @@ export const createReview = asyncHandler(
   },
 );
 
+export const getMyReviews = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const reviews = await Review.find({ customerId: req.user?._id }).select(
+      "bookingId rating comment",
+    );
+    res.status(200).json({ success: true, reviews });
+  },
+);
+
 export const getBusinessReviews = asyncHandler(
   async (req: Request, res: Response) => {
     const { businessId } = req.params;
 
     const reviews = await Review.find({ businessId })
+      .populate("customerId", "name")
+      .populate("serviceId", "name")
+      .sort({ createdAt: -1 });
+
+    const totalReviews = reviews.length;
+    const averageRating =
+      totalReviews === 0
+        ? 0
+        : reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews;
+
+    res.status(200).json({
+      success: true,
+      reviews,
+      averageRating: Math.round(averageRating * 10) / 10,
+      totalReviews,
+    });
+  },
+);
+
+export const getMyStaffReviews = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const staff = await Staff.findOne({ userId: req.user?._id });
+    if (!staff) {
+      res
+        .status(404)
+        .json({ success: false, message: "Staff profile not found" });
+      return;
+    }
+
+    const reviews = await Review.find({ staffId: staff._id })
       .populate("customerId", "name")
       .populate("serviceId", "name")
       .sort({ createdAt: -1 });
@@ -101,6 +140,7 @@ export const getStaffReviews = asyncHandler(
         return;
       }
     } else if (req.user?.role === "business_owner") {
+      // Business owners can only view reviews for their own staff
       const business = staff.businessId as unknown as {
         ownerId: { toString(): string };
       };

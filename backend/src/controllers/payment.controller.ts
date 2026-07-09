@@ -34,7 +34,7 @@ export const initializePayment = asyncHandler(
     }
 
     const service = booking.serviceId as unknown as { price: number };
-    const amountInKobo = service.price * 100; // Paystack expects amount in kobo
+    const amountInKobo = service.price * 100;
 
     try {
       const response = await axios.post(

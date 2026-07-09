@@ -9,6 +9,7 @@ import {
   setSelectedTime,
   clearBooking,
 } from '../../store/slices/bookingSlice'
+import { getBusinessReviews } from '../../api/review.api'
 import { getBusinessBySlug } from '../../api/business.api'
 import { getServicesBySlug } from '../../api/service.api'
 import { getStaffBySlug } from '../../api/staff.api'
@@ -25,6 +26,7 @@ import {
   Loader2,
   Check,
   MapPin,
+  Star,
 } from 'lucide-react'
 
 const STEPS = ['service', 'staff', 'datetime', 'confirm'] as const
@@ -43,12 +45,43 @@ const BookingPage = () => {
   const [business, setBusiness] = useState<Business | null>(null)
   const [services, setServices] = useState<Service[]>([])
   const [staffList, setStaffList] = useState<Staff[]>([])
+
+  const [averageRating, setAverageRating] = useState(0)
+  const [totalReviews, setTotalReviews] = useState(0)
   const [customerAddress, setCustomerAddress] = useState('')
   const [customerPhone, setCustomerPhone] = useState('')
   const [locationNotes, setLocationNotes] = useState('')
   const [selectedDateInput, setSelectedDateInput] = useState('')
   const [slots, setSlots] = useState<string[]>([])
   const [isLoadingSlots, setIsLoadingSlots] = useState(false)
+
+  useEffect(() => {
+    const loadBusiness = async () => {
+      if (!slug) return
+      try {
+        const [businessRes, servicesRes] = await Promise.all([
+          getBusinessBySlug(slug),
+          getServicesBySlug(slug),
+        ])
+        setBusiness(businessRes.data.business)
+        dispatch(setSelectedBusiness(businessRes.data.business))
+        setServices(servicesRes.data.services)
+
+        // Reviews are non-critical — don't block the booking flow if this fails
+        getBusinessReviews(businessRes.data.business._id)
+          .then((reviewsRes) => {
+            setAverageRating(reviewsRes.data.averageRating)
+            setTotalReviews(reviewsRes.data.totalReviews)
+          })
+          .catch(() => {})
+      } catch {
+        toast.error('Business not found')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    void loadBusiness()
+  }, [slug, dispatch])
 
   useEffect(() => {
     const loadBusiness = async () => {
@@ -208,6 +241,28 @@ const BookingPage = () => {
             {business.name}
           </h1>
           <p className="text-sm text-zinc-500 mt-1">{business.description}</p>
+
+          {totalReviews > 0 && (
+            <div className="flex items-center justify-center gap-1.5 text-xs mt-2">
+              <div className="flex items-center gap-0.5">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    key={i}
+                    size={13}
+                    className={
+                      i < Math.round(averageRating)
+                        ? 'fill-amber-400 text-amber-400'
+                        : 'text-zinc-200'
+                    }
+                  />
+                ))}
+              </div>
+              <span className="font-medium text-zinc-700">{averageRating}</span>
+              <span className="text-zinc-400">
+                ({totalReviews} review{totalReviews === 1 ? '' : 's'})
+              </span>
+            </div>
+          )}
           <div className="flex items-center justify-center gap-1.5 text-xs text-zinc-400 mt-2">
             <MapPin size={13} />
             {business.address}, {business.city}

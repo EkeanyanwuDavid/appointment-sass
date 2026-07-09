@@ -74,3 +74,15 @@ export interface Availability {
   endTime: string
   isOff: boolean
 }
+
+export interface Review {
+  _id: string
+  bookingId: string
+  customerId: { _id: string; name: string }
+  businessId: string
+  staffId: string
+  serviceId: { _id: string; name: string }
+  rating: number
+  comment: string
+  createdAt: string
+}

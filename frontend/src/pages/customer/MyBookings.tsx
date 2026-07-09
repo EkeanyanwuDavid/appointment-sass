@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { getMyBookings, cancelBooking } from '../../api/booking.api'
-import type { Booking } from '../../types/index'
+import { getMyReviews, createReview } from '../../api/review.api'
+import type { Booking, Review } from '../../types/index'
 import { toast } from 'sonner'
 import { Link } from 'react-router-dom'
-import { CalendarDays, Clock, X, ChevronLeft } from 'lucide-react'
+import { CalendarDays, Clock, X, ChevronLeft, Star } from 'lucide-react'
 import { initializePayment } from '../../api/payment.api'
 
 const statusColors = {
@@ -15,13 +16,29 @@ const statusColors = {
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState<Booking[]>([])
+  const [reviewsByBooking, setReviewsByBooking] = useState<
+    Record<string, Review>
+  >({})
   const [isLoading, setIsLoading] = useState(true)
   const [cancellingId, setCancellingId] = useState<string | null>(null)
   const [confirmCancelId, setConfirmCancelId] = useState<string | null>(null)
+  const [reviewBookingId, setReviewBookingId] = useState<string | null>(null)
+  const [reviewRating, setReviewRating] = useState(0)
+  const [reviewComment, setReviewComment] = useState('')
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false)
+
   const fetchBookings = async () => {
     try {
-      const res = await getMyBookings()
-      setBookings(res.data.bookings)
+      const [bookingsRes, reviewsRes] = await Promise.all([
+        getMyBookings(),
+        getMyReviews(),
+      ])
+      setBookings(bookingsRes.data.bookings)
+      const map: Record<string, Review> = {}
+      for (const review of reviewsRes.data.reviews as Review[]) {
+        map[review.bookingId] = review
+      }
+      setReviewsByBooking(map)
     } catch {
       toast.error('Failed to load your bookings')
     } finally {
@@ -62,6 +79,37 @@ const MyBookings = () => {
       const error = err as { response?: { data?: { message?: string } } }
       toast.error(error.response?.data?.message || 'Failed to start payment')
       setPayingId(null)
+    }
+  }
+
+  const openReviewModal = (id: string) => {
+    setReviewBookingId(id)
+    setReviewRating(0)
+    setReviewComment('')
+  }
+
+  const handleSubmitReview = async () => {
+    if (!reviewBookingId) return
+    if (reviewRating === 0) {
+      toast.error('Please select a rating')
+      return
+    }
+
+    setIsSubmittingReview(true)
+    try {
+      await createReview({
+        bookingId: reviewBookingId,
+        rating: reviewRating,
+        comment: reviewComment,
+      })
+      toast.success('Thanks for your feedback!')
+      setReviewBookingId(null)
+      fetchBookings()
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } }
+      toast.error(error.response?.data?.message || 'Failed to submit review')
+    } finally {
+      setIsSubmittingReview(false)
     }
   }
 
@@ -166,6 +214,34 @@ const MyBookings = () => {
                       )}
                     </div>
                   )}
+
+                  {booking.status === 'completed' && (
+                    <div className="flex flex-col gap-1 items-end shrink-0">
+                      {reviewsByBooking[booking._id] ? (
+                        <div className="flex items-center gap-1 text-xs text-zinc-500">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star
+                              key={i}
+                              size={13}
+                              className={
+                                i < reviewsByBooking[booking._id].rating
+                                  ? 'fill-amber-400 text-amber-400'
+                                  : 'text-zinc-200'
+                              }
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => openReviewModal(booking._id)}
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 text-white rounded-lg text-xs font-medium hover:bg-zinc-800 transition-colors"
+                        >
+                          <Star size={13} />
+                          Rate this service
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -197,6 +273,70 @@ const MyBookings = () => {
                 className="flex-1 bg-red-500 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-red-700 transition-colors"
               >
                 Yes, cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {reviewBookingId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setReviewBookingId(null)}
+          />
+          <div className="relative bg-white rounded-xl shadow-lg w-full max-w-sm p-6">
+            <h2 className="text-base font-semibold text-zinc-900 mb-1">
+              Rate this service
+            </h2>
+            <p className="text-sm text-zinc-500 mb-4">
+              How was your experience?
+            </p>
+
+            <div className="flex items-center gap-1.5 mb-4">
+              {Array.from({ length: 5 }).map((_, i) => {
+                const value = i + 1
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setReviewRating(value)}
+                    className="p-0.5"
+                  >
+                    <Star
+                      size={26}
+                      className={
+                        value <= reviewRating
+                          ? 'fill-amber-400 text-amber-400'
+                          : 'text-zinc-200'
+                      }
+                    />
+                  </button>
+                )
+              })}
+            </div>
+
+            <textarea
+              value={reviewComment}
+              onChange={(e) => setReviewComment(e.target.value)}
+              placeholder="Tell us more (optional)"
+              rows={3}
+              maxLength={1000}
+              className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition resize-none mb-5"
+            />
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setReviewBookingId(null)}
+                className="flex-1 border border-zinc-200 text-zinc-700 rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-zinc-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSubmitReview}
+                disabled={isSubmittingReview}
+                className="flex-1 bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+              >
+                {isSubmittingReview ? 'Submitting...' : 'Submit review'}
               </button>
             </div>
           </div>
