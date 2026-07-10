@@ -204,7 +204,7 @@ const BookingPage = () => {
       <div className="max-w-lg mx-auto">
         <Link
           to="/home"
-          className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 mb-4 transition-colors"
+          className="inline-flex items-center gap-1.5 text-base text-zinc-500 hover:text-zinc-900 mb-4 transition-colors"
         >
           <ChevronLeft size={16} />
           Back to home
@@ -215,18 +215,26 @@ const BookingPage = () => {
               <CalendarCheck size={22} />
             </div>
           </div>
-          <h1 className="text-xl font-semibold text-zinc-900">
+          <h1
+            className="text-3xl sm:text-4xl leading-tight tracking-[-0.02em] text-zinc-900"
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 760,
+            }}
+          >
             {business.name}
           </h1>
-          <p className="text-sm text-zinc-500 mt-1">{business.description}</p>
+          <p className="text-base text-zinc-500 mt-2 leading-7 max-w-md mx-auto">
+            {business.description}
+          </p>
 
           {totalReviews > 0 && (
-            <div className="flex items-center justify-center gap-1.5 text-xs mt-2">
+            <div className="flex items-center justify-center gap-2 text-sm mt-3">
               <div className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
-                    size={13}
+                    size={14}
                     className={
                       i < Math.round(averageRating)
                         ? 'fill-amber-400 text-amber-400'
@@ -241,7 +249,7 @@ const BookingPage = () => {
               </span>
             </div>
           )}
-          <div className="flex items-center justify-center gap-1.5 text-xs text-zinc-400 mt-2">
+          <div className="flex items-center justify-center gap-2 text-sm text-zinc-500 mt-3">
             <MapPin size={13} />
             {business.address}, {business.city}
           </div>
@@ -262,7 +270,7 @@ const BookingPage = () => {
           {step !== 'service' && (
             <button
               onClick={goBack}
-              className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 mb-4 transition-colors"
+              className="flex items-center gap-1.5 text-base text-zinc-500 hover:text-zinc-900 mb-4 transition-colors"
             >
               <ChevronLeft size={16} />
               Back
@@ -271,7 +279,7 @@ const BookingPage = () => {
 
           {step === 'service' && (
             <div>
-              <h2 className="text-base font-semibold text-zinc-900 mb-4">
+              <h2 className="text-xl font-semibold text-zinc-900 mb-5">
                 Choose a service
               </h2>
               {services.length === 0 ? (
@@ -279,7 +287,7 @@ const BookingPage = () => {
                   No services available yet
                 </p>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {services.map((service) => (
                     <button
                       key={service._id}
@@ -291,15 +299,15 @@ const BookingPage = () => {
                           <Scissors size={16} className="text-amber-600" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-zinc-900">
+                          <p className="text-base font-semibold text-zinc-900">
                             {service.name}
                           </p>
-                          <p className="text-xs text-zinc-500">
+                          <p className="text-sm text-zinc-500">
                             {service.durationMins} mins
                           </p>
                         </div>
                       </div>
-                      <p className="text-sm font-medium text-zinc-900">
+                      <p className="text-lg font-semibold text-zinc-900">
                         {service.currency} {service.price.toLocaleString()}
                       </p>
                     </button>
@@ -329,7 +337,7 @@ const BookingPage = () => {
                       <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-semibold text-sm">
                         {staff.name.charAt(0).toUpperCase()}
                       </div>
-                      <p className="text-sm font-medium text-zinc-900">
+                      <p className="text-base font-semibold text-zinc-900">
                         {staff.name}
                       </p>
                     </button>
@@ -344,7 +352,7 @@ const BookingPage = () => {
                 Choose date & time
               </h2>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                <label className="block text-base font-semibold text-zinc-900 mb-1.5">
                   Date
                 </label>
                 <input
@@ -352,7 +360,7 @@ const BookingPage = () => {
                   value={selectedDateInput}
                   min={new Date().toISOString().split('T')[0]}
                   onChange={(e) => handleDateChange(e.target.value)}
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  className="w-full border border-zinc-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
               </div>
 
@@ -398,20 +406,20 @@ const BookingPage = () => {
               </h2>
               <div className="space-y-3 mb-6">
                 <div className="flex items-center justify-between py-2 border-b border-zinc-100">
-                  <span className="text-sm text-zinc-500">Service</span>
+                  <span className="text-base text-zinc-500">Service</span>
                   <span className="text-sm font-medium text-zinc-900">
                     {booking.selectedService?.name}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-zinc-100">
-                  <span className="text-sm text-zinc-500">Staff</span>
+                  <span className="text-base text-zinc-500">Staff</span>
                   <span className="text-sm font-medium text-zinc-900 flex items-center gap-1.5">
-                    <User size={13} />
+                    <User size={15} />
                     {booking.selectedStaff?.name}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-zinc-100">
-                  <span className="text-sm text-zinc-500">Date</span>
+                  <span className="text-base text-zinc-500">Date</span>
                   <span className="text-sm font-medium text-zinc-900">
                     {booking.selectedDate &&
                       new Date(booking.selectedDate).toLocaleDateString(
@@ -426,21 +434,21 @@ const BookingPage = () => {
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-zinc-100">
-                  <span className="text-sm text-zinc-500">Time</span>
+                  <span className="text-base text-zinc-500">Time</span>
                   <span className="text-sm font-medium text-zinc-900">
                     {booking.selectedTime}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-2">
                   <span className="text-sm text-zinc-500">Price</span>
-                  <span className="text-sm font-semibold text-zinc-900">
+                  <span className="text-base font-semibold text-zinc-900">
                     {booking.selectedService?.currency}{' '}
                     {booking.selectedService?.price.toLocaleString()}
                   </span>
                 </div>
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                <label className="block text-base font-medium text-zinc-900 mb-1.5">
                   Your address <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -449,14 +457,14 @@ const BookingPage = () => {
                   placeholder="e.g. 15 Allen Avenue, Ikeja, Lagos"
                   rows={2}
                   required
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
                 />
                 <p className="text-xs text-zinc-400 mt-1">
                   Staff will come to this location
                 </p>
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                <label className="block text-base font-medium text-zinc-900 mb-1.5">
                   Phone number <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -465,14 +473,14 @@ const BookingPage = () => {
                   onChange={(e) => setCustomerPhone(e.target.value)}
                   placeholder="08012345678"
                   required
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
-                <p className="text-xs text-zinc-400 mt-1">
+                <p className="text-sm text-zinc-400 mt-1">
                   In case staff need to reach you
                 </p>
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                <label className="block text-base font-medium text-zinc-900 mb-1.5">
                   Additional notes (optional)
                 </label>
                 <textarea
@@ -486,7 +494,7 @@ const BookingPage = () => {
               <button
                 onClick={handleConfirmBooking}
                 disabled={isBooking}
-                className="w-full bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-blue-600 text-white rounded-lg px-4 py-3 text-base font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isBooking ? (
                   <>

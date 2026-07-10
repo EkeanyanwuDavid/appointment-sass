@@ -123,12 +123,12 @@ const MyBookings = () => {
 
   return (
     <div className="min-h-screen bg-zinc-50 px-4 py-8">
-      <div className="max-w-2xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         <Link
           to="/home"
-          className="inline-flex items-center gap-1.5 text-sm text-zinc-500 ouline-none focus:outline-none hover:text-zinc-900 transition-colors"
+          className="inline-flex items-center gap-2 text-base text-zinc-500 ouline-none focus:outline-none hover:text-zinc-900 transition-colors"
         >
-          <ChevronLeft size={16} />
+          <ChevronLeft size={18} />
           Back to home
         </Link>
         <div>
@@ -137,20 +137,22 @@ const MyBookings = () => {
               fontFamily: "'Google Sans Flex', sans-serif",
               fontWeight: 750,
             }}
-            className=" text-2xl sm:text-4xl leading-[1.1] font-semibold tracking-[-0.01em] text-zinc-900"
+            className=" text-4xl sm:text-5xl leading-[1.1] font-semibold tracking-[-0.01em] text-zinc-900"
           >
             My bookings
           </h1>
-          <p className="text-sm text-zinc-500 mt-0.5">
+          <p className="text-lg text-zinc-500 mt-3">
             View and manage your appointments
           </p>
         </div>
 
         {bookings.length === 0 ? (
           <div className="bg-white border border-zinc-200 rounded-xl p-12 text-center shadow-sm">
-            <CalendarDays size={32} className="text-zinc-300 mx-auto mb-3" />
-            <p className="text-zinc-500 text-sm font-medium">No bookings yet</p>
-            <p className="text-zinc-400 text-xs mt-1">
+            <CalendarDays size={42} className="text-zinc-300 mx-auto mb-3" />
+            <p className="text-zinc-500 text-lg font-semibold">
+              No bookings yet
+            </p>
+            <p className="text-zinc-400 text-base mt-1">
               Your booking history will show up here
             </p>
           </div>
@@ -162,32 +164,32 @@ const MyBookings = () => {
                 className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between gap-4">
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="text-sm font-medium text-zinc-900">
+                      <p className="text-lg font-semibold text-zinc-900">
                         {booking.businessId?.name}
                       </p>
                       <span
-                        className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${statusColors[booking.status]}`}
+                        className={`text-sm px-3 py-1 rounded-full font-medium capitalize ${statusColors[booking.status]}`}
                       >
                         {booking.status}
                       </span>
                       {booking.paymentStatus === 'paid' && (
-                        <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700">
+                        <span className="text-sm px-2 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700">
                           Paid
                         </span>
                       )}
                       {booking.paymentStatus === 'refunded' && (
-                        <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-zinc-100 text-zinc-500">
+                        <span className="text-sm px-2 py-0.5 rounded-full font-medium bg-zinc-100 text-zinc-500">
                           Refunded
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-zinc-500">
+                    <p className="text-sm text-zinc-500">
                       {booking.serviceId?.name} • with {booking.staffId?.name}
                     </p>
-                    <div className="flex items-center gap-2 text-xs text-zinc-500">
-                      <CalendarDays size={13} />
+                    <div className="flex items-center gap-2 text-sm text-zinc-500">
+                      <CalendarDays size={15} />
                       {new Date(booking.date).toLocaleDateString('en-NG', {
                         weekday: 'short',
                         day: 'numeric',
@@ -195,11 +197,11 @@ const MyBookings = () => {
                         year: 'numeric',
                       })}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-zinc-500">
-                      <Clock size={13} />
+                    <div className="flex items-center gap-2 text-sm text-zinc-500">
+                      <Clock size={15} />
                       {booking.startTime} - {booking.endTime}
                     </div>
-                    <p className="text-xs font-medium text-zinc-900">
+                    <p className="text-lg font-semibold text-zinc-900">
                       {booking.serviceId?.currency}{' '}
                       {booking.serviceId?.price?.toLocaleString()}
                     </p>
@@ -214,7 +216,7 @@ const MyBookings = () => {
                           <button
                             onClick={() => handlePayNow(booking._id)}
                             disabled={payingId === booking._id}
-                            className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
                           >
                             {payingId === booking._id
                               ? 'Redirecting...'
@@ -226,9 +228,9 @@ const MyBookings = () => {
                         <button
                           onClick={() => setConfirmCancelId(booking._id)}
                           disabled={cancellingId === booking._id}
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-xs font-medium hover:bg-red-100 transition-colors disabled:opacity-50"
+                          className="flex items-center gap-1.5 px-4 py-2 bg-red-50 text-red-700 rounded-lg text-xs font-medium hover:bg-red-100 transition-colors disabled:opacity-50"
                         >
-                          <X size={13} />
+                          <X size={15} />
                           {cancellingId === booking._id
                             ? 'Cancelling...'
                             : 'Cancel'}
@@ -240,11 +242,11 @@ const MyBookings = () => {
                   {booking.status === 'completed' && (
                     <div className="flex flex-col gap-1 items-end shrink-0">
                       {reviewsByBooking[booking._id] ? (
-                        <div className="flex items-center gap-1 text-xs text-zinc-500">
+                        <div className="flex items-center gap-1 text-sm text-zinc-500">
                           {Array.from({ length: 5 }).map((_, i) => (
                             <Star
                               key={i}
-                              size={13}
+                              size={15}
                               className={
                                 i < reviewsByBooking[booking._id].rating
                                   ? 'fill-amber-400 text-amber-400'
@@ -256,7 +258,7 @@ const MyBookings = () => {
                       ) : (
                         <button
                           onClick={() => openReviewModal(booking._id)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 text-white rounded-lg text-xs font-medium hover:bg-zinc-800 transition-colors"
+                          className="flex items-center gap-1.5 px-4 py-2 bg-zinc-900 text-white rounded-lg text-xs font-medium hover:bg-zinc-800 transition-colors"
                         >
                           <Star size={13} />
                           Rate this service
@@ -277,22 +279,22 @@ const MyBookings = () => {
             onClick={() => setConfirmCancelId(null)}
           />
           <div className="relative bg-white rounded-xl shadow-lg w-full max-w-sm p-6">
-            <h2 className="text-base font-semibold text-zinc-900 mb-2">
+            <h2 className="text-xl font-semibold text-zinc-900 mb-2">
               Cancel this booking?
             </h2>
-            <p className="text-sm text-zinc-500 mb-6">
+            <p className="text-base text-zinc-500 mb-7">
               This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setConfirmCancelId(null)}
-                className="flex-1 border border-zinc-200 text-zinc-700 rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-zinc-50 transition-colors"
+                className="flex-1 border border-zinc-200 text-zinc-700 rounded-lg px-3 py-2.5 text-base font-medium hover:bg-zinc-50 transition-colors"
               >
                 Keep booking
               </button>
               <button
                 onClick={() => handleCancel(confirmCancelId)}
-                className="flex-1 bg-red-500 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-red-700 transition-colors"
+                className="flex-1 bg-red-500 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-red-600 transition-colors"
               >
                 Yes, cancel
               </button>
@@ -307,10 +309,10 @@ const MyBookings = () => {
             onClick={() => setReviewBookingId(null)}
           />
           <div className="relative bg-white rounded-xl shadow-lg w-full max-w-sm p-6">
-            <h2 className="text-base font-semibold text-zinc-900 mb-1">
+            <h2 className="text-xl font-semibold text-zinc-900 mb-1">
               Rate this service
             </h2>
-            <p className="text-sm text-zinc-500 mb-4">
+            <p className="text-base text-zinc-500 mb-4">
               How was your experience?
             </p>
 
@@ -325,7 +327,7 @@ const MyBookings = () => {
                     className="p-0.5"
                   >
                     <Star
-                      size={26}
+                      size={32}
                       className={
                         value <= reviewRating
                           ? 'fill-amber-400 text-amber-400'
@@ -343,20 +345,20 @@ const MyBookings = () => {
               placeholder="Tell us more (optional)"
               rows={3}
               maxLength={1000}
-              className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition resize-none mb-5"
+              className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition resize-none mb-5"
             />
 
             <div className="flex gap-3">
               <button
                 onClick={() => setReviewBookingId(null)}
-                className="flex-1 border border-zinc-200 text-zinc-700 rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-zinc-50 transition-colors"
+                className="flex-1 border border-zinc-200 text-zinc-700 rounded-lg px-4 py-3 text-base font-medium hover:bg-zinc-50 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmitReview}
                 disabled={isSubmittingReview}
-                className="flex-1 bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                className="flex-1 bg-blue-600 text-white rounded-lg px-4 py-3 text-base font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
               >
                 {isSubmittingReview ? 'Submitting...' : 'Submit review'}
               </button>

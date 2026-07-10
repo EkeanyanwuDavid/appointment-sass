@@ -136,7 +136,7 @@ const LandingPage = () => {
       {/* Hero */}
       <div className="relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl -z-10" />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
           <div className="inline-flex items-center gap-1.5  bg-blue-50 text-blue-700 text-sm font-medium px-3 py-1.5 rounded-full mb-6">
             <Sparkles size={13} />
             No more waiting rooms
@@ -181,9 +181,11 @@ const LandingPage = () => {
           to="/register"
           className="block rounded-xl border border-blue-100 bg-blue-50 p-5 text-center hover:bg-blue-100/70 hover:border-blue-200 transition-colors group"
         >
-          <h3 className="flex items-center justify-center gap-2 font-semibold text-xl text-blue-900">
-            <RocketIcon size={18} />
-            Bkly is now welcoming its first customers and businesses.
+          <h3 className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xl font-semibold text-blue-900">
+            <RocketIcon className="w-5 h-5 shrink-0" />
+            <span>
+              Bkly is now welcoming its first customers and businesses.
+            </span>
           </h3>
 
           <p className="mt-2 text-base text-blue-700">
@@ -320,7 +322,7 @@ const LandingPage = () => {
         </div>
       </div>
       {/* FAQ */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <h2 className="text-3xl font-semibold text-zinc-900 text-center mb-8">
           Frequently asked questions
         </h2>
@@ -374,7 +376,7 @@ const LandingPage = () => {
       </div>
 
       {/* Help */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 text-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center">
         <div className="bg-white border border-zinc-200 rounded-xl p-8 shadow-sm">
           <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
             <MessageCircle size={22} className="text-blue-600" />

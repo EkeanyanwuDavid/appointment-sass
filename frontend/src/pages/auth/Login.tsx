@@ -41,26 +41,36 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-zinc-50 flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-sm sm:max-w-md">
-        <div className="mb-6 text-center">
+      <div className="w-full max-w-md sm:max-w-lg">
+        <div className="mb-8 text-center">
           <div className="flex items-center justify-center gap-2 mb-5">
             <div className="bg-blue-600 text-white p-2 rounded-xl">
               <CalendarCheck size={22} />
             </div>
 
-            <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
+            <h1
+              style={{
+                fontFamily: "'Google Sans Flex', sans-serif",
+                fontWeight: 750,
+              }}
+              className="text-4xl sm:text-5xl font-bold tracking-tight text-zinc-900"
+            >
               Bkly
             </h1>
           </div>
 
-          <h2 className="text-lg sm:text-xl font-semibold">Welcome back</h2>
-          <p className="text-zinc-500 mt-1 text-sm">Sign in to your account</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-zinc-900">
+            Welcome back
+          </h2>
+          <p className="text-zinc-500 mt-2 text-base">
+            Sign in to your account
+          </p>
         </div>
 
-        <div className="bg-white border border-zinc-200 rounded-xl p-6 sm:p-7 shadow-sm">
-          <form onSubmit={handleSubmit} className="space-y-3.5">
+        <div className="bg-white border border-zinc-200 rounded-xl p-8 sm:p-10 shadow-sm">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-base font-medium text-zinc-900 mb-1.5">
                 Email
               </label>
               <input
@@ -71,12 +81,12 @@ const Login = () => {
                 placeholder="you@example.com"
                 autoComplete="email"
                 required
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                className="w-full border border-zinc-200 rounded-lg px-4 py-3.5 text-base text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-base font-medium text-zinc-900 mb-1.5">
                 Password
               </label>
               <div className="relative">
@@ -88,7 +98,7 @@ const Login = () => {
                   placeholder="••••••••"
                   required
                   autoComplete="current-password"
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 pr-10 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                  className="w-full border border-zinc-200 rounded-lg px-4 py-3.5 text-base pr-10 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
                 />
                 <button
                   type="button"
@@ -103,7 +113,7 @@ const Login = () => {
             <div className="flex justify-end">
               <Link
                 to="/forgot-password"
-                className="text-sm text-blue-600 hover:underline"
+                className="text-base text-blue-600 hover:underline"
               >
                 Forgot password?
               </Link>
@@ -111,7 +121,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-blue-600 text-white rounded-lg py-3.5 text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
@@ -130,7 +140,7 @@ const Login = () => {
           </div>
 
           <div className="space-y-2 mb-4">
-            <p className="text-xs text-zinc-500 mb-2">
+            <p className="text-sm text-zinc-500 mb-2">
               Continue with Google as:
             </p>
             <GoogleAuthButton role="customer" label="Customer" />
@@ -138,7 +148,7 @@ const Login = () => {
           </div>
         </div>
 
-        <p className="text-center text-sm text-zinc-500 mt-5">
+        <p className="text-center text-base text-zinc-500 mt-5">
           Don't have an account?{' '}
           <Link
             to="/register"

@@ -47,20 +47,26 @@ const Register = () => {
 
   return (
     <div className="min-h-screen bg-zinc-50 flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-sm sm:max-w-md">
-        <div className="mb-6 text-center">
+      <div className="w-full max-w-md sm:max-w-lg">
+        <div className="mb-8 text-center">
           <div className="flex items-center justify-center gap-2 mb-5">
             <div className="bg-blue-600 text-white p-2 rounded-xl">
               <CalendarCheck size={22} />
             </div>
-            <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
+            <h1
+              style={{
+                fontFamily: "'Google Sans Flex', sans-serif",
+                fontWeight: 750,
+              }}
+              className="text-4xl sm:text-5xl font-bold tracking-tight text-zinc-900"
+            >
               Bkly
             </h1>
           </div>
-          <h2 className="text-lg sm:text-xl font-semibold">
+          <h2 className="text-2xl sm:text-3xl font-semibold">
             Create an account
           </h2>
-          <p className="text-zinc-500 mt-1 text-sm">
+          <p className="text-zinc-500 mt-1 text-base">
             Get started with Bkly today
           </p>
         </div>
@@ -68,7 +74,7 @@ const Register = () => {
         <div className="bg-white border border-zinc-200 rounded-xl p-6 sm:p-7 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-3.5">
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-base font-medium text-zinc-900 mb-1.5">
                 Full name
               </label>
               <input
@@ -78,12 +84,12 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="Your Name"
                 required
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                className="w-full border border-zinc-200 rounded-lg px-4 py-3.5 text-base text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-base font-medium text-zinc-900 mb-1.5">
                 Email
               </label>
               <input
@@ -93,12 +99,12 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="you@example.com"
                 required
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                className="w-full border border-zinc-200 rounded-lg px-4 py-3.5 text-base text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-base font-medium text-zinc-900 mb-1.5">
                 Phone number
               </label>
               <input
@@ -108,12 +114,12 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="08012345678"
                 required
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                className="w-full border border-zinc-200 rounded-lg px-4 py-3.5 text-base text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-base font-medium text-zinc-900 mb-1.5">
                 Password
               </label>
               <div className="relative">
@@ -124,7 +130,7 @@ const Register = () => {
                   onChange={handleChange}
                   placeholder="••••••••"
                   required
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 pr-10 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                  className="w-full border border-zinc-200 rounded-lg px-4 py-3.5 text-base pr-10 text-base text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
                 />
                 <button
                   type="button"
@@ -137,14 +143,14 @@ const Register = () => {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-lg font-medium text-zinc-900 mb-1.5">
                 I'm signing up as
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => setForm({ ...form, role: 'customer' })}
-                  className={`border rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                  className={`border rounded-lg px-4 py-3.5 text-base font-medium font-medium transition-all ${
                     form.role === 'customer'
                       ? 'border-blue-600 bg-blue-50 text-blue-700'
                       : 'border-zinc-200 text-zinc-600 hover:bg-zinc-50'
@@ -155,7 +161,7 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={() => setForm({ ...form, role: 'business_owner' })}
-                  className={`border rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                  className={`border rounded-lg px-4 py-3.5 text-base font-medium transition-all ${
                     form.role === 'business_owner'
                       ? 'border-blue-600 bg-blue-50 text-blue-700'
                       : 'border-zinc-200 text-zinc-600 hover:bg-zinc-50'
@@ -168,7 +174,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-blue-600 text-white rounded-lg px-4 py-3.5 text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
@@ -183,12 +189,12 @@ const Register = () => {
 
           <div className="flex items-center gap-3 mt-5 mb-5">
             <div className="flex-1 h-px bg-zinc-200" />
-            <span className="text-xs text-zinc-400">or</span>
+            <span className="text-sm text-zinc-400">or</span>
             <div className="flex-1 h-px bg-zinc-200" />
           </div>
 
-          <div className="space-y-2">
-            <p className="text-xs text-zinc-500 mb-2">
+          <div className="space-y-5">
+            <p className="text-sm text-zinc-500 mb-2">
               Continue with Google as:
             </p>
             <GoogleAuthButton role="customer" label="Customer" />
@@ -196,7 +202,7 @@ const Register = () => {
           </div>
         </div>
 
-        <p className="text-center text-sm text-zinc-500 mt-5">
+        <p className="text-center text-base text-zinc-500 mt-5">
           Already have an account?{' '}
           <Link
             to="/login"
@@ -205,7 +211,7 @@ const Register = () => {
             Sign in
           </Link>
         </p>
-        <p className="text-xs text-zinc-400 text-center mt-3">
+        <p className="text-base text-zinc-400 text-center mt-3">
           By signing up, you agree to our{' '}
           <Link to="/terms" className="underline hover:text-zinc-600">
             Terms & Privacy Policy

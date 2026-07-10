@@ -112,17 +112,17 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-zinc-50">
       <div className="bg-white border-b border-zinc-200 px-4 sm:px-6 py-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-blue-600 text-white p-1.5 rounded-lg">
               <CalendarCheck size={18} />
             </div>
-            <span className="font-bold text-zinc-900">Bkly</span>
+            <span className="font-bold text-xl text-zinc-900">Bkly</span>
           </div>
           <div className="flex items-center gap-4">
             <Link
               to="/my-bookings"
-              className="relative flex items-center gap-1.5 text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+              className="relative flex items-center gap-1.5 text-base font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
             >
               <CalendarDays size={16} />
               My bookings
@@ -143,14 +143,18 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-6 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-6 space-y-8">
         <div>
-          <p className="flex items-center gap-1.5 text-sm font-medium text-blue-600 mb-1.5">
+          <p className="flex items-center gap-2 text-lg font-medium text-blue-600 mb-1.5">
             Hi{user?.name ? `, ${user.name}` : ''}
-            <RocketIcon size={15} className="rotate-12" strokeWidth={2.25} />
+            <RocketIcon
+              size={18}
+              className="rotate-12 shrink-0"
+              strokeWidth={2.25}
+            />
           </p>
           <h1
-            className="text-[2.15rem] sm:text-4xl leading-[1.08] text-zinc-900 tracking-[-0.02em]"
+            className="text-5xl sm:text-5xl leading-tight tracking-[-0.02em] text-zinc-900"
             style={{
               fontFamily: "'Google Sans Flex', sans-serif",
               fontWeight: 780,
@@ -160,7 +164,7 @@ const Home = () => {
             <br />
             appointment
           </h1>
-          <p className="text-sm text-zinc-500 mt-3">
+          <p className="text-lg leading-8 text-zinc-500 mt-4 max-w-xl">
             Search trusted businesses near you and book in minutes
           </p>
         </div>
@@ -169,7 +173,7 @@ const Home = () => {
         <form onSubmit={handleSearchSubmit} className="flex gap-2">
           <div className="relative flex-1">
             <Search
-              size={16}
+              size={18}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
             />
             <input
@@ -177,12 +181,12 @@ const Home = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search businesses..."
-              className="w-full border border-zinc-200 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white"
+              className="w-full border border-zinc-200 rounded-lg py-3.5 pl-10 pr-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white"
             />
           </div>
           <button
             type="submit"
-            className="px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="px-6 py-3.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
           >
             Search
           </button>
@@ -193,7 +197,7 @@ const Home = () => {
             <button
               key={cat.value}
               onClick={() => setCategory(cat.value)}
-              className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-colors ${
+              className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 category === cat.value
                   ? 'bg-zinc-900 text-white'
                   : 'text-zinc-500 hover:bg-zinc-100'
@@ -224,11 +228,11 @@ const Home = () => {
           </div>
         ) : businesses.length === 0 ? (
           <div className="bg-white border border-zinc-200 rounded-xl p-12 text-center shadow-sm">
-            <Search size={32} className="text-zinc-300 mx-auto mb-3" />
-            <p className="text-zinc-500 text-sm font-medium">
+            <Search size={42} className="text-zinc-300 mx-auto mb-3" />
+            <p className="text-zinc-500 text-base font-medium">
               No businesses found
             </p>
-            <p className="text-zinc-400 text-xs mt-1">
+            <p className="text-zinc-400 text-sm font-semibold mt-1">
               Try a different search or category
             </p>
           </div>
@@ -278,20 +282,20 @@ const Home = () => {
                 )}
                 <div className="p-5">
                   <div className="flex items-center justify-between mb-1.5">
-                    <p className="text-sm font-medium text-zinc-900">
+                    <p className="text-lg font-semibold text-zinc-900">
                       {business.name}
                     </p>
-                    <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-50 text-blue-700 capitalize">
+                    <span className="text-sm px-2 py-0.5 rounded-full font-medium bg-blue-50 text-blue-700 capitalize">
                       {business.category}
                     </span>
                   </div>
                   {business.totalReviews ? (
                     <div className="flex items-center gap-1 mb-2">
                       <Star
-                        size={12}
+                        size={14}
                         className="fill-amber-400 text-amber-400"
                       />
-                      <span className="text-xs font-medium text-zinc-700">
+                      <span className="text-sm font-medium text-zinc-700">
                         {business.averageRating}
                       </span>
                       <span className="text-xs text-zinc-400">
@@ -299,11 +303,11 @@ const Home = () => {
                       </span>
                     </div>
                   ) : null}
-                  <p className="text-xs text-zinc-500 mb-3 line-clamp-2">
+                  <p className="text-sm leading-6 text-zinc-500 mb-3 line-clamp-2">
                     {business.description}
                   </p>
-                  <div className="flex items-center gap-1.5 text-xs text-zinc-400">
-                    <MapPin size={13} />
+                  <div className="flex items-center gap-1.5 text-sm text-zinc-400">
+                    <MapPin size={15} />
                     {business.city}
                   </div>
                 </div>
