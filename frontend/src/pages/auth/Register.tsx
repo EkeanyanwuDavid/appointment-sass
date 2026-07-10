@@ -205,6 +205,12 @@ const Register = () => {
             Sign in
           </Link>
         </p>
+        <p className="text-xs text-zinc-400 text-center mt-3">
+          By signing up, you agree to our{' '}
+          <Link to="/terms" className="underline hover:text-zinc-600">
+            Terms & Privacy Policy
+          </Link>
+        </p>
       </div>
     </div>
   )

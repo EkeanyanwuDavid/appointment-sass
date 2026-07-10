@@ -52,11 +52,17 @@ const AdminDashboard = () => {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900">
-            Platform overview
+          <h1
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 750,
+            }}
+            className="text-2xl  sm:text-4xl leading-[1.1]  tracking-[-0.01em] font-bold text-zinc-900"
+          >
+            Welcome back, Admin
           </h1>
-          <p className="text-sm text-zinc-500 mt-0.5">
-            A secret view across all of Bkly
+          <p className="text-sm text-zinc-500 mt-1">
+            Monitor businesses, users and bookings across the platform.
           </p>
         </div>
 

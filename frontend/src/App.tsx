@@ -15,6 +15,7 @@ import Ratings from './pages/business/Rating'
 import ForgotPassword from './pages/auth/ForgotPassword'
 import ResetPassword from './pages/auth/ResetPassword'
 import Settings from './pages/business/Settings'
+import TermsPage from './pages/auth/TermsPage'
 
 import StaffDashboard from './pages/staff/StaffDashboard'
 
@@ -58,6 +59,7 @@ const App = () => {
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/terms" element={<TermsPage />} />
 
         {/* Landing Page */}
         <Route path="/" element={<LandingPage />} />

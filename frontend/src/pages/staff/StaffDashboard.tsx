@@ -148,7 +148,13 @@ const StaffDashboard = () => {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900">
+          <h1
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 750,
+            }}
+            className="text-2xl sm:text-4xl leading-[1.1] font-semibold tracking-[-0.01em] text-zinc-900"
+          >
             Hi{user?.name ? `, ${user.name}` : ''}
           </h1>
           <p className="text-sm text-zinc-500 mt-0.5">Here's your schedule</p>
@@ -204,8 +210,9 @@ const StaffDashboard = () => {
               Your bookings
             </h2>
             {bookings.length === 0 ? (
-              <div className="flex items-center justify-center h-32 text-sm text-zinc-400">
-                No bookings yet
+              <div className="flex flex-col items-center justify-center h-40 text-center">
+                <CalendarDays size={28} className="text-zinc-300 mb-2" />
+                <p className="text-zinc-400 text-sm">No bookings yet</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -215,7 +222,7 @@ const StaffDashboard = () => {
                     className="flex items-start justify-between gap-4 py-3 px-2 -mx-2 rounded-lg border-b border-zinc-100 last:border-0 hover:bg-zinc-50/50 transition-colors"
                   >
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2.5">
+                      <div className="flex items-center gap-2.5 flex-wrap">
                         <div className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-semibold text-xs shrink-0">
                           {booking.customerId?.name?.charAt(0).toUpperCase() ||
                             'C'}
@@ -223,6 +230,16 @@ const StaffDashboard = () => {
                         <p className="text-sm font-medium text-zinc-900">
                           {booking.customerId?.name || 'Customer'}
                         </p>
+                        {booking.paymentStatus === 'paid' && (
+                          <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700">
+                            Paid
+                          </span>
+                        )}
+                        {booking.paymentStatus === 'refunded' && (
+                          <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-zinc-100 text-zinc-500">
+                            Refunded
+                          </span>
+                        )}
                       </div>
                       <p className="text-xs text-zinc-500">
                         {booking.serviceId?.name} •{' '}
@@ -289,8 +306,9 @@ const StaffDashboard = () => {
                 </button>
               </div>
               {leaves.length === 0 ? (
-                <div className="flex items-center justify-center h-32 text-sm text-zinc-400">
-                  No leave requests yet
+                <div className="flex flex-col items-center justify-center h-40 text-center">
+                  <Clock size={28} className="text-zinc-300 mb-2" />
+                  <p className="text-zinc-400 text-sm">No leave requests yet</p>
                 </div>
               ) : (
                 <div className="space-y-3">

@@ -129,7 +129,13 @@ const Dashboard = () => {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900">
+          <h1
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 750,
+            }}
+            className="text-3xl sm:text-4xl leading-[1.1] tracking-[-0.01em] font-semibold text-zinc-900"
+          >
             Hi{user?.name ? `, ${user.name}` : ''}
           </h1>
           <p className="text-sm text-zinc-500 mt-0.5">

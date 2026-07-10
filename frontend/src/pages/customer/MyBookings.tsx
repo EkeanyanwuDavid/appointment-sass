@@ -126,13 +126,21 @@ const MyBookings = () => {
       <div className="max-w-2xl mx-auto space-y-6">
         <Link
           to="/home"
-          className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-zinc-500 ouline-none focus:outline-none hover:text-zinc-900 transition-colors"
         >
           <ChevronLeft size={16} />
           Back to home
         </Link>
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900">My bookings</h1>
+          <h1
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 750,
+            }}
+            className=" text-2xl sm:text-4xl leading-[1.1] font-semibold tracking-[-0.01em] text-zinc-900"
+          >
+            My bookings
+          </h1>
           <p className="text-sm text-zinc-500 mt-0.5">
             View and manage your appointments
           </p>
@@ -140,18 +148,22 @@ const MyBookings = () => {
 
         {bookings.length === 0 ? (
           <div className="bg-white border border-zinc-200 rounded-xl p-12 text-center shadow-sm">
-            <p className="text-zinc-400 text-sm">No bookings yet</p>
+            <CalendarDays size={32} className="text-zinc-300 mx-auto mb-3" />
+            <p className="text-zinc-500 text-sm font-medium">No bookings yet</p>
+            <p className="text-zinc-400 text-xs mt-1">
+              Your booking history will show up here
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
             {bookings.map((booking) => (
               <div
                 key={booking._id}
-                className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm"
+                className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <p className="text-sm font-medium text-zinc-900">
                         {booking.businessId?.name}
                       </p>
@@ -160,6 +172,16 @@ const MyBookings = () => {
                       >
                         {booking.status}
                       </span>
+                      {booking.paymentStatus === 'paid' && (
+                        <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700">
+                          Paid
+                        </span>
+                      )}
+                      {booking.paymentStatus === 'refunded' && (
+                        <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-zinc-100 text-zinc-500">
+                          Refunded
+                        </span>
+                      )}
                     </div>
                     <p className="text-xs text-zinc-500">
                       {booking.serviceId?.name} • with {booking.staffId?.name}

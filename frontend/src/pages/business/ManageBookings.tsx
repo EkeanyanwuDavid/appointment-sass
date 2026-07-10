@@ -149,7 +149,16 @@ const ManageBookings = () => {
 
             {filteredBookings.length === 0 ? (
               <div className="bg-white border border-zinc-200 rounded-xl p-12 text-center shadow-sm">
-                <p className="text-zinc-400 text-sm">No bookings found</p>
+                <CalendarDays
+                  size={32}
+                  className="text-zinc-300 mx-auto mb-3"
+                />
+                <p className="text-zinc-500 text-sm font-medium">
+                  No bookings found
+                </p>
+                <p className="text-zinc-400 text-xs mt-1">
+                  Bookings will show up here once customers start booking
+                </p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -160,7 +169,7 @@ const ManageBookings = () => {
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <User size={14} className="text-zinc-400" />
                           <p className="text-sm font-medium text-zinc-900">
                             {booking.customerId?.name || 'Customer'}
@@ -170,6 +179,16 @@ const ManageBookings = () => {
                           >
                             {booking.status}
                           </span>
+                          {booking.paymentStatus === 'paid' && (
+                            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700">
+                              Paid
+                            </span>
+                          )}
+                          {booking.paymentStatus === 'refunded' && (
+                            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-zinc-100 text-zinc-500">
+                              Refunded
+                            </span>
+                          )}
                         </div>
                         <div className="flex items-center gap-2 text-xs text-zinc-500">
                           <CalendarDays size={13} />
@@ -250,7 +269,8 @@ const ManageBookings = () => {
           <div className="space-y-3">
             {leaves.length === 0 ? (
               <div className="bg-white border border-zinc-200 rounded-xl p-12 text-center shadow-sm">
-                <p className="text-zinc-400 text-sm">
+                <Clock size={32} className="text-zinc-300 mx-auto mb-3" />
+                <p className="text-zinc-500 text-sm font-medium">
                   No pending leave requests
                 </p>
               </div>

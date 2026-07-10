@@ -20,6 +20,7 @@ import {
   ChevronDown,
   PhoneCall,
   Mail,
+  RocketIcon,
   MessageCircle,
 } from 'lucide-react'
 
@@ -113,19 +114,19 @@ const LandingPage = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen bg-linear-to-b from-white via-blue-50/30 to-zinc-50">
       {/* Nav */}
       <div className="border-b border-zinc-200 bg-white px-4 sm:px-6 py-4">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-blue-600 text-white p-1.5 rounded-lg">
               <CalendarCheck size={18} />
             </div>
-            <span className="font-bold text-zinc-900">Bkly</span>
+            <span className="font-bold text-xl text-zinc-900">Bkly</span>
           </div>
           <Link
             to="/login"
-            className="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+            className="text-base font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
           >
             Sign in
           </Link>
@@ -133,39 +134,73 @@ const LandingPage = () => {
       </div>
 
       {/* Hero */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 text-center">
-        <div className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1.5 rounded-full mb-6">
-          <Sparkles size={13} />
-          No more waiting rooms
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 max-w-2xl mx-auto">
-          <span className="text-blue-600 animate-pulse">Book</span> a
-          professional who comes to you
-        </h1>
-        <p className="text-zinc-500 mt-4 max-w-lg mx-auto">
-          Bkly connects you with barbers, caterers, stylists, and more booked in
-          minutes, delivered at your door.
-        </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
-          <Link
-            to="/register"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-blue-700 transition-colors"
+      <div className="relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl -z-10" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
+          <div className="inline-flex items-center gap-1.5  bg-blue-50 text-blue-700 text-sm font-medium px-3 py-1.5 rounded-full mb-6">
+            <Sparkles size={13} />
+            No more waiting rooms
+          </div>
+          <h1
+            className="text-5xl sm:text-5xl lg:text-6xl leading-[1.1] text-zinc-900  mx-auto tracking-[-0.01em]"
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 750,
+            }}
           >
-            Find a service
-            <ArrowRight size={16} />
-          </Link>
-          <Link
-            to="/register"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 border border-zinc-200 bg-white text-zinc-700 rounded-lg px-6 py-3 text-sm font-medium hover:bg-zinc-50 transition-colors"
-          >
-            List your business
-          </Link>
+            <span className="bg-linear-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+              Book
+            </span>{' '}
+            a professional who comes to you
+          </h1>
+          <p className="text-lg text-zinc-500 mt-5 max-w-2xl mx-auto leading-8">
+            Bkly connects you with barbers, caterers, stylists, and more booked
+            in minutes, delivered at your door.
+          </p>
+          <div className="flex flex-col  sm:flex-row items-center justify-center gap-3 mt-8">
+            <Link
+              to="/register"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white rounded-lg px-8 py-4 text-base font-medium hover:bg-blue-700 transition-colors"
+            >
+              Find a service
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              to="/register"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 border border-zinc-200 bg-white text-zinc-700 rounded-lg px-8 py-4 text-base font-medium hover:bg-zinc-50 transition-colors"
+            >
+              List your business
+            </Link>
+          </div>
         </div>
       </div>
 
+      {/* Early Access */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        <Link
+          to="/register"
+          className="block rounded-xl border border-blue-100 bg-blue-50 p-5 text-center hover:bg-blue-100/70 hover:border-blue-200 transition-colors group"
+        >
+          <h3 className="flex items-center justify-center gap-2 font-semibold text-xl text-blue-900">
+            <RocketIcon size={18} />
+            Bkly is now welcoming its first customers and businesses.
+          </h3>
+
+          <p className="mt-2 text-base text-blue-700">
+            Be among the first to experience hassle-free home service bookings
+            and help shape the future of Bkly.
+          </p>
+
+          <span className="inline-flex items-center gap-1.5 mt-2 text-base font-medium text-blue-700 group-hover:gap-2.5 transition-all">
+            Join now
+            <ArrowRight size={16} />
+          </span>
+        </Link>
+      </div>
+
       {/* How it works */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-        <h2 className="text-lg font-semibold text-zinc-900 text-center mb-8">
+      <div className="max-w-7xl  mx-auto px-4 sm:px-6 py-12">
+        <h2 className="text-3xl font-semibold text-zinc-900 text-center mb-8">
           How it works
         </h2>
         <div className="grid gap-6 sm:grid-cols-3">
@@ -173,8 +208,8 @@ const LandingPage = () => {
             <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
               <Search size={20} className="text-blue-600" />
             </div>
-            <p className="text-sm font-medium text-zinc-900">Browse</p>
-            <p className="text-xs text-zinc-500 mt-1">
+            <p className="text-lg font-medium text-zinc-900">Browse</p>
+            <p className="text-base text-zinc-500 mt-1">
               Find a business and service near you
             </p>
           </div>
@@ -182,8 +217,8 @@ const LandingPage = () => {
             <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
               <Clock size={20} className="text-blue-600" />
             </div>
-            <p className="text-sm font-medium text-zinc-900">Pick a time</p>
-            <p className="text-xs text-zinc-500 mt-1">
+            <p className="text-lg font-medium text-zinc-900">Pick a time</p>
+            <p className="text-base text-zinc-500 mt-1">
               Choose a slot that works for your schedule
             </p>
           </div>
@@ -191,10 +226,10 @@ const LandingPage = () => {
             <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
               <MapPin size={20} className="text-blue-600" />
             </div>
-            <p className="text-sm font-medium text-zinc-900">
+            <p className="text-lg font-medium text-zinc-900">
               Get served at your door
             </p>
-            <p className="text-xs text-zinc-500 mt-1">
+            <p className="text-base text-zinc-500 mt-1">
               A professional comes to you, on time
             </p>
           </div>
@@ -203,7 +238,7 @@ const LandingPage = () => {
 
       {/* Live businesses */}
       {businesses.length > 0 && (
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
           <h2 className="text-lg font-semibold text-zinc-900 text-center mb-8">
             Businesses already on Bkly
           </h2>
@@ -211,7 +246,7 @@ const LandingPage = () => {
             {businesses.map((business) => (
               <div
                 key={business._id}
-                className="bg-white border border-zinc-200 hover:translate-y-1.5 transition-all rounded-xl overflow-hidden shadow-sm"
+                className="bg-white border border-zinc-200 hover:-translate-y-1 hover:shadow-md transition-all rounded-xl overflow-hidden shadow-sm"
               >
                 {business.imageUrl ? (
                   <div className="h-20 bg-zinc-100">
@@ -223,24 +258,37 @@ const LandingPage = () => {
                   </div>
                 ) : (
                   <div
-                    className={`h-20 bg-linear-to-br ${
+                    className={`relative h-20 overflow-hidden bg-linear-to-br ${
                       categoryStyles[business.category]?.gradient ||
                       categoryStyles.other.gradient
-                    } flex items-center justify-center`}
+                    }`}
                   >
                     {(() => {
                       const Icon =
                         categoryStyles[business.category]?.icon ||
                         categoryStyles.other.icon
-                      return <Icon size={24} className="text-white/90" />
+                      return (
+                        <>
+                          <Icon
+                            size={72}
+                            strokeWidth={1.25}
+                            className="absolute -right-3 -bottom-4 text-white/15 -rotate-12"
+                          />
+                          <Icon
+                            size={22}
+                            strokeWidth={1.75}
+                            className="absolute left-3.5 bottom-3.5 text-white"
+                          />
+                        </>
+                      )
                     })()}
                   </div>
                 )}
                 <div className="p-4">
-                  <p className="text-sm font-medium text-zinc-900">
+                  <p className="text-lg font-medium text-zinc-900">
                     {business.name}
                   </p>
-                  <p className="text-xs text-zinc-500 capitalize mt-0.5">
+                  <p className="text-sm text-zinc-500 capitalize mt-0.5">
                     {business.category} • {business.city}
                   </p>
                 </div>
@@ -251,41 +299,42 @@ const LandingPage = () => {
       )}
 
       {/* Categories */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-        <h2 className="text-lg font-semibold text-zinc-900 text-center mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+        <h2 className="text-3xl font-semibold text-zinc-900 text-center mb-8">
           Whatever you need, we've got you
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           {categoryList.map((cat) => {
             const Icon = categoryStyles[cat.value].icon
             return (
-              <div
+              <Link
                 key={cat.value}
-                className={`bg-linear-to-br ${categoryStyles[cat.value].gradient} rounded-xl p-5 text-white flex flex-col items-center justify-center gap-2 `}
+                to="/register"
+                className={`bg-linear-to-br ${categoryStyles[cat.value].gradient} rounded-xl p-5 text-white flex flex-col items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-md transition-all`}
               >
-                <Icon size={28} />
-                <p className="text-sm font-medium text-center">{cat.label}</p>
-              </div>
+                <Icon size={34} />
+                <p className="text-lg font-medium text-center">{cat.label}</p>
+              </Link>
             )
           })}
         </div>
       </div>
       {/* FAQ */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
-        <h2 className="text-lg font-semibold text-zinc-900 text-center mb-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <h2 className="text-3xl font-semibold text-zinc-900 text-center mb-8">
           Frequently asked questions
         </h2>
         <div className="space-y-3">
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className="bg-white border focus:outline-none outline-none border-zinc-200 rounded-xl overflow-hidden shadow-sm"
+              className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm"
             >
               <button
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full flex items-center justify-between outline-none focus:outline-none focus:ring-0 p-4 text-left"
+                className="w-full flex items-center justify-between p-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-inset"
               >
-                <span className="text-sm font-medium text-zinc-900">
+                <span className="text-lg font-medium text-zinc-900">
                   {faq.question}
                 </span>
                 <ChevronDown
@@ -297,7 +346,9 @@ const LandingPage = () => {
               </button>
               {openFaq === i && (
                 <div className="px-4 pb-4">
-                  <p className="text-sm text-zinc-500">{faq.answer}</p>
+                  <p className="text-base leading-7 text-zinc-500">
+                    {faq.answer}
+                  </p>
                 </div>
               )}
             </div>
@@ -306,16 +357,16 @@ const LandingPage = () => {
       </div>
 
       {/* Final CTA */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 text-center">
-        <h2 className="text-2xl font-semibold text-zinc-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
+        <h2 className="text-4xl font-semibold text-zinc-900">
           Ready to get started?
         </h2>
-        <p className="text-sm text-zinc-500 mt-2 mb-6">
+        <p className="text-lg text-zinc-500 mt-2 mb-6">
           Join Bkly today — it takes less than a minute
         </p>
         <Link
           to="/register"
-          className="inline-flex items-center gap-2 bg-blue-600 text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-blue-600 text-white rounded-lg text-base px-8 py-4 font-medium hover:bg-blue-700 transition-colors"
         >
           Create your account
           <ArrowRight size={16} />
@@ -323,30 +374,30 @@ const LandingPage = () => {
       </div>
 
       {/* Help */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12 text-center">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 text-center">
         <div className="bg-white border border-zinc-200 rounded-xl p-8 shadow-sm">
           <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
             <MessageCircle size={22} className="text-blue-600" />
           </div>
-          <h2 className="text-base font-semibold text-zinc-900">Need help?</h2>
-          <p className="text-sm text-zinc-500 mt-1 mb-5">
+          <h2 className="text-2xl font-semibold text-zinc-900">Need help?</h2>
+          <p className="text-lg text-zinc-500 mt-1 mb-5">
             Our team is here to guide you through booking or listing your
             business.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
               href="tel:+2348012345678"
-              className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-all hover:translate-y-2 w-full sm:w-auto"
+              className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-base font-medium text-zinc-700 hover:bg-zinc-50 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
             >
-              <PhoneCall className="text-yellow-600" size={16} />
+              <PhoneCall className="text-blue-600" size={16} />
               +234 801 234 5678
             </a>
 
             <a
               href="mailto:support@bkly.com"
-              className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-all hover:translate-y-2 w-full sm:w-auto"
+              className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-base font-medium text-zinc-700 hover:bg-zinc-50 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
             >
-              <Mail className="text-green-700" size={16} />
+              <Mail className="text-blue-600" size={16} />
               support@bkly.com
             </a>
           </div>
@@ -364,6 +415,7 @@ const LandingPage = () => {
           >
             <TwitterIcon />
           </a>
+
           <a
             href="https://instagram.com"
             target="_blank"
@@ -373,6 +425,7 @@ const LandingPage = () => {
           >
             <InstagramIcon />
           </a>
+
           <a
             href="https://facebook.com"
             target="_blank"
@@ -382,6 +435,7 @@ const LandingPage = () => {
           >
             <FacebookIcon />
           </a>
+
           <a
             href="mailto:hello@bkly.com"
             className="text-zinc-500 hover:text-white transition-colors"
@@ -392,6 +446,14 @@ const LandingPage = () => {
         </div>
         <p className="text-xs text-zinc-500">
           &copy; {new Date().getFullYear()} Bkly. Book anything, anywhere.
+        </p>
+        <p className="text-xs text-zinc-600 mt-2">
+          <Link
+            to="/terms"
+            className="underline hover:text-white transition-colors"
+          >
+            Terms & Privacy Policy
+          </Link>
         </p>
       </div>
     </div>

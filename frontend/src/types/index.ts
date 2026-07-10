@@ -11,6 +11,8 @@ export interface Business {
   isActive: boolean
   ownerId: string
   createdAt: string
+  averageRating?: number
+  totalReviews?: number
   paystackSubaccountCode: string
   settlementBankCode: string
   settlementBankName: string

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAllBusinesses } from '../../api/business.api'
+import { getMyBookings } from '../../api/booking.api'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { logout } from '../../store/slices/authSlice'
 import type { Business } from '../../types/index'
@@ -20,6 +21,8 @@ import {
   Dumbbell,
   UtensilsCrossed,
   Store,
+  Star,
+  RocketIcon,
 } from 'lucide-react'
 
 const categories = [
@@ -58,6 +61,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('all')
+  const [activeBookingsCount, setActiveBookingsCount] = useState(0)
 
   const fetchBusinesses = async () => {
     setIsLoading(true)
@@ -73,6 +77,19 @@ const Home = () => {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    // Badge count is non-critical — fail silently, don't block the page
+    getMyBookings()
+      .then((res) => {
+        const activeCount = res.data.bookings.filter(
+          (b: { status: string }) =>
+            b.status === 'pending' || b.status === 'confirmed'
+        ).length
+        setActiveBookingsCount(activeCount)
+      })
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     const loadBusinesses = async () => {
@@ -105,10 +122,15 @@ const Home = () => {
           <div className="flex items-center gap-4">
             <Link
               to="/my-bookings"
-              className="flex items-center gap-1.5 text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+              className="relative flex items-center gap-1.5 text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
             >
               <CalendarDays size={16} />
               My bookings
+              {activeBookingsCount > 0 && (
+                <span className="flex items-center justify-center min-w-4.5 h-4.5 px-1 bg-blue-600 text-white text-[10px] font-semibold rounded-full">
+                  {activeBookingsCount}
+                </span>
+              )}
             </Link>
             <button
               onClick={handleLogout}
@@ -121,13 +143,25 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 pb-6 space-y-8">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900">
+          <p className="flex items-center gap-1.5 text-sm font-medium text-blue-600 mb-1.5">
             Hi{user?.name ? `, ${user.name}` : ''}
+            <RocketIcon size={15} className="rotate-12" strokeWidth={2.25} />
+          </p>
+          <h1
+            className="text-[2.15rem] sm:text-4xl leading-[1.08] text-zinc-900 tracking-[-0.02em]"
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 780,
+            }}
+          >
+            Book your next
+            <br />
+            appointment
           </h1>
-          <p className="text-sm text-zinc-500 mt-0.5">
-            Find a business to book with
+          <p className="text-sm text-zinc-500 mt-3">
+            Search trusted businesses near you and book in minutes
           </p>
         </div>
 
@@ -159,10 +193,10 @@ const Home = () => {
             <button
               key={cat.value}
               onClick={() => setCategory(cat.value)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-colors ${
                 category === cat.value
                   ? 'bg-zinc-900 text-white'
-                  : 'bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50'
+                  : 'text-zinc-500 hover:bg-zinc-100'
               }`}
             >
               {cat.label}
@@ -216,21 +250,34 @@ const Home = () => {
                   </div>
                 ) : (
                   <div
-                    className={`h-24 bg-linear-to-br ${
+                    className={`relative h-24 overflow-hidden bg-linear-to-br ${
                       categoryStyles[business.category]?.gradient ||
                       categoryStyles.other.gradient
-                    } flex items-center justify-center`}
+                    }`}
                   >
                     {(() => {
                       const Icon =
                         categoryStyles[business.category]?.icon ||
                         categoryStyles.other.icon
-                      return <Icon size={32} className="text-white/90" />
+                      return (
+                        <>
+                          <Icon
+                            size={88}
+                            strokeWidth={1.25}
+                            className="absolute -right-4 -bottom-5 text-white/15 -rotate-12"
+                          />
+                          <Icon
+                            size={26}
+                            strokeWidth={1.75}
+                            className="absolute left-4 bottom-4 text-white"
+                          />
+                        </>
+                      )
                     })()}
                   </div>
                 )}
                 <div className="p-5">
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-1.5">
                     <p className="text-sm font-medium text-zinc-900">
                       {business.name}
                     </p>
@@ -238,6 +285,20 @@ const Home = () => {
                       {business.category}
                     </span>
                   </div>
+                  {business.totalReviews ? (
+                    <div className="flex items-center gap-1 mb-2">
+                      <Star
+                        size={12}
+                        className="fill-amber-400 text-amber-400"
+                      />
+                      <span className="text-xs font-medium text-zinc-700">
+                        {business.averageRating}
+                      </span>
+                      <span className="text-xs text-zinc-400">
+                        ({business.totalReviews})
+                      </span>
+                    </div>
+                  ) : null}
                   <p className="text-xs text-zinc-500 mb-3 line-clamp-2">
                     {business.description}
                   </p>
