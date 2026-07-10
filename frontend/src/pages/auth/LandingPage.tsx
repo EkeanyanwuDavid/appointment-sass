@@ -392,7 +392,7 @@ const LandingPage = () => {
               className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-base font-medium text-zinc-700 hover:bg-zinc-50 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
             >
               <PhoneCall className="text-blue-600" size={16} />
-              +234 801 234 5678
+              +234 814 790 1386
             </a>
 
             <a
@@ -406,7 +406,7 @@ const LandingPage = () => {
         </div>
       </div>
       {/* Footer */}
-      <div className="border-t bg-zinc-900 border-zinc-200 py-6 text-center text-xs text-zinc-400">
+      <div className="border-t bg-zinc-900 border-zinc-200 py-6 text-center text-base text-zinc-400">
         <div className="flex items-center justify-center gap-5 mb-4">
           <a
             href="https://twitter.com"
@@ -446,10 +446,10 @@ const LandingPage = () => {
             <Mail size={18} />
           </a>
         </div>
-        <p className="text-xs text-zinc-500">
+        <p className="text-base text-zinc-500">
           &copy; {new Date().getFullYear()} Bkly. Book anything, anywhere.
         </p>
-        <p className="text-xs text-zinc-600 mt-2">
+        <p className="text-sm text-zinc-600 mt-2">
           <Link
             to="/terms"
             className="underline hover:text-white transition-colors"
