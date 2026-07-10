@@ -68,8 +68,16 @@ const Ratings = () => {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900">Ratings</h1>
-          <p className="text-sm text-zinc-500 mt-0.5">
+          <h1
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 700,
+            }}
+            className="text-2xl sm:text-3xl tracking-[-0.02em] text-zinc-900"
+          >
+            Ratings
+          </h1>
+          <p className="text-sm text-zinc-500 mt-1">
             See how customers rate your business
           </p>
         </div>
@@ -78,40 +86,48 @@ const Ratings = () => {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex justify-between mb-3">
-              <p className="text-sm text-zinc-500">Average rating</p>
+              <p className="text-[15px] font-medium text-zinc-500">
+                Average rating
+              </p>
               <Star size={18} className="text-amber-500 fill-amber-500" />
             </div>
 
-            <p className="text-2xl font-semibold">
+            <p className="text-3xl font-semibold tracking-tight text-zinc-900">
               {totalReviews ? averageRating : '—'}
             </p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex justify-between mb-3">
-              <p className="text-sm text-zinc-500">Reviews</p>
+              <p className="text-[15px] font-medium text-zinc-500">Reviews</p>
               <MessageSquare size={18} className="text-blue-600" />
             </div>
 
-            <p className="text-2xl font-semibold">{totalReviews}</p>
+            <p className="text-3xl font-semibold tracking-tight text-zinc-900">
+              {totalReviews}
+            </p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex justify-between mb-3">
-              <p className="text-sm text-zinc-500">5 star reviews</p>
+              <p className=" font-medium text-zinc-500">5 star reviews</p>
               <Star size={18} className="text-green-600 fill-green-600" />
             </div>
 
-            <p className="text-2xl font-semibold">{distribution[5]}</p>
+            <p className="text-3xl font-semibold tracking-tight text-zinc-900">
+              {distribution[5]}
+            </p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex justify-between mb-3">
-              <p className="text-sm text-zinc-500">Needs attention</p>
+              <p className="text-[15px] font-medium text-zinc-500">
+                Needs attention
+              </p>
               <AlertTriangle size={18} className="text-red-500" />
             </div>
 
-            <p className="text-2xl font-semibold">
+            <p className="text-3xl font-semibold tracking-tight text-zinc-900">
               {distribution[1] + distribution[2]}
             </p>
           </div>
@@ -119,7 +135,9 @@ const Ratings = () => {
 
         {/* Distribution */}
         <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
-          <h2 className="text-sm font-medium mb-5">Rating distribution</h2>
+          <h2 className="text-base font-semibold text-zinc-900 mb-5">
+            Rating distribution
+          </h2>
 
           <div className="space-y-4">
             {[5, 4, 3, 2, 1].map((star) => (
@@ -155,7 +173,7 @@ const Ratings = () => {
         <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-5">
             <Users size={17} className="text-zinc-500" />
-            <h2 className="text-sm font-medium text-zinc-900">
+            <h2 className="text-base font-semibold text-zinc-900">
               Top performing staff
             </h2>
           </div>
@@ -163,7 +181,7 @@ const Ratings = () => {
           {topStaff.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-28 text-zinc-400">
               <Search size={24} className="mb-2 text-zinc-300" />
-              <p className="text-sm">No staff ratings yet</p>
+              <p className="text-lg">No staff ratings yet</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -178,7 +196,7 @@ const Ratings = () => {
                     </div>
 
                     <div>
-                      <p className="text-sm font-medium text-zinc-900">
+                      <p className="text-[15px] font-semi-bold text-zinc-900">
                         {staff.name}
                       </p>
 
@@ -190,7 +208,7 @@ const Ratings = () => {
 
                   <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-full text-xs font-medium text-amber-700">
                     {staff.averageRating}
-                    <Star size={12} className="fill-amber-400 text-amber-400" />
+                    <Star size={14} className="fill-amber-400 text-amber-400" />
                   </div>
                 </div>
               ))}
@@ -202,10 +220,10 @@ const Ratings = () => {
         <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h2 className="text-sm font-medium text-zinc-900">
+              <h2 className="text-base font-semibold text-zinc-900">
                 Customer reviews
               </h2>
-              <p className="text-xs text-zinc-400 mt-1">
+              <p className="text-sm text-zinc-400 mt-1">
                 Feedback from your customers
               </p>
             </div>
@@ -236,11 +254,11 @@ const Ratings = () => {
                       </div>
 
                       <div>
-                        <p className="text-sm font-medium text-zinc-900">
+                        <p className="text-base font-semibold text-zinc-900">
                           {review.customerId?.name || 'Customer'}
                         </p>
 
-                        <p className="text-xs text-zinc-400">
+                        <p className="text-sm text-zinc-500">
                           {review.serviceId?.name}
                         </p>
                       </div>
@@ -262,12 +280,12 @@ const Ratings = () => {
                   </div>
 
                   {review.comment && (
-                    <p className="text-sm text-zinc-600 mt-4 leading-relaxed">
+                    <p className="text-base font-base text-zinc-600 mt-4 leading-relaxed">
                       "{review.comment}"
                     </p>
                   )}
 
-                  <p className="text-xs text-zinc-400 mt-3">
+                  <p className="text-sm text-zinc-500 mt-3">
                     {new Date(review.createdAt).toLocaleDateString('en-NG', {
                       day: 'numeric',
                       month: 'short',

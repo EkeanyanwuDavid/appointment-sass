@@ -17,6 +17,7 @@ import {
   X,
   ToggleLeft,
   ToggleRight,
+  PackageOpen,
 } from 'lucide-react'
 
 const ManageServices = () => {
@@ -128,14 +129,22 @@ const ManageServices = () => {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-zinc-900">Services</h1>
-            <p className="text-sm text-zinc-500 mt-0.5">
+            <h1
+              style={{
+                fontFamily: "'Google Sans Flex', sans-serif",
+                fontWeight: 750,
+              }}
+              className="text-3xl sm:text-4xl leading-[1.1] tracking-[-0.01em] text-zinc-900"
+            >
+              Services
+            </h1>
+            <p className="text-sm text-zinc-500 mt-1">
               Manage what your business offers
             </p>
           </div>
           <button
             onClick={openAddModal}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
           >
             <Plus size={16} />
             Add service
@@ -148,10 +157,13 @@ const ManageServices = () => {
           </div>
         ) : services.length === 0 ? (
           <div className="bg-white border border-zinc-200 rounded-xl p-12 text-center shadow-sm">
+            <div className="w-12 h-12 bg-zinc-50 rounded-full flex items-center justify-center mx-auto mb-3">
+              <PackageOpen size={22} className="text-zinc-500" />
+            </div>
             <p className="text-zinc-400 text-sm">No services yet</p>
             <button
               onClick={openAddModal}
-              className="mt-4 text-sm text-blue-600 font-medium hover:underline"
+              className="mt-4 text-sm text-blue-600 font-semibold hover:underline"
             >
               Add your first service
             </button>
@@ -166,10 +178,10 @@ const ManageServices = () => {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-medium text-zinc-900">
+                      <p className="font-semibold text-base text-zinc-900">
                         {service.name}
                       </p>
-                      <p className="text-sm text-zinc-500 mt-1">
+                      <p className="text-bold text-zinc-500 mt-1">
                         {service.durationMins} mins • {service.currency}{' '}
                         {service.price.toLocaleString()}
                       </p>
@@ -220,16 +232,16 @@ const ManageServices = () => {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-zinc-100">
-                    <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                    <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                       Service
                     </th>
-                    <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                    <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                       Duration
                     </th>
-                    <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                    <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                       Price
                     </th>
-                    <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                    <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                       Status
                     </th>
                     <th className="px-5 py-3.5" />
@@ -241,13 +253,13 @@ const ManageServices = () => {
                       key={service._id}
                       className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50"
                     >
-                      <td className="px-5 py-4 font-medium text-zinc-900">
+                      <td className="px-5 py-4 font-semibold text-zinc-900">
                         {service.name}
                       </td>
                       <td className="px-5 py-4 text-zinc-500">
                         {service.durationMins} mins
                       </td>
-                      <td className="px-5 py-4 text-zinc-900">
+                      <td className="px-5 py-4 font-semibold text-zinc-900">
                         {service.currency} {service.price.toLocaleString()}
                       </td>
                       <td className="px-5 py-4">
@@ -330,7 +342,7 @@ const ManageServices = () => {
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="Enter service name you offer"
+                  placeholder="Service name"
                   required
                   className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
@@ -349,7 +361,7 @@ const ManageServices = () => {
                   placeholder="e.g. 30"
                   required
                   min="1"
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
               </div>
 

@@ -4,7 +4,7 @@ import { getStaff, addStaff, removeStaff } from '../../api/staff.api'
 import { getAvailability, setAvailability } from '../../api/availability.api'
 import type { Staff } from '../../types/index'
 import { toast } from 'sonner'
-import { Plus, Trash2, Loader2, X, Clock } from 'lucide-react'
+import { Plus, Trash2, Loader2, X, Clock, Users } from 'lucide-react'
 
 const DAYS = [
   'Sunday',
@@ -114,14 +114,22 @@ const ManageStaff = () => {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-zinc-900">Staff</h1>
-            <p className="text-sm text-zinc-500 mt-0.5">
+            <h1
+              style={{
+                fontFamily: "'Google Sans Flex', sans-serif",
+                fontWeight: 750,
+              }}
+              className="text-3xl sm:text-4xl leading-[1.1] tracking-[-0.01em] text-zinc-900"
+            >
+              Staff
+            </h1>
+            <p className="text-sm text-zinc-500 mt-1">
               Manage your team members and their availability
             </p>
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
           >
             <Plus size={16} />
             Add staff
@@ -134,7 +142,10 @@ const ManageStaff = () => {
           </div>
         ) : staff.length === 0 ? (
           <div className="bg-white border border-zinc-200 rounded-xl p-12 text-center shadow-sm">
-            <p className="text-zinc-400 text-sm">No staff members yet</p>
+            <div className="w-12 h-12 bg-zinc-50 rounded-full flex items-center justify-center mx-auto mb-3">
+              <Users size={22} className="text-zinc-400" />
+            </div>
+            <p className="text-zinc-500 text-sm">No staff members yet</p>
             <button
               onClick={() => setShowAddModal(true)}
               className="mt-4 text-sm text-blue-600 font-medium hover:underline"
@@ -160,14 +171,14 @@ const ManageStaff = () => {
                     <Trash2 size={15} />
                   </button>
                 </div>
-                <p className="font-medium text-zinc-900 text-sm">
+                <p className="font-semibold text-base text-zinc-900 text-sm">
                   {member.name}
                 </p>
-                <p className="text-xs text-zinc-400 mt-0.5">{member.email}</p>
-                <p className="text-xs text-zinc-400">{member.phone}</p>
+                <p className="text-sm text-zinc-400 mt-0.5">{member.email}</p>
+                <p className="text-sm text-zinc-400">{member.phone}</p>
                 <button
                   onClick={() => openAvailabilityModal(member)}
-                  className="mt-4 flex items-center gap-1.5 text-xs text-blue-600 font-medium hover:underline"
+                  className="mt-4 flex items-center gap-1.5 text-sm text-blue-600 font-base hover:underline"
                 >
                   <Clock size={13} />
                   Set availability
@@ -187,7 +198,7 @@ const ManageStaff = () => {
           />
           <div className="relative bg-white rounded-xl shadow-lg w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-base font-semibold text-zinc-900">
+              <h2 className="text-lg font-semibold text-zinc-900">
                 Add staff member
               </h2>
               <button
@@ -199,7 +210,7 @@ const ManageStaff = () => {
             </div>
             <form onSubmit={handleAddStaff} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                <label className="block text-base font-medium text-zinc-900 mb-1.5">
                   Full name
                 </label>
                 <input
@@ -208,11 +219,11 @@ const ManageStaff = () => {
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   placeholder="e.g. Kunle"
                   required
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                <label className="block text-sm text-base font-medium text-zinc-900 mb-1.5">
                   Email
                 </label>
                 <input
@@ -221,11 +232,11 @@ const ManageStaff = () => {
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   placeholder="kunle@example.com"
                   required
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                <label className="block text-base font-medium text-zinc-900 mb-1.5">
                   Phone
                 </label>
                 <input
@@ -233,13 +244,13 @@ const ManageStaff = () => {
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                   placeholder="08012345678"
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
               </div>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-blue-600 text-white rounded-lg px-4 py-3 text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>
@@ -264,7 +275,7 @@ const ManageStaff = () => {
           />
           <div className="relative bg-white rounded-xl shadow-lg w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-base font-semibold text-zinc-900">
+              <h2 className="text-lg font-semibold text-zinc-900">
                 {selectedStaff?.name}'s availability
               </h2>
               <button
@@ -278,7 +289,7 @@ const ManageStaff = () => {
             <div className="space-y-3">
               {availability.map((day, index) => (
                 <div key={day.dayOfWeek} className="flex items-center gap-3">
-                  <div className="w-24 text-sm text-zinc-700 font-medium">
+                  <div className="w-24 text-base text-zinc-700 font-base">
                     {DAYS[day.dayOfWeek]}
                   </div>
                   <input
@@ -309,7 +320,7 @@ const ManageStaff = () => {
                         }}
                         className="border border-zinc-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                       />
-                      <span className="text-zinc-400 text-sm">to</span>
+                      <span className="text-zinc-400 text-base">to</span>
                       <input
                         type="time"
                         value={day.endTime}
@@ -326,7 +337,7 @@ const ManageStaff = () => {
                     </>
                   )}
                   {day.isOff && (
-                    <span className="text-xs text-zinc-400">Day off</span>
+                    <span className="text-sm text-zinc-400">Day off</span>
                   )}
                 </div>
               ))}
@@ -335,7 +346,7 @@ const ManageStaff = () => {
             <button
               onClick={handleSaveAvailability}
               disabled={isSubmitting}
-              className="w-full mt-6 bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full mt-6 bg-blue-600 text-white rounded-lg px-4 py-3 text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <>

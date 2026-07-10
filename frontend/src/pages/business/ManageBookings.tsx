@@ -82,8 +82,16 @@ const ManageBookings = () => {
     <BusinessLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900">Bookings</h1>
-          <p className="text-sm text-zinc-500 mt-0.5">
+          <h1
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 750,
+            }}
+            className="text-3xl sm:text-4xl leading-[1.1] tracking-[-0.01em] text-zinc-900"
+          >
+            Bookings
+          </h1>
+          <p className="text-sm text-zinc-500 mt-1">
             Manage appointments and staff leave requests
           </p>
         </div>
@@ -153,10 +161,10 @@ const ManageBookings = () => {
                   size={32}
                   className="text-zinc-300 mx-auto mb-3"
                 />
-                <p className="text-zinc-500 text-sm font-medium">
+                <p className="text-zinc-500 text-base font-medium">
                   No bookings found
                 </p>
-                <p className="text-zinc-400 text-xs mt-1">
+                <p className="text-zinc-400 text-sm mt-1">
                   Bookings will show up here once customers start booking
                 </p>
               </div>
@@ -171,7 +179,7 @@ const ManageBookings = () => {
                       <div className="space-y-2">
                         <div className="flex items-center gap-2 flex-wrap">
                           <User size={14} className="text-zinc-400" />
-                          <p className="text-sm font-medium text-zinc-900">
+                          <p className="text-[15px] font-semibold text-zinc-900">
                             {booking.customerId?.name || 'Customer'}
                           </p>
                           <span
@@ -199,27 +207,27 @@ const ManageBookings = () => {
                             year: 'numeric',
                           })}
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-zinc-500">
+                        <div className="flex items-center gap-2 text-xs text-zinc-600">
                           <Clock size={13} />
                           {booking.startTime} - {booking.endTime}
                         </div>
-                        <p className="text-xs text-zinc-500">
+                        <p className="text-xs text-zinc-600">
                           {booking.serviceId?.name} • {booking.staffId?.name}
                         </p>
-                        <p className="text-xs font-medium text-zinc-900">
+                        <p className="text-base font-semibold text-zinc-900">
                           ₦{booking.serviceId?.price?.toLocaleString()}
                         </p>
-                        <p className="text-xs flex items-center gap-1.5 text-zinc-500 mt-1">
+                        <p className="text-xs flex items-center gap-1.5 text-zinc-600 mt-1">
                           <MapPin size={13} />
                           {booking.customerAddress}
                         </p>
 
-                        <p className="text-xs flex items-center gap-1.5 text-zinc-500">
+                        <p className="text-xs flex items-center gap-1.5 text-zinc-600">
                           <PhoneCall size={13} />
                           {booking.customerPhone}
                         </p>
                         {booking.locationNotes && (
-                          <p className="text-xs text-zinc-500 italic">
+                          <p className="text-xs text-zinc-600 italic">
                             Note: {booking.locationNotes}
                           </p>
                         )}
@@ -253,7 +261,7 @@ const ManageBookings = () => {
                           onClick={() =>
                             handleStatusUpdate(booking._id, 'completed')
                           }
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium hover:bg-blue-100 transition-colors"
+                          className="flex items-center gap-1.5 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg text-base font-medium hover:bg-blue-100 transition-colors"
                         >
                           <Check size={13} />
                           Mark complete
@@ -282,7 +290,7 @@ const ManageBookings = () => {
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="space-y-1">
-                      <p className="text-sm font-medium text-zinc-900">
+                      <p className="text-lg font-base text-zinc-900">
                         {leave.staffId?.name}
                       </p>
                       <p className="text-xs text-zinc-500">
@@ -293,21 +301,21 @@ const ManageBookings = () => {
                           year: 'numeric',
                         })}
                       </p>
-                      <p className="text-xs text-zinc-500 capitalize">
+                      <p className="text-sm text-zinc-500 capitalize">
                         Reason: {leave.reason.replace('_', ' ')}
                       </p>
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleLeaveUpdate(leave._id, 'approved')}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-xs font-medium hover:bg-green-100 transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-2 bg-green-50 text-green-700 rounded-lg text-base font-semibold hover:bg-green-100 transition-colors"
                       >
                         <Check size={13} />
                         Approve
                       </button>
                       <button
                         onClick={() => handleLeaveUpdate(leave._id, 'rejected')}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-xs font-medium hover:bg-red-100 transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-2 bg-red-50 text-red-700 rounded-lg text-base font-semibold hover:bg-red-100 transition-colors"
                       >
                         <XIcon size={13} />
                         Reject

@@ -151,18 +151,27 @@ const Settings = () => {
     <BusinessLayout>
       <div className="space-y-6 max-w-2xl">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900">Settings</h1>
-          <p className="text-sm text-zinc-500 mt-0.5">
+          <h1
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 700,
+            }}
+            className="text-2xl sm:text-3xl tracking-[-0.02em] text-zinc-900"
+          >
+            Settings
+          </h1>
+
+          <p className="mt-1 text-sm text-zinc-500">
             Manage your business profile
           </p>
         </div>
 
         {/* Booking URL */}
         <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
-          <h2 className="text-sm font-medium text-zinc-900 mb-1">
+          <h2 className="text-base font-semibold tracking-tight text-zinc-900 mb-2">
             Your booking page
           </h2>
-          <p className="text-xs text-zinc-500 mb-3">
+          <p className="text-sm text-zinc-500 mb-3">
             Share this link with your customers
           </p>
           <div className="flex items-center gap-2">
@@ -181,12 +190,12 @@ const Settings = () => {
 
         {/* Business info form */}
         <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
-          <h2 className="text-sm font-medium text-zinc-900 mb-4">
+          <h2 className="text-base font-semibold text-zinc-900 mb-4">
             Business information
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
                 Business name
               </label>
               <input
@@ -194,12 +203,12 @@ const Settings = () => {
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 required
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
                 Cover image URL
               </label>
               <input
@@ -207,21 +216,21 @@ const Settings = () => {
                 value={form.imageUrl}
                 onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
                 placeholder="https://example.com/your-photo.jpg"
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base  focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
-              <p className="text-xs text-zinc-400 mt-1">
+              <p className="text-sm text-zinc-400 mt-1">
                 Paste a link to an image (e.g. from Imgur, Google Drive, or your
                 own hosting)
               </p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
                 Category
               </label>
               <select
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               >
                 <option value="barbershop">Barbershop</option>
                 <option value="salon">Salon</option>
@@ -236,7 +245,7 @@ const Settings = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
                 Description
               </label>
               <textarea
@@ -245,12 +254,12 @@ const Settings = () => {
                   setForm({ ...form, description: e.target.value })
                 }
                 rows={3}
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
+                className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
                 Phone number
               </label>
               <input
@@ -258,13 +267,13 @@ const Settings = () => {
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 required
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
                   Address
                 </label>
                 <input
@@ -274,11 +283,11 @@ const Settings = () => {
                     setForm({ ...form, address: e.target.value })
                   }
                   required
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
                   City
                 </label>
                 <input
@@ -286,7 +295,7 @@ const Settings = () => {
                   value={form.city}
                   onChange={(e) => setForm({ ...form, city: e.target.value })}
                   required
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
               </div>
             </div>
@@ -294,7 +303,7 @@ const Settings = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+              className="bg-blue-600 text-white rounded-lg px-4 py-3 text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
             >
               {isSubmitting ? (
                 <>
@@ -305,117 +314,117 @@ const Settings = () => {
                 'Save changes'
               )}
             </button>
-            {/* Payout settings */}
-            <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
-              <h2 className="text-sm font-medium text-zinc-900 mb-1">
-                Payout settings
-              </h2>
+          </form>
+        </div>
+        {/* Payout settings */}
+        <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
+          <h2 className="text-base font-semibold text-zinc-900 mb-1">
+            Payout settings
+          </h2>
 
-              <p className="text-xs text-zinc-500 mb-4">
-                Connect your bank account to receive payments from bookings.
+          <p className="text-sm text-zinc-500 mb-4">
+            Connect your bank account to receive payments from bookings.
+          </p>
+
+          {business?.paystackSubaccountCode ? (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <p className="text-base font-medium text-green-700">
+                Payout account connected
               </p>
+              <p className="text-sm text-green-600 mt-1">
+                Payments will automatically settle to your account.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handlePayoutSetup} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
+                  Bank
+                </label>
 
-              {business?.paystackSubaccountCode ? (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                  <p className="text-sm font-medium text-green-700">
-                    Payout account connected
-                  </p>
-                  <p className="text-xs text-green-600 mt-1">
-                    Payments will automatically settle to your account.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handlePayoutSetup} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-zinc-900 mb-1.5">
-                      Bank
-                    </label>
-
-                    <div ref={bankDropdownRef} className="space-y-2 relative">
-                      <div className="relative">
-                        <Search
-                          size={16}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
-                        />
-
-                        <input
-                          type="text"
-                          value={bankSearch}
-                          onChange={(e) => {
-                            setBankSearch(e.target.value)
-                            setSelectedBank(null)
-                            setShowBankDropdown(true)
-                          }}
-                          onFocus={() => setShowBankDropdown(true)}
-                          placeholder="Search bank..."
-                          className="w-full border border-zinc-200 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                        />
-                      </div>
-
-                      {showBankDropdown && (
-                        <div className="absolute z-10 w-full bg-white border border-zinc-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                          {filteredBanks.length > 0 ? (
-                            filteredBanks.map((bank) => (
-                              <button
-                                key={bank.code}
-                                type="button"
-                                onClick={() => {
-                                  setSelectedBank(bank)
-                                  setBankSearch(bank.name)
-                                  setShowBankDropdown(false)
-                                }}
-                                className="w-full text-left px-3 py-2.5 text-sm hover:bg-zinc-100"
-                              >
-                                {bank.name}
-                              </button>
-                            ))
-                          ) : (
-                            <p className="px-3 py-2.5 text-sm text-zinc-400">
-                              No bank found
-                            </p>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-zinc-900 mb-1.5">
-                      Account number
-                    </label>
+                <div ref={bankDropdownRef} className="space-y-2 relative">
+                  <div className="relative">
+                    <Search
+                      size={16}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+                    />
 
                     <input
-                      value={accountNumber}
-                      onChange={(e) => setAccountNumber(e.target.value)}
-                      placeholder="0123456789"
-                      maxLength={10}
-                      className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      type="text"
+                      value={bankSearch}
+                      onChange={(e) => {
+                        setBankSearch(e.target.value)
+                        setSelectedBank(null)
+                        setShowBankDropdown(true)
+                      }}
+                      onFocus={() => setShowBankDropdown(true)}
+                      placeholder="Search bank..."
+                      className="w-full border border-zinc-200 rounded-lg pl-8 pr-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                     />
                   </div>
 
-                  <button
-                    disabled={isConnecting}
-                    className="bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium disabled:opacity-50"
-                  >
-                    {isConnecting ? 'Connecting...' : 'Connect payout account'}
-                  </button>
-                </form>
-              )}
-            </div>
-            <div className="bg-white border border-red-200 rounded-xl p-5 shadow-sm">
-              <h2 className="text-sm font-medium text-red-600 mb-2">
-                Danger zone
-              </h2>
+                  {showBankDropdown && (
+                    <div className="absolute z-10 w-full bg-white border border-zinc-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                      {filteredBanks.length > 0 ? (
+                        filteredBanks.map((bank) => (
+                          <button
+                            key={bank.code}
+                            type="button"
+                            onClick={() => {
+                              setSelectedBank(bank)
+                              setBankSearch(bank.name)
+                              setShowBankDropdown(false)
+                            }}
+                            className="w-full text-left px-3 py-2.5 text-sm hover:bg-zinc-100"
+                          >
+                            {bank.name}
+                          </button>
+                        ))
+                      ) : (
+                        <p className="px-3 py-2.5 text-sm text-zinc-400">
+                          No bank found
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
 
-              <p className="text-xs text-zinc-500 mb-4">
-                Permanently delete your workspace and all associated data.
-              </p>
+              <div>
+                <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
+                  Account number
+                </label>
 
-              <button className="bg-red-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-red-700 transition-colors">
-                Delete workspace
+                <input
+                  value={accountNumber}
+                  onChange={(e) => setAccountNumber(e.target.value)}
+                  placeholder="0123456789"
+                  maxLength={10}
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                />
+              </div>
+
+              <button
+                disabled={isConnecting}
+                className="bg-blue-600 text-white rounded-lg px-4 py-3 text-base font-semibold disabled:opacity-50"
+              >
+                {isConnecting ? 'Connecting...' : 'Connect payout account'}
               </button>
-            </div>
-          </form>
+            </form>
+          )}
+        </div>
+        <div className="bg-white border border-red-200 rounded-xl p-5 shadow-sm">
+          <h2 className="text-base font-semibold text-red-600 mb-2">
+            Danger zone
+          </h2>
+
+          <p className="text-sm text-zinc-500 mb-4">
+            Permanently delete your workspace and all associated data.
+          </p>
+
+          <button className="bg-red-600 text-white rounded-lg px-4 py-3 text-base font-semibold hover:bg-red-700 transition-colors">
+            Delete workspace
+          </button>
         </div>
       </div>
     </BusinessLayout>

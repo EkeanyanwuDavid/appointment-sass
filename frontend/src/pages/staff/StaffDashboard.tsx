@@ -134,7 +134,15 @@ const StaffDashboard = () => {
             <div className="bg-blue-600 text-white p-1.5 rounded-lg">
               <CalendarCheck size={18} />
             </div>
-            <span className="font-bold text-zinc-900">Bkly</span>
+            <span
+              className="text-lg tracking-[-0.03em] text-zinc-900"
+              style={{
+                fontFamily: "'Google Sans Flex', sans-serif",
+                fontWeight: 800,
+              }}
+            >
+              Bkly
+            </span>
           </div>
           <button
             onClick={handleLogout}
@@ -157,56 +165,62 @@ const StaffDashboard = () => {
           >
             Hi{user?.name ? `, ${user.name}` : ''}
           </h1>
-          <p className="text-sm text-zinc-500 mt-0.5">Here's your schedule</p>
+          <p className="text-[15px] leading-6 text-zinc-500 mt-2">
+            Here's your schedule
+          </p>
         </div>
 
         {/* Stats */}
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Upcoming bookings</p>
+              <p className="text-[15px] font-medium text-zinc-500">
+                Upcoming bookings
+              </p>
               <div className="p-2 bg-blue-50 rounded-lg">
                 <CalendarDays size={16} className="text-blue-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="text-[2rem] font-bold tracking-[-0.03em] text-zinc-900">
               {upcomingBookings.length}
             </p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Leave requests</p>
+              <p className="text-[15px] font-medium text-zinc-500">
+                Leave requests
+              </p>
               <div className="p-2 bg-amber-50 rounded-lg">
                 <Clock size={16} className="text-amber-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="text-[2rem] font-bold tracking-[-0.03em] text-zinc-900">
               {leaves.length}
             </p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Your rating</p>
+              <p className="text-[15px] font-medium text-zinc-500">
+                Your rating
+              </p>
               <div className="p-2 bg-amber-50 rounded-lg">
                 <Star size={16} className="text-amber-600 fill-amber-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="text-[2rem] font-bold tracking-[-0.03em] text-zinc-900">
               {totalReviews > 0 ? averageRating : '—'}
             </p>
-            <p className="text-xs text-zinc-400 mt-1">
+            <p className="text-sm text-zinc-400 mt-2">
               {totalReviews} review{totalReviews === 1 ? '' : 's'}
             </p>
           </div>
         </div>
 
-        {/* Bookings + sidebar */}
         <div className="grid gap-6 lg:grid-cols-3">
-          {/* Bookings — wide left column */}
           <div className="lg:col-span-2 bg-white border border-zinc-200 rounded-xl p-5 shadow-sm h-fit">
-            <h2 className="text-sm font-medium text-zinc-900 mb-4">
+            <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-zinc-900">
               Your bookings
             </h2>
             {bookings.length === 0 ? (
@@ -289,12 +303,11 @@ const StaffDashboard = () => {
             )}
           </div>
 
-          {/* Right sidebar — leave requests + reviews */}
           <div className="space-y-6">
             {/* Leave requests */}
             <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-medium text-zinc-900">
+                <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-zinc-900">
                   Your leave requests
                 </h2>
                 <button
@@ -343,7 +356,7 @@ const StaffDashboard = () => {
 
             {/* Reviews */}
             <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
-              <h2 className="text-sm font-medium text-zinc-900 mb-4">
+              <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-zinc-900">
                 What customers are saying
               </h2>
               {reviews.length === 0 ? (
@@ -387,7 +400,7 @@ const StaffDashboard = () => {
                         )}
                       </p>
                       {review.comment && (
-                        <p className="text-sm text-zinc-600">
+                        <p className="text-[15px] leading-6 text-zinc-600">
                           {review.comment}
                         </p>
                       )}
@@ -409,7 +422,7 @@ const StaffDashboard = () => {
           />
           <div className="relative bg-white rounded-xl shadow-lg w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-base font-semibold text-zinc-900">
+              <h2 className="text-lg font-semibold tracking-[-0.01em] text-zinc-900">
                 Request leave
               </h2>
               <button

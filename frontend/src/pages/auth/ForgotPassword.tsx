@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { forgotPassword } from '../../api/auth.api'
 import { toast } from 'sonner'
-import { Loader2, CalendarCheck, ArrowLeft } from 'lucide-react'
+import { Loader2, CalendarCheck, ArrowLeft, CheckCircle2 } from 'lucide-react'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('')
@@ -35,24 +35,36 @@ const ForgotPassword = () => {
               Bkly
             </h1>
           </div>
-          <h2 className="text-lg sm:text-xl font-semibold">
+          <h2
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 750,
+            }}
+            className="text-3xl sm:text-4xl leading-[1.1] tracking-[-0.01em] text-zinc-900"
+          >
             Forgot your password?
           </h2>
-          <p className="text-zinc-500 mt-1 text-sm">
+          <p className="text-zinc-500 mt-1 text-base">
             Enter your email and we'll send you a reset link
           </p>
         </div>
 
         <div className="bg-white border border-zinc-200 rounded-xl p-6 sm:p-7 shadow-sm">
           {sent ? (
-            <p className="text-sm text-zinc-600 text-center">
-              If an account exists for <strong>{email}</strong>, a reset link is
-              on its way. Check your inbox.
-            </p>
+            <div className="text-center space-y-3">
+              <CheckCircle2 size={42} className="mx-auto text-green-600" />
+
+              <h3 className="font-semibold text-zinc-900">Check your email</h3>
+
+              <p className="text-sm text-zinc-600">
+                If an account exists for <strong>{email}</strong>, we've sent a
+                password reset link.
+              </p>
+            </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                <label className="block text-sm font-semibold text-zinc-900 mb-1.5">
                   Email
                 </label>
                 <input
@@ -61,14 +73,14 @@ const ForgotPassword = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   required
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full bg-blue-600 text-white rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>
@@ -85,7 +97,7 @@ const ForgotPassword = () => {
 
         <Link
           to="/login"
-          className="flex items-center justify-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-700 mt-5"
+          className="flex items-center justify-center gap-1.5 text-base text-zinc-500 hover:text-zinc-700 mt-5"
         >
           <ArrowLeft size={14} />
           Back to sign in

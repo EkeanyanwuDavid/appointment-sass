@@ -138,7 +138,7 @@ const Dashboard = () => {
           >
             Hi{user?.name ? `, ${user.name}` : ''}
           </h1>
-          <p className="text-sm text-zinc-500 mt-0.5">
+          <p className="text-base text-zinc-500 mt-0.5">
             Here's what's happening today
           </p>
         </div>
@@ -147,67 +147,69 @@ const Dashboard = () => {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm outline-none">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Total bookings</p>
+              <p className="text-[15px] font-medium text-zinc-500">
+                Total bookings
+              </p>
               <div className="p-2 bg-blue-50 rounded-lg">
                 <CalendarDays size={16} className="text-blue-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="text-3xl font-bold tracking-tight text-zinc-900">
               {bookings.length}
             </p>
-            <p className="text-xs text-zinc-400 mt-1">
+            <p className="text-xs text-zinc-400 mt-2">
               {pendingBookings} pending
             </p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm outline-none">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Revenue</p>
+              <p className="text-[15px] font-medium text-zinc-500">Revenue</p>
               <div className="p-2 bg-green-50 rounded-lg">
                 <TrendingUp size={16} className="text-green-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="text-3xl font-bold tracking tight text-zinc-900">
               ₦{totalRevenue.toLocaleString()}
             </p>
-            <p className="text-xs text-zinc-400 mt-1">From paid bookings</p>
+            <p className="text-xs text-zinc-400 mt-2">From paid bookings</p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm outline-none">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Staff</p>
+              <p className="text-[15px] font-medium text-zinc-500">Staff</p>
               <div className="p-2 bg-purple-50 rounded-lg">
                 <Users size={16} className="text-purple-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">{staffCount}</p>
-            <p className="text-xs text-zinc-400 mt-1">Active members</p>
+            <p className="text-3xl font-bold tracking-tight text-zinc-900">
+              {staffCount}
+            </p>
+            <p className="text-xs text-zinc-400 mt-2">Active members</p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm outline-none">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Services</p>
+              <p className="text-[15px] font-medium text-zinc-500">Services</p>
               <div className="p-2 bg-amber-50 rounded-lg">
                 <Scissors size={16} className="text-amber-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
-              {serviceCount}
-            </p>
-            <p className="text-xs text-zinc-400 mt-1">Available services</p>
+            <p className="text-3xl font-bold text-zinc-900">{serviceCount}</p>
+            <p className="text-xs text-zinc-400 mt-2">Available services</p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm outline-none">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Rating</p>
+              <p className="text-[15px] font-medium text-zinc-500">Rating</p>
               <div className="p-2 bg-amber-50 rounded-lg">
                 <Star size={16} className="text-amber-500 fill-amber-500" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="text-3xl font-bold tracking-tight text-zinc-900">
               {totalReviews > 0 ? averageRating : '—'}
             </p>
-            <p className="text-xs text-zinc-400 mt-1">
+            <p className="text-xs text-zinc-400 mt-2">
               {totalReviews} review{totalReviews === 1 ? '' : 's'}
             </p>
           </div>
@@ -222,7 +224,7 @@ const Dashboard = () => {
             tabIndex={-1}
             onMouseDown={(event) => event.preventDefault()}
           >
-            <h2 className="text-sm font-medium text-zinc-900 mb-4">
+            <h2 className="text-base font-semibold text-zinc-900 mb-4">
               Bookings this week
             </h2>
             <ResponsiveContainer
@@ -231,7 +233,10 @@ const Dashboard = () => {
               className="outline-none"
               style={{ outline: 'none' }}
             >
-              <AreaChart data={getChartData()}>
+              <AreaChart
+                data={getChartData()}
+                margin={{ top: 5, right: 10, left: -15, bottom: 0 }}
+              >
                 <defs>
                   <linearGradient id="bookingGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#2563eb" stopOpacity={0.15} />
@@ -263,8 +268,8 @@ const Dashboard = () => {
           </div>
 
           {/* Recent bookings */}
-          <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm outline-none">
-            <h2 className="text-sm font-medium text-zinc-900 mb-4">
+          <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm outline-none flex flex-col">
+            <h2 className="text-base font-semibold text-zinc-900 mb-4">
               Recent bookings
             </h2>
             {recentBookings.length === 0 ? (
@@ -279,7 +284,7 @@ const Dashboard = () => {
                     className="flex items-center justify-between py-2 border-b border-zinc-100 last:border-0"
                   >
                     <div>
-                      <p className="text-sm font-medium text-zinc-900">
+                      <p className="text-base font-semibold text-zinc-900">
                         {booking.customerId?.name || 'Customer'}
                       </p>
                       <p className="text-xs text-zinc-400">
@@ -309,17 +314,17 @@ const Dashboard = () => {
         {/* Recent reviews */}
         <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm outline-none">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm text-zinc-500">Rating</p>
+            <p className="text-base font-semibold text-zinc-900">Rating</p>
             <div className="p-2 bg-amber-50 rounded-lg">
               <Star size={16} className="text-amber-500 fill-amber-500" />
             </div>
           </div>
 
-          <p className="text-2xl font-semibold text-zinc-900">
+          <p className="text-3xl font-semibold text-zinc-900">
             {totalReviews > 0 ? averageRating : '—'}
           </p>
 
-          <p className="text-xs text-zinc-400 mt-1">
+          <p className="text-sm text-zinc-400 mt-2">
             {totalReviews} review{totalReviews === 1 ? '' : 's'}
           </p>
 

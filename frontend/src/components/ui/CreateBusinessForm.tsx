@@ -55,9 +55,15 @@ const CreateBusinessForm = ({ onSuccess }: Props) => {
   }
 
   return (
-    <div className="max-w-lg mx-auto">
+    <div className="max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-zinc-900">
+        <h1
+          style={{
+            fontFamily: "'Google Sans Flex', sans-serif",
+            fontWeight: 700,
+          }}
+          className="text-2xl sm:text-3xl tracking-[-0.02em] text-zinc-900"
+        >
           Set up your business
         </h1>
         <p className="text-sm text-zinc-500 mt-1">
@@ -68,7 +74,7 @@ const CreateBusinessForm = ({ onSuccess }: Props) => {
       <div className="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+            <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
               Business name
             </label>
             <input
@@ -78,16 +84,16 @@ const CreateBusinessForm = ({ onSuccess }: Props) => {
               onChange={handleChange}
               placeholder="e.g. David's Barbershop"
               required
-              className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+            <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
               Booking page URL
             </label>
             <div className="flex items-center border border-zinc-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-600">
-              <span className="px-3 py-2.5 text-sm text-zinc-400 bg-zinc-50 border-r border-zinc-200">
+              <span className="px-3 py-3 text-base text-zinc-400 bg-zinc-50 border-r border-zinc-200">
                 bkly.com/book/
               </span>
               <input
@@ -97,16 +103,16 @@ const CreateBusinessForm = ({ onSuccess }: Props) => {
                 onChange={handleChange}
                 placeholder="davids-barbershop"
                 required
-                className="flex-1 px-3 py-2.5 text-sm focus:outline-none"
+                className="flex-1 px-3 py-2.5 text-base focus:outline-none"
               />
             </div>
-            <p className="text-xs text-zinc-400 mt-1">
+            <p className="text-m text-zinc-400 mt-1">
               Auto-generated from your business name. You can edit it.
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+            <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
               Category
             </label>
             <select
@@ -114,7 +120,7 @@ const CreateBusinessForm = ({ onSuccess }: Props) => {
               value={form.category}
               onChange={handleChange}
               required
-              className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             >
               <option value="">Select a category</option>
               <option value="barbershop">Barbershop</option>
@@ -130,7 +136,7 @@ const CreateBusinessForm = ({ onSuccess }: Props) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+            <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
               Description
             </label>
             <textarea
@@ -139,12 +145,12 @@ const CreateBusinessForm = ({ onSuccess }: Props) => {
               onChange={handleChange}
               placeholder="Tell customers what you do..."
               rows={3}
-              className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
+              className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+            <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
               Phone number
             </label>
             <input
@@ -154,13 +160,13 @@ const CreateBusinessForm = ({ onSuccess }: Props) => {
               onChange={handleChange}
               placeholder="08012345678"
               required
-              className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
                 Address
               </label>
               <input
@@ -170,11 +176,11 @@ const CreateBusinessForm = ({ onSuccess }: Props) => {
                 onChange={handleChange}
                 placeholder="15 Allen Avenue"
                 required
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+              <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
                 City
               </label>
               <input
@@ -184,7 +190,7 @@ const CreateBusinessForm = ({ onSuccess }: Props) => {
                 onChange={handleChange}
                 placeholder="Lagos"
                 required
-                className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
             </div>
           </div>
@@ -192,7 +198,7 @@ const CreateBusinessForm = ({ onSuccess }: Props) => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
+            className="w-full bg-blue-600 text-white rounded-lg px-4 py-3 text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
           >
             {isSubmitting ? (
               <>
