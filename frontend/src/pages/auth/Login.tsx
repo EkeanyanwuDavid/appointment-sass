@@ -16,7 +16,7 @@ const Login = () => {
     password: '',
   })
   const [showPassword, setShowPassword] = useState(false)
-
+  const [rememberMe, setRememberMe] = useState(false)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
@@ -110,7 +110,16 @@ const Login = () => {
                 </button>
               </div>
             </div>
-            <div className="flex justify-end">
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 text-base text-zinc-700 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded border-zinc-300 accent-blue-600 focus:outline-none focus:ring-blue-600 focus:ring-offset-2 cursor-pointer"
+                />
+                Remember me
+              </label>
               <Link
                 to="/forgot-password"
                 className="text-base text-blue-600 hover:underline"

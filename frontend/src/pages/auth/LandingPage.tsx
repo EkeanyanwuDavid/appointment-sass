@@ -334,7 +334,7 @@ const LandingPage = () => {
             >
               <button
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full flex items-center justify-between p-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-inset"
+                className="w-full flex items-center justify-between p-4 text-left outline-none  focus-visible:ring-blue-600 focus-visible:ring-inset"
               >
                 <span className="text-lg font-medium text-zinc-900">
                   {faq.question}
