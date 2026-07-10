@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getAllBusinesses } from '../../api/business.api'
 import type { Business } from '../../types/index'
+import SupportSection from '../auth/SupportSection'
 import {
   CalendarCheck,
   Search,
@@ -405,6 +406,10 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Support */}
+      <SupportSection />
+
       {/* Footer */}
       <div className="border-t bg-zinc-900 border-zinc-200 py-6 text-center text-base text-zinc-400">
         <div className="flex items-center justify-center gap-5 mb-4">

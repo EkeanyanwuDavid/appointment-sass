@@ -10,12 +10,14 @@ import {
   LogOut,
   Menu,
   User as UserIcon,
+  MessagesSquare,
 } from 'lucide-react'
 
 const navItems = [
   { label: 'Overview', icon: LayoutDashboard, path: '/admin/dashboard' },
   { label: 'Businesses', icon: Building2, path: '/admin/businesses' },
   { label: 'Users', icon: Users, path: '/admin/users' },
+  { label: 'FeedBack', icon: MessagesSquare, path: '/admin/feedback' },
 ]
 
 type SidebarProps = {

@@ -26,6 +26,7 @@ import PaymentCallBack from './pages/customer/PaymentCallBack'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminBusinesses from './pages/admin/AdminBusiness'
 import AdminUsers from './pages/admin/AdminUsers'
+import AdminFeedback from './pages/admin/AdminFeedBack'
 const App = () => {
   return (
     <BrowserRouter>
@@ -51,7 +52,7 @@ const App = () => {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/businesses" element={<AdminBusinesses />} />
         <Route path="/admin/users" element={<AdminUsers />} />
-
+        <Route path="/admin/feedback" element={<AdminFeedback />} />
         {/* Auth  */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

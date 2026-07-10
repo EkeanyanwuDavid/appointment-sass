@@ -93,3 +93,15 @@ export interface Review {
   comment: string
   createdAt: string
 }
+
+export interface FeedbackForm {
+  name: string
+  email: string
+  category:
+    | 'Bug Report'
+    | 'Feature Request'
+    | 'Improvement'
+    | 'Question'
+    | 'General Feedback'
+  message: string
+}

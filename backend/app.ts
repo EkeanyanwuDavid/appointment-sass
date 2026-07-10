@@ -17,7 +17,7 @@ import bookingRoutes from "./src/routes/booking.routes";
 import leaveRoutes from "./src/routes/leave.routes";
 import paymentRoutes from "./src/routes/payment.routes";
 import reviewRoutes from "./src/routes/review.routes";
-
+import feedbackRoutes from "./src/routes/feedback.routes";
 import adminRoutes from "./src/routes/admin.routes";
 const app = express();
 
@@ -50,6 +50,7 @@ app.use("/api/payments", paymentRoutes);
 
 // reviews
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/feedback", feedbackRoutes);
 
 //ADMIN
 app.use("/api/admin", adminRoutes);
