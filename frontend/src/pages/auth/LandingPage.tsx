@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom'
 import { getAllBusinesses } from '../../api/business.api'
 import type { Business } from '../../types/index'
 import SupportSection from '../auth/SupportSection'
+import FadeUp from '../../components/animations/Fadeup'
+import ScrollToTopButton from '../../components/ui/ScrolltoTopBtn'
+import { motion } from 'framer-motion'
 import {
   CalendarCheck,
   Search,
@@ -101,7 +104,9 @@ const FacebookIcon = () => (
 )
 const LandingPage = () => {
   const [businesses, setBusinesses] = useState<Business[]>([])
+  const [loadingBusinesses, setLoadingBusinesses] = useState(true)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+
   useEffect(() => {
     const loadBusinesses = async () => {
       try {
@@ -109,6 +114,8 @@ const LandingPage = () => {
         setBusinesses(res.data.businesses.slice(0, 3))
       } catch {
         // fail silently
+      } finally {
+        setLoadingBusinesses(false)
       }
     }
     void loadBusinesses()
@@ -117,352 +124,419 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-linear-to-b from-white via-blue-50/30 to-zinc-50">
       {/* Nav */}
-      <div className="border-b border-zinc-200 bg-white px-4 sm:px-6 py-4">
+      <div className="sticky top-0 z-50 border-b border-zinc-200/70 bg-white/80 backdrop-blur-md px-4 sm:px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="bg-blue-600 text-white p-1.5 rounded-lg">
-              <CalendarCheck size={18} />
-            </div>
+            <motion.div
+              whileHover={{ rotate: 5, scale: 1.05 }}
+              className="bg-blue-600 text-white p-1.5 rounded-lg"
+            >
+              <div className="bg-blue-600 text-white p-1.5 rounded-lg">
+                <CalendarCheck size={18} />
+              </div>
+            </motion.div>
+
             <span className="font-bold text-xl text-zinc-900">Bkly</span>
           </div>
-          <Link
-            to="/login"
-            className="text-base font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
-          >
-            Sign in
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              to="/login"
+              className="text-base font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+            >
+              Sign in
+            </Link>
+
+            <Link
+              to="/register"
+              className="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            >
+              Get started
+            </Link>
+          </div>
         </div>
       </div>
 
       {/* Hero */}
-      <div className="relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl -z-10" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
-          <div className="inline-flex items-center gap-1.5  bg-blue-50 text-blue-700 text-sm font-medium px-3 py-1.5 rounded-full mb-6">
-            <Sparkles size={13} />
-            No more waiting rooms
-          </div>
-          <h1
-            className="text-5xl sm:text-5xl lg:text-6xl leading-[1.1] text-zinc-900  mx-auto tracking-[-0.01em]"
-            style={{
-              fontFamily: "'Google Sans Flex', sans-serif",
-              fontWeight: 750,
-            }}
-          >
-            <span className="bg-linear-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-              Book
-            </span>{' '}
-            a professional who comes to you
-          </h1>
-          <p className="text-lg text-zinc-500 mt-5 max-w-2xl mx-auto leading-8">
-            Bkly connects you with barbers, caterers, stylists, and more booked
-            in minutes, delivered at your door.
-          </p>
-          <div className="flex flex-col  sm:flex-row items-center justify-center gap-3 mt-8">
-            <Link
-              to="/register"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white rounded-lg px-8 py-4 text-base font-medium hover:bg-blue-700 transition-colors"
+      <FadeUp>
+        <div className="relative">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl -z-10" />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
+            <div className="inline-flex items-center gap-1.5  bg-blue-50 text-blue-700 text-sm font-medium px-3 py-1.5 rounded-full mb-6">
+              <Sparkles size={13} />
+              No more waiting rooms
+            </div>
+            <h1
+              className="text-5xl sm:text-5xl lg:text-6xl leading-[1.1] text-zinc-900  mx-auto tracking-[-0.01em]"
+              style={{
+                fontFamily: "'Google Sans Flex', sans-serif",
+                fontWeight: 750,
+              }}
             >
-              Find a service
-              <ArrowRight size={16} />
-            </Link>
-            <Link
-              to="/register"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 border border-zinc-200 bg-white text-zinc-700 rounded-lg px-8 py-4 text-base font-medium hover:bg-zinc-50 transition-colors"
-            >
-              List your business
-            </Link>
+              <span className="bg-linear-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                Book
+              </span>{' '}
+              a professional who comes to you
+            </h1>
+            <p className="text-lg text-zinc-500 mt-5 max-w-2xl mx-auto leading-8">
+              Bkly connects you with barbers, caterers, stylists, and more
+              booked in minutes, delivered at your door.
+            </p>
+            <div className="flex flex-col  sm:flex-row items-center justify-center gap-3 mt-8">
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <Link
+                  to="/register"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white rounded-lg px-8 py-4 text-base font-medium hover:bg-blue-700 transition-colors"
+                >
+                  Find a service
+                  <ArrowRight size={16} />
+                </Link>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Link
+                  to="/register"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 border border-zinc-200 bg-white text-zinc-700 rounded-lg px-8 py-4 text-base font-medium hover:bg-zinc-50 transition-colors"
+                >
+                  List your business
+                </Link>
+              </motion.div>
+            </div>
           </div>
         </div>
-      </div>
+      </FadeUp>
 
       {/* Early Access */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-        <Link
-          to="/register"
-          className="block rounded-xl border border-blue-100 bg-blue-50 p-5 text-center hover:bg-blue-100/70 hover:border-blue-200 transition-colors group"
-        >
-          <h3 className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xl font-semibold text-blue-900">
-            <RocketIcon className="w-5 h-5 shrink-0" />
-            <span>
-              Bkly is now welcoming its first customers and businesses.
+        <motion.div whileHover={{ y: -3 }}>
+          {' '}
+          <Link
+            to="/register"
+            className="block rounded-xl border border-blue-100 bg-blue-50 p-5 text-center hover:bg-blue-100/70 hover:border-blue-200 transition-colors group"
+          >
+            <h3 className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xl font-semibold text-blue-900">
+              <RocketIcon className="w-5 h-5 shrink-0" />
+              <span>
+                Bkly is now welcoming its first customers and businesses.
+              </span>
+            </h3>
+
+            <p className="mt-2 text-base text-blue-700">
+              Be among the first to experience hassle-free home service bookings
+              and help shape the future of Bkly.
+            </p>
+
+            <span className="inline-flex items-center gap-1.5 mt-2 text-base font-medium text-blue-700 group-hover:gap-2.5 transition-all">
+              Join now
+              <ArrowRight size={16} />
             </span>
-          </h3>
-
-          <p className="mt-2 text-base text-blue-700">
-            Be among the first to experience hassle-free home service bookings
-            and help shape the future of Bkly.
-          </p>
-
-          <span className="inline-flex items-center gap-1.5 mt-2 text-base font-medium text-blue-700 group-hover:gap-2.5 transition-all">
-            Join now
-            <ArrowRight size={16} />
-          </span>
-        </Link>
+          </Link>
+        </motion.div>
       </div>
 
       {/* How it works */}
-      <div className="max-w-7xl  mx-auto px-4 sm:px-6 py-12">
-        <h2 className="text-3xl font-semibold text-zinc-900 text-center mb-8">
-          How it works
-        </h2>
-        <div className="grid gap-6 sm:grid-cols-3">
-          <div className="text-center">
-            <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Search size={20} className="text-blue-600" />
+      <FadeUp>
+        {' '}
+        <div className="max-w-7xl  mx-auto px-4 sm:px-6 py-12">
+          <h2 className="text-3xl font-semibold text-zinc-900 text-center mb-8">
+            How it works
+          </h2>
+          <div className="grid gap-6 sm:grid-cols-3">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Search size={20} className="text-blue-600" />
+              </div>
+              <p className="text-lg font-medium text-zinc-900">Browse</p>
+              <p className="text-base text-zinc-500 mt-1">
+                Find a business and service near you
+              </p>
             </div>
-            <p className="text-lg font-medium text-zinc-900">Browse</p>
-            <p className="text-base text-zinc-500 mt-1">
-              Find a business and service near you
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Clock size={20} className="text-blue-600" />
+            <div className="text-center">
+              <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Clock size={20} className="text-blue-600" />
+              </div>
+              <p className="text-lg font-medium text-zinc-900">Pick a time</p>
+              <p className="text-base text-zinc-500 mt-1">
+                Choose a slot that works for your schedule
+              </p>
             </div>
-            <p className="text-lg font-medium text-zinc-900">Pick a time</p>
-            <p className="text-base text-zinc-500 mt-1">
-              Choose a slot that works for your schedule
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
-              <MapPin size={20} className="text-blue-600" />
+            <div className="text-center">
+              <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                <MapPin size={20} className="text-blue-600" />
+              </div>
+              <p className="text-lg font-medium text-zinc-900">
+                Get served at your door
+              </p>
+              <p className="text-base text-zinc-500 mt-1">
+                A professional comes to you, on time
+              </p>
             </div>
-            <p className="text-lg font-medium text-zinc-900">
-              Get served at your door
-            </p>
-            <p className="text-base text-zinc-500 mt-1">
-              A professional comes to you, on time
-            </p>
           </div>
         </div>
-      </div>
+      </FadeUp>
 
       {/* Live businesses */}
-      {businesses.length > 0 && (
+      <FadeUp delay={0.15}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
           <h2 className="text-lg font-semibold text-zinc-900 text-center mb-8">
             Businesses already on Bkly
           </h2>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {businesses.map((business) => (
-              <div
-                key={business._id}
-                className="bg-white border border-zinc-200 hover:-translate-y-1 hover:shadow-md transition-all rounded-xl overflow-hidden shadow-sm"
-              >
-                {business.imageUrl ? (
-                  <div className="h-20 bg-zinc-100">
-                    <img
-                      src={business.imageUrl}
-                      alt={business.name}
-                      className="w-full h-full object-cover"
-                    />
+
+          {loadingBusinesses ? (
+            <div className="grid gap-4 sm:grid-cols-3">
+              {[...Array(3)].map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-xl border border-zinc-200 bg-white overflow-hidden animate-pulse"
+                >
+                  <div className="h-20 bg-zinc-200" />
+
+                  <div className="p-4 space-y-3">
+                    <div className="h-5 w-2/3 rounded bg-zinc-200" />
+                    <div className="h-4 w-1/2 rounded bg-zinc-100" />
                   </div>
-                ) : (
-                  <div
-                    className={`relative h-20 overflow-hidden bg-linear-to-br ${
-                      categoryStyles[business.category]?.gradient ||
-                      categoryStyles.other.gradient
+                </div>
+              ))}
+            </div>
+          ) : businesses.length > 0 ? (
+            <div className="grid gap-4 sm:grid-cols-3">
+              {businesses.map((business) => (
+                <div
+                  key={business._id}
+                  className="bg-white border border-zinc-200 hover:-translate-y-1 hover:shadow-md transition-all rounded-xl overflow-hidden shadow-sm"
+                >
+                  {business.imageUrl ? (
+                    <div className="h-20 bg-zinc-100">
+                      <img
+                        src={business.imageUrl}
+                        alt={business.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className={`relative h-20 overflow-hidden bg-linear-to-br ${
+                        categoryStyles[business.category]?.gradient ||
+                        categoryStyles.other.gradient
+                      }`}
+                    >
+                      {(() => {
+                        const Icon =
+                          categoryStyles[business.category]?.icon ||
+                          categoryStyles.other.icon
+                        return (
+                          <>
+                            <Icon
+                              size={72}
+                              strokeWidth={1.25}
+                              className="absolute -right-3 -bottom-4 text-white/15 -rotate-12"
+                            />
+                            <Icon
+                              size={22}
+                              strokeWidth={1.75}
+                              className="absolute left-3.5 bottom-3.5 text-white"
+                            />
+                          </>
+                        )
+                      })()}
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <p className="text-lg font-medium text-zinc-900">
+                      {business.name}
+                    </p>
+                    <p className="text-sm text-zinc-500 capitalize mt-0.5">
+                      {business.category} • {business.city}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      </FadeUp>
+
+      {/* Categories */}
+      <FadeUp delay={0.15}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+          <h2 className="text-3xl font-semibold text-zinc-900 text-center mb-8">
+            Whatever you need, we've got you
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {categoryList.map((cat) => {
+              const Icon = categoryStyles[cat.value].icon
+              return (
+                <Link
+                  key={cat.value}
+                  to="/register"
+                  className={`bg-linear-to-br ${categoryStyles[cat.value].gradient} rounded-xl p-5 text-white flex flex-col items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-md transition-all`}
+                >
+                  <Icon size={34} />
+                  <p className="text-lg font-medium text-center">{cat.label}</p>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      </FadeUp>
+
+      {/* FAQ */}
+      <FadeUp delay={0.2}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+          <h2 className="text-3xl font-semibold text-zinc-900 text-center mb-8">
+            Frequently asked questions
+          </h2>
+          <div className="space-y-3">
+            {faqs.map((faq, i) => (
+              <div
+                key={i}
+                className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm"
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between p-4 text-left outline-none  focus-visible:ring-blue-600 focus-visible:ring-inset"
+                >
+                  <span className="text-lg font-medium text-zinc-900">
+                    {faq.question}
+                  </span>
+                  <ChevronDown
+                    size={18}
+                    className={`text-zinc-400 transition-transform shrink-0 ml-3 ${
+                      openFaq === i ? 'rotate-180' : ''
                     }`}
-                  >
-                    {(() => {
-                      const Icon =
-                        categoryStyles[business.category]?.icon ||
-                        categoryStyles.other.icon
-                      return (
-                        <>
-                          <Icon
-                            size={72}
-                            strokeWidth={1.25}
-                            className="absolute -right-3 -bottom-4 text-white/15 -rotate-12"
-                          />
-                          <Icon
-                            size={22}
-                            strokeWidth={1.75}
-                            className="absolute left-3.5 bottom-3.5 text-white"
-                          />
-                        </>
-                      )
-                    })()}
+                  />
+                </button>
+                {openFaq === i && (
+                  <div className="px-4 pb-4">
+                    <p className="text-base leading-7 text-zinc-500">
+                      {faq.answer}
+                    </p>
                   </div>
                 )}
-                <div className="p-4">
-                  <p className="text-lg font-medium text-zinc-900">
-                    {business.name}
-                  </p>
-                  <p className="text-sm text-zinc-500 capitalize mt-0.5">
-                    {business.category} • {business.city}
-                  </p>
-                </div>
               </div>
             ))}
           </div>
         </div>
-      )}
-
-      {/* Categories */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-        <h2 className="text-3xl font-semibold text-zinc-900 text-center mb-8">
-          Whatever you need, we've got you
-        </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {categoryList.map((cat) => {
-            const Icon = categoryStyles[cat.value].icon
-            return (
-              <Link
-                key={cat.value}
-                to="/register"
-                className={`bg-linear-to-br ${categoryStyles[cat.value].gradient} rounded-xl p-5 text-white flex flex-col items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-md transition-all`}
-              >
-                <Icon size={34} />
-                <p className="text-lg font-medium text-center">{cat.label}</p>
-              </Link>
-            )
-          })}
-        </div>
-      </div>
-      {/* FAQ */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-        <h2 className="text-3xl font-semibold text-zinc-900 text-center mb-8">
-          Frequently asked questions
-        </h2>
-        <div className="space-y-3">
-          {faqs.map((faq, i) => (
-            <div
-              key={i}
-              className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm"
-            >
-              <button
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full flex items-center justify-between p-4 text-left outline-none  focus-visible:ring-blue-600 focus-visible:ring-inset"
-              >
-                <span className="text-lg font-medium text-zinc-900">
-                  {faq.question}
-                </span>
-                <ChevronDown
-                  size={18}
-                  className={`text-zinc-400 transition-transform shrink-0 ml-3 ${
-                    openFaq === i ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-              {openFaq === i && (
-                <div className="px-4 pb-4">
-                  <p className="text-base leading-7 text-zinc-500">
-                    {faq.answer}
-                  </p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      </FadeUp>
 
       {/* Final CTA */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
-        <h2 className="text-4xl font-semibold text-zinc-900">
-          Ready to get started?
-        </h2>
-        <p className="text-lg text-zinc-500 mt-2 mb-6">
-          Join Bkly today — it takes less than a minute
-        </p>
-        <Link
-          to="/register"
-          className="inline-flex items-center gap-2 bg-blue-600 text-white rounded-lg text-base px-8 py-4 font-medium hover:bg-blue-700 transition-colors"
-        >
-          Create your account
-          <ArrowRight size={16} />
-        </Link>
-      </div>
+      <FadeUp delay={0.25}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
+          <h2 className="text-4xl font-semibold text-zinc-900">
+            Ready to get started?
+          </h2>
+          <p className="text-lg text-zinc-500 mt-2 mb-6">
+            Join Bkly today — it takes less than a minute
+          </p>
+          <Link
+            to="/register"
+            className="inline-flex items-center gap-2 bg-blue-600 text-white rounded-lg text-base px-8 py-4 font-medium hover:bg-blue-700 transition-colors"
+          >
+            Create your account
+            <ArrowRight size={16} />
+          </Link>
+        </div>
+      </FadeUp>
 
       {/* Help */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center">
-        <div className="bg-white border border-zinc-200 rounded-xl p-8 shadow-sm">
-          <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <MessageCircle size={22} className="text-blue-600" />
-          </div>
-          <h2 className="text-2xl font-semibold text-zinc-900">Need help?</h2>
-          <p className="text-lg text-zinc-500 mt-1 mb-5">
-            Our team is here to guide you through booking or listing your
-            business.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a
-              href="tel:+2348012345678"
-              className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-base font-medium text-zinc-700 hover:bg-zinc-50 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
-            >
-              <PhoneCall className="text-blue-600" size={16} />
-              +234 814 790 1386
-            </a>
+      <FadeUp delay={0.3}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center">
+          <div className="bg-white border border-zinc-200 rounded-xl p-8 shadow-sm">
+            <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <MessageCircle size={22} className="text-blue-600" />
+            </div>
+            <h2 className="text-2xl font-semibold text-zinc-900">Need help?</h2>
+            <p className="text-lg text-zinc-500 mt-1 mb-5">
+              Our team is here to guide you through booking or listing your
+              business.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href="tel:+2348012345678"
+                className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-base font-medium text-zinc-700 hover:bg-zinc-50 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
+              >
+                <PhoneCall className="text-blue-600" size={16} />
+                +234 814 790 1386
+              </a>
 
-            <a
-              href="mailto:support@bkly.com"
-              className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-base font-medium text-zinc-700 hover:bg-zinc-50 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
-            >
-              <Mail className="text-blue-600" size={16} />
-              support@bkly.com
-            </a>
+              <a
+                href="mailto:support@bkly.com"
+                className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-base font-medium text-zinc-700 hover:bg-zinc-50 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
+              >
+                <Mail className="text-blue-600" size={16} />
+                support@bkly.com
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      </FadeUp>
 
       {/* Support */}
-      <SupportSection />
+      <FadeUp delay={0.35}>
+        {' '}
+        <SupportSection />
+      </FadeUp>
 
       {/* Footer */}
-      <div className="border-t bg-zinc-900 border-zinc-200 py-6 text-center text-base text-zinc-400">
-        <div className="flex items-center justify-center gap-5 mb-4">
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-zinc-500 hover:text-white transition-colors"
-            aria-label="Twitter"
-          >
-            <TwitterIcon />
-          </a>
+      <FadeUp delay={0.35}>
+        <div className="border-t bg-zinc-900 border-zinc-200 py-6 text-center text-base text-zinc-400">
+          <div className="flex items-center justify-center gap-5 mb-4">
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-500 hover:text-white transition-colors"
+              aria-label="Twitter"
+            >
+              <TwitterIcon />
+            </a>
 
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-zinc-500 hover:text-white transition-colors"
-            aria-label="Instagram"
-          >
-            <InstagramIcon />
-          </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-500 hover:text-white transition-colors"
+              aria-label="Instagram"
+            >
+              <InstagramIcon />
+            </a>
 
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-zinc-500 hover:text-white transition-colors"
-            aria-label="Facebook"
-          >
-            <FacebookIcon />
-          </a>
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-500 hover:text-white transition-colors"
+              aria-label="Facebook"
+            >
+              <FacebookIcon />
+            </a>
 
-          <a
-            href="mailto:hello@bkly.com"
-            className="text-zinc-500 hover:text-white transition-colors"
-            aria-label="Email"
-          >
-            <Mail size={18} />
-          </a>
+            <a
+              href="mailto:hello@bkly.com"
+              className="text-zinc-500 hover:text-white transition-colors"
+              aria-label="Email"
+            >
+              <Mail size={18} />
+            </a>
+          </div>
+          <p className="text-base text-zinc-500">
+            &copy; {new Date().getFullYear()} Bkly. Book anything, anywhere.
+          </p>
+          <p className="text-sm text-zinc-600 mt-2">
+            <Link
+              to="/terms"
+              className="underline hover:text-white transition-colors"
+            >
+              Terms & Privacy Policy
+            </Link>
+          </p>
         </div>
-        <p className="text-base text-zinc-500">
-          &copy; {new Date().getFullYear()} Bkly. Book anything, anywhere.
-        </p>
-        <p className="text-sm text-zinc-600 mt-2">
-          <Link
-            to="/terms"
-            className="underline hover:text-white transition-colors"
-          >
-            Terms & Privacy Policy
-          </Link>
-        </p>
-      </div>
+      </FadeUp>
+      <ScrollToTopButton />
     </div>
   )
 }

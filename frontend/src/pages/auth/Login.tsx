@@ -40,7 +40,7 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md sm:max-w-lg">
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center gap-2 mb-5">

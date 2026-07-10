@@ -27,9 +27,12 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminBusinesses from './pages/admin/AdminBusiness'
 import AdminUsers from './pages/admin/AdminUsers'
 import AdminFeedback from './pages/admin/AdminFeedBack'
+
+import ScrollToTop from './components/ui/ScrolltoTop'
 const App = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/business/dashboard" element={<Dashboard />} />

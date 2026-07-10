@@ -46,7 +46,7 @@ const Register = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md sm:max-w-lg">
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center gap-2 mb-5">
@@ -130,7 +130,7 @@ const Register = () => {
                   onChange={handleChange}
                   placeholder="••••••••"
                   required
-                  className="w-full border border-zinc-200 rounded-lg px-4 py-3.5 text-base pr-10 text-base text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                  className="w-full border border-zinc-200 rounded-lg px-4 py-3.5 pr-10 text-base text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
                 />
                 <button
                   type="button"
@@ -150,7 +150,7 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={() => setForm({ ...form, role: 'customer' })}
-                  className={`border rounded-lg px-4 py-3.5 text-base font-medium font-medium transition-all ${
+                  className={`border rounded-lg px-4 py-3.5 text-base font-medium transition-all ${
                     form.role === 'customer'
                       ? 'border-blue-600 bg-blue-50 text-blue-700'
                       : 'border-zinc-200 text-zinc-600 hover:bg-zinc-50'
