@@ -170,3 +170,23 @@ export const verifyPayment = asyncHandler(
     }
   },
 );
+
+export const refundPayment = async (
+  paymentRef: string,
+  amountInKobo: number,
+) => {
+  const response = await axios.post(
+    `${PAYSTACK_BASE_URL}/refund`,
+    {
+      transaction: paymentRef,
+      amount: amountInKobo,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${env.paystackSecretKey}`,
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  return response.data;
+};

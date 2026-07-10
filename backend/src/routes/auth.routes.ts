@@ -12,18 +12,23 @@ import passport from "../config/passport";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
 import { IUser } from "../models/User";
+import {
+  authLimiter,
+  strictLimiter,
+} from "../middleware/ratelimiter.middleware";
+
 import sendEmail from "../utils/sendEmail";
 const router = Router();
 
-router.post("/register", register);
-router.post("/login", login);
+router.post("/register", authLimiter, register);
+router.post("/login", authLimiter, login);
 router.get("/me", protect as RequestHandler, getMe as RequestHandler);
 router.put(
   "/change-password",
   protect as RequestHandler,
   changePassword as RequestHandler,
 );
-router.post("/forgot-password", forgotPassword);
+router.post("/forgot-password", strictLimiter, forgotPassword);
 router.put("/reset-password/:token", resetPassword);
 router.get("/google", (req, res, next) => {
   const role = (req.query.role as string | undefined) || "customer";

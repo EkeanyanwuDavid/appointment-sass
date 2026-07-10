@@ -8,6 +8,7 @@ import { getAvailableSlots } from "../utils/slots";
 import { AuthRequest } from "../types/index";
 import asyncHandler from "../utils/asyncHandler";
 import sendEmail from "../utils/sendEmail";
+import { refundPayment } from "./payment.controller";
 import { bookingCancellationTemplate } from "../utils/emailTemplates";
 
 export const createBooking = asyncHandler(
@@ -120,8 +121,7 @@ export const getMyBookings = asyncHandler(
       .populate("businessId", "name slug")
       .populate("staffId", "name")
       .populate("serviceId", "name price durationMins currency")
-      .sort({ date: -1 });
-
+      .sort({ createdAt: -1 });
     res.status(200).json({ success: true, bookings });
   },
 );
@@ -132,7 +132,7 @@ export const getBusinessBookings = asyncHandler(
       .populate("customerId", "name email phone")
       .populate("staffId", "name")
       .populate("serviceId", "name price durationMins currency")
-      .sort({ date: -1 });
+      .sort({ createdAt: -1 });
 
     res.status(200).json({ success: true, bookings });
   },
@@ -148,7 +148,7 @@ export const getStaffBookings = asyncHandler(
     const bookings = await Booking.find({ staffId: staff._id })
       .populate("customerId", "name email phone")
       .populate("serviceId", "name price durationMins currency")
-      .sort({ date: -1 });
+      .sort({ createdAt: -1 });
 
     res.status(200).json({ success: true, bookings });
   },
@@ -180,7 +180,7 @@ export const cancelBooking = asyncHandler(
       customerId: req.user?._id,
     })
       .populate("businessId", "name")
-      .populate("serviceId", "name");
+      .populate("serviceId", "name price");
 
     if (!booking) {
       res.status(404).json({ success: false, message: "Booking not found" });
@@ -192,6 +192,22 @@ export const cancelBooking = asyncHandler(
         .status(400)
         .json({ success: false, message: "Cannot cancel a completed booking" });
       return;
+    }
+
+    if (booking.paymentStatus === "paid" && booking.paymentRef) {
+      try {
+        const service = booking.serviceId as unknown as { price: number };
+        await refundPayment(booking.paymentRef, service.price * 100);
+        booking.paymentStatus = "refunded";
+      } catch (err) {
+        console.error("Refund failed:", err);
+        res.status(500).json({
+          success: false,
+          message:
+            "Cancellation failed — refund could not be processed. Please contact support.",
+        });
+        return;
+      }
     }
 
     booking.status = "cancelled";
@@ -215,6 +231,7 @@ export const cancelBooking = asyncHandler(
     res.status(200).json({ success: true, booking });
   },
 );
+
 export const getSlots = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const { staffId, serviceId, date } = req.query;

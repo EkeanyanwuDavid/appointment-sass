@@ -87,7 +87,28 @@ export const getAllBusinesses = asyncHandler(
       filter.name = { $regex: search as string, $options: "i" };
     }
 
-    const businesses = await Business.find(filter).sort({ createdAt: -1 });
+    // Single aggregation instead of N+1 review lookups per card
+    const businesses = await Business.aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "businessId",
+          as: "reviews",
+        },
+      },
+      {
+        $addFields: {
+          averageRating: {
+            $round: [{ $ifNull: [{ $avg: "$reviews.rating" }, 0] }, 1],
+          },
+          totalReviews: { $size: "$reviews" },
+        },
+      },
+      { $project: { reviews: 0 } },
+      { $sort: { createdAt: -1 } },
+    ]);
 
     res.status(200).json({ success: true, businesses });
   },
