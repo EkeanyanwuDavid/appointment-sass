@@ -50,8 +50,16 @@ const AdminUsers = () => {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900">Users</h1>
-          <p className="text-sm text-zinc-500 mt-0.5">
+          <h1
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 750,
+            }}
+            className="text-3xl sm:text-4xl leading-tight tracking-tight text-zinc-900"
+          >
+            Users
+          </h1>
+          <p className="text-sm text-zinc-500 mt-1">
             {users.length} users found
           </p>
         </div>
@@ -81,16 +89,16 @@ const AdminUsers = () => {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-zinc-100">
-                  <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                     Name
                   </th>
-                  <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                     Email
                   </th>
-                  <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                     Role
                   </th>
-                  <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                     Joined
                   </th>
                 </tr>
@@ -101,7 +109,7 @@ const AdminUsers = () => {
                     key={u._id}
                     className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50"
                   >
-                    <td className="px-5 py-4 font-medium text-zinc-900">
+                    <td className="px-5 py-4 font-semibold text-zinc-900">
                       {u.name}
                     </td>
                     <td className="px-5 py-4 text-zinc-500">{u.email}</td>

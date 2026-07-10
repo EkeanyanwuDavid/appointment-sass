@@ -58,8 +58,16 @@ const AdminBusinesses = () => {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900">Businesses</h1>
-          <p className="text-sm text-zinc-500 mt-0.5">
+          <h1
+            style={{
+              fontFamily: "'Google Sans Flex', sans-serif",
+              fontWeight: 750,
+            }}
+            className="text-3xl sm:text-4xl leading-tight tracking-tight text-zinc-900"
+          >
+            Businesses
+          </h1>
+          <p className="text-sm text-zinc-500 mt-1">
             {businesses.length} businesses on the platform
           </p>
         </div>
@@ -73,16 +81,16 @@ const AdminBusinesses = () => {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-zinc-100">
-                  <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                     Business
                   </th>
-                  <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                     Owner
                   </th>
-                  <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                     Category
                   </th>
-                  <th className="text-left px-5 py-3.5 text-xs font-medium text-zinc-500">
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold tracking-wide uppercase text-zinc-500">
                     Status
                   </th>
                   <th className="px-5 py-3.5" />
@@ -95,7 +103,7 @@ const AdminBusinesses = () => {
                     className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50"
                   >
                     <td className="px-5 py-4">
-                      <p className="font-medium text-zinc-900">
+                      <p className="font-base text-base text-zinc-900">
                         {business.name}
                       </p>
                       <p className="text-xs text-zinc-400">{business.city}</p>
@@ -103,7 +111,7 @@ const AdminBusinesses = () => {
                     <td className="px-5 py-4">
                       {business.ownerId ? (
                         <>
-                          <p className="text-zinc-900">
+                          <p className="text-zinc-900 font-semibold text-base">
                             {business.ownerId.name}
                           </p>
                           <p className="text-xs text-zinc-400">
@@ -117,12 +125,12 @@ const AdminBusinesses = () => {
                         </span>
                       )}
                     </td>
-                    <td className="px-5 py-4 text-zinc-500 capitalize">
+                    <td className="px-5 py-4 text-zinc-500 text-base capitalize">
                       {business.category}
                     </td>
-                    <td className="px-5 py-4">
+                    <td className="px-5 py-4 text-base">
                       <span
-                        className={`text-xs px-2 py-1 rounded-full font-medium ${
+                        className={`text-xs px-2 py-1 rounded-full ${
                           business.isActive
                             ? 'bg-green-50 text-green-700'
                             : 'bg-zinc-100 text-zinc-500'
@@ -131,7 +139,7 @@ const AdminBusinesses = () => {
                         {business.isActive ? 'Active' : 'Deactivated'}
                       </span>
                     </td>
-                    <td className="px-5 py-4">
+                    <td className="px-5 py-4 text-base">
                       <button
                         onClick={() => handleToggle(business._id)}
                         disabled={togglingId === business._id}

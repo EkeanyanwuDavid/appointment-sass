@@ -38,6 +38,28 @@ const AdminDashboard = () => {
     void loadStats()
   }, [])
 
+  const [greeting, setGreeting] = useState('')
+
+  useEffect(() => {
+    const updateGreeting = () => {
+      const hour = new Date().getHours()
+
+      if (hour < 12) {
+        setGreeting('Good morning')
+      } else if (hour < 17) {
+        setGreeting('Good afternoon')
+      } else {
+        setGreeting('Good evening')
+      }
+    }
+
+    updateGreeting()
+
+    const interval = setInterval(updateGreeting, 60_000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   if (isLoading) {
     return (
       <AdminLayout>
@@ -57,84 +79,93 @@ const AdminDashboard = () => {
               fontFamily: "'Google Sans Flex', sans-serif",
               fontWeight: 750,
             }}
-            className="text-2xl  sm:text-4xl leading-[1.1]  tracking-[-0.01em] font-bold text-zinc-900"
+            className="text-3xl sm:text-4xl leading-tight tracking-tight text-zinc-900"
           >
-            Welcome back, Admin
+            {greeting}, Admin
           </h1>
-          <p className="text-sm text-zinc-500 mt-1">
-            Monitor businesses, users and bookings across the platform.
+
+          <p className="mt-2 max-w-2xl text-sm text-zinc-500">
+            Monitor businesses, users, bookings and revenue across the platform.
           </p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Businesses</p>
+              <p className="text-[15px] font-medium text-zinc-500">
+                Businesses
+              </p>
               <div className="p-2 bg-blue-50 rounded-lg">
                 <Building2 size={16} className="text-blue-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="mt-1 text-3xl font-bold tracking-tight text-zinc-900">
               {stats?.totalBusinesses}
             </p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Customers</p>
+              <p className="text-[15px] font-medium text-zinc-500">Customers</p>
               <div className="p-2 bg-purple-50 rounded-lg">
                 <Users size={16} className="text-purple-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="mt-1 text-3xl font-bold tracking-tight text-zinc-900">
               {stats?.totalCustomers}
             </p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Business owners</p>
+              <p className="text-[15px] font-medium text-zinc-500">
+                Business owners
+              </p>
               <div className="p-2 bg-amber-50 rounded-lg">
                 <Briefcase size={16} className="text-amber-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="mt-1 text-3xl font-bold tracking-tight text-zinc-900">
               {stats?.totalOwners}
             </p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Staff</p>
+              <p className="text-[15px] font-medium text-zinc-500">Staff</p>
               <div className="p-2 bg-indigo-50 rounded-lg">
                 <UserCog size={16} className="text-indigo-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="mt-1 text-3xl font-bold tracking-tight text-zinc-900">
               {stats?.totalStaff}
             </p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Total bookings</p>
+              <p className="text-[15px] font-medium text-zinc-500">
+                Total bookings
+              </p>
               <div className="p-2 bg-green-50 rounded-lg">
                 <CalendarDays size={16} className="text-green-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="mt-1 text-3xl font-bold tracking-tight text-zinc-900">
               {stats?.totalBookings}
             </p>
           </div>
 
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-zinc-500">Total revenue</p>
+              <p className="text-[15px] font-medium text-zinc-500">
+                Total revenue
+              </p>
               <div className="p-2 bg-emerald-50 rounded-lg">
                 <TrendingUp size={16} className="text-emerald-600" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-zinc-900">
+            <p className="mt-1 text-3xl font-bold tracking-tight text-zinc-900">
               ₦{stats?.totalRevenue.toLocaleString()}
             </p>
           </div>
