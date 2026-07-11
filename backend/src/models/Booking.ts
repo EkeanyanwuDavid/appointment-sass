@@ -11,6 +11,7 @@ export interface IBooking extends Document {
   status: "pending" | "confirmed" | "cancelled" | "completed";
   paymentStatus: "unpaid" | "paid" | "refunded";
   paymentRef: string;
+  amountPaid: number;
   customerAddress: string;
   customerPhone: string;
   locationNotes: string;
@@ -40,6 +41,7 @@ const BookingSchema = new Schema<IBooking>(
       default: "unpaid",
     },
     paymentRef: { type: String, default: "" },
+    amountPaid: { type: Number, default: 0 },
     customerAddress: { type: String, required: true },
     customerPhone: { type: String, required: true },
     locationNotes: { type: String, default: "" },

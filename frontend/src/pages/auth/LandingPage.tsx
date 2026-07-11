@@ -482,59 +482,145 @@ const LandingPage = () => {
       </FadeUp>
 
       {/* Footer */}
+      {/* Footer */}
       <FadeUp delay={0.35}>
-        <div className="border-t bg-zinc-900 border-zinc-200 py-6 text-center text-base text-zinc-400">
-          <div className="flex items-center justify-center gap-5 mb-4">
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-zinc-500 hover:text-white transition-colors"
-              aria-label="Twitter"
-            >
-              <TwitterIcon />
-            </a>
+        <footer className="bg-zinc-900 text-zinc-400">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+              {/* Brand */}
+              <div className="lg:col-span-2">
+                <div className="flex items-center gap-2">
+                  <div className="bg-blue-600 text-white p-1.5 rounded-lg">
+                    <CalendarCheck size={18} />
+                  </div>
+                  <span className="font-bold text-xl text-white">Bkly</span>
+                </div>
+                <p className="text-base text-zinc-400 mt-4 max-w-sm leading-7">
+                  Book barbers, caterers, stylists, and more — a professional
+                  comes to you, on your schedule.
+                </p>
+                <div className="flex items-center gap-5 mt-5">
+                  <a
+                    href="https://twitter.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-500 hover:text-white transition-colors"
+                    aria-label="Twitter"
+                  >
+                    <TwitterIcon />
+                  </a>
 
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-zinc-500 hover:text-white transition-colors"
-              aria-label="Instagram"
-            >
-              <InstagramIcon />
-            </a>
+                  <a
+                    href="https://instagram.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-500 hover:text-white transition-colors"
+                    aria-label="Instagram"
+                  >
+                    <InstagramIcon />
+                  </a>
 
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-zinc-500 hover:text-white transition-colors"
-              aria-label="Facebook"
-            >
-              <FacebookIcon />
-            </a>
+                  <a
+                    href="https://facebook.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-500 hover:text-white transition-colors"
+                    aria-label="Facebook"
+                  >
+                    <FacebookIcon />
+                  </a>
 
-            <a
-              href="mailto:hello@bkly.com"
-              className="text-zinc-500 hover:text-white transition-colors"
-              aria-label="Email"
-            >
-              <Mail size={18} />
-            </a>
+                  <a
+                    href="mailto:hello@bkly.com"
+                    className="text-zinc-500 hover:text-white transition-colors"
+                    aria-label="Email"
+                  >
+                    <Mail size={18} />
+                  </a>
+                </div>
+              </div>
+
+              {/* Product */}
+              <div>
+                <p className="text-sm font-semibold text-white uppercase tracking-wide">
+                  Product
+                </p>
+                <ul className="mt-4 space-y-3">
+                  <li>
+                    <Link
+                      to="/register"
+                      className="text-base hover:text-white transition-colors"
+                    >
+                      Find a service
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/register"
+                      className="text-base hover:text-white transition-colors"
+                    >
+                      List your business
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/login"
+                      className="text-base hover:text-white transition-colors"
+                    >
+                      Sign in
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Support */}
+              <div>
+                <p className="text-sm font-semibold text-white uppercase tracking-wide">
+                  Support
+                </p>
+                <ul className="mt-4 space-y-3">
+                  <li>
+                    <a
+                      href="tel:+2348147901386"
+                      className="flex items-center gap-2 text-base hover:text-white transition-colors"
+                    >
+                      <PhoneCall size={15} />
+                      +234 814 790 1386
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="mailto:support@bkly.com"
+                      className="flex items-center gap-2 text-base hover:text-white transition-colors"
+                    >
+                      <Mail size={15} />
+                      support@bkly.com
+                    </a>
+                  </li>
+                  <li>
+                    <Link
+                      to="/terms"
+                      className="text-base hover:text-white transition-colors"
+                    >
+                      Terms & Privacy Policy
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <p className="text-base text-zinc-500">
-            &copy; {new Date().getFullYear()} Bkly. Book anything, anywhere.
-          </p>
-          <p className="text-sm text-zinc-600 mt-2">
-            <Link
-              to="/terms"
-              className="underline hover:text-white transition-colors"
-            >
-              Terms & Privacy Policy
-            </Link>
-          </p>
-        </div>
+
+          <div className="border-t border-zinc-800">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
+              <p className="text-sm text-zinc-500">
+                &copy; {new Date().getFullYear()} Bkly. Book anything, anywhere.
+              </p>
+              <p className="text-sm text-zinc-500">
+                Made in Port Harcourt, Nigeria
+              </p>
+            </div>
+          </div>
+        </footer>
       </FadeUp>
       <ScrollToTopButton />
     </div>

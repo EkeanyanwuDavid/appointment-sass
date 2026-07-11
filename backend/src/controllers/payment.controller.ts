@@ -51,6 +51,9 @@ export const initializePayment = asyncHandler(
             bookingId: booking._id.toString(),
           },
           callback_url: `${env.clientUrl}/payment/callback`,
+          // Only split if the business owner has completed payout setup.
+          // Otherwise the full amount settles to the platform account, same
+          // as before — no payment gets blocked just because setup is pending.
           ...(business.paystackSubaccountCode && {
             subaccount: business.paystackSubaccountCode,
           }),
@@ -118,6 +121,7 @@ export const verifyPayment = asyncHandler(
 
       booking.paymentStatus = "paid";
       booking.paymentRef = reference as string;
+      booking.amountPaid = data.amount;
       await booking.save();
 
       const business = booking.businessId as unknown as {
@@ -130,7 +134,6 @@ export const verifyPayment = asyncHandler(
         currency: string;
       };
 
-      // Fire-and-forget: don't block the payment response on email delivery
       sendEmail({
         to: req.user!.email,
         subject: "Your Bkly booking is confirmed",
@@ -145,7 +148,7 @@ export const verifyPayment = asyncHandler(
         }),
       });
 
-      // Notify the business owner too
+      // Notify the business owner
       sendEmail({
         to: business.ownerId.email,
         subject: "New paid booking on Bkly",

@@ -158,15 +158,77 @@ export const updateBookingStatus = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const { status } = req.body;
 
-    const booking = await Booking.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true },
-    );
+    const booking = await Booking.findById(req.params.id)
+      .populate("businessId", "name ownerId")
+      .populate("customerId", "name email")
+      .populate("serviceId", "name");
 
     if (!booking) {
       res.status(404).json({ success: false, message: "Booking not found" });
       return;
+    }
+
+    //  business owner can only modify bookings that
+    // belong to their own business, not anyone else's.
+    const business = booking.businessId as unknown as {
+      name: string;
+      ownerId: { toString(): string };
+    };
+    if (business.ownerId.toString() !== req.user?._id.toString()) {
+      res.status(403).json({ success: false, message: "Not authorized" });
+      return;
+    }
+
+    if (booking.status === "completed" || booking.status === "cancelled") {
+      res.status(400).json({
+        success: false,
+        message: `Cannot change status of a ${booking.status} booking`,
+      });
+      return;
+    }
+
+    // Refund automatically if the business owner is cancelling a paid booking
+    if (
+      status === "cancelled" &&
+      booking.paymentStatus === "paid" &&
+      booking.paymentRef
+    ) {
+      try {
+        await refundPayment(booking.paymentRef, booking.amountPaid);
+        booking.paymentStatus = "refunded";
+      } catch (err) {
+        console.error("Refund failed:", err);
+        res.status(500).json({
+          success: false,
+          message:
+            "Cancellation failed — refund could not be processed. Please contact support.",
+        });
+        return;
+      }
+    }
+
+    booking.status = status;
+    await booking.save();
+
+    if (status === "cancelled") {
+      const customer = booking.customerId as unknown as {
+        name: string;
+        email: string;
+      };
+      const service = booking.serviceId as unknown as { name: string };
+      console.log("Attempting to send cancellation email to:", customer.email);
+      // to customer
+      sendEmail({
+        to: customer.email,
+        subject: "Your Bkly booking was cancelled",
+        html: bookingCancellationTemplate({
+          customerName: customer.name,
+          businessName: business.name,
+          serviceName: service.name,
+          date: booking.date.toDateString(),
+          startTime: booking.startTime,
+        }),
+      });
     }
 
     res.status(200).json({ success: true, booking });
@@ -180,7 +242,7 @@ export const cancelBooking = asyncHandler(
       customerId: req.user?._id,
     })
       .populate("businessId", "name")
-      .populate("serviceId", "name price");
+      .populate("serviceId", "name");
 
     if (!booking) {
       res.status(404).json({ success: false, message: "Booking not found" });
@@ -196,8 +258,7 @@ export const cancelBooking = asyncHandler(
 
     if (booking.paymentStatus === "paid" && booking.paymentRef) {
       try {
-        const service = booking.serviceId as unknown as { price: number };
-        await refundPayment(booking.paymentRef, service.price * 100);
+        await refundPayment(booking.paymentRef, booking.amountPaid);
         booking.paymentStatus = "refunded";
       } catch (err) {
         console.error("Refund failed:", err);

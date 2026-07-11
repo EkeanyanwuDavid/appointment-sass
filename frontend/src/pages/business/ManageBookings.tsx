@@ -60,11 +60,11 @@ const ManageBookings = () => {
       await updateBookingStatus(id, status)
       toast.success(`Booking ${status}`)
       fetchData()
-    } catch {
-      toast.error('Failed to update booking')
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } }
+      toast.error(error.response?.data?.message || 'Failed to update booking')
     }
   }
-
   const handleLeaveUpdate = async (id: string, status: string) => {
     try {
       await updateLeaveStatus(id, status)
