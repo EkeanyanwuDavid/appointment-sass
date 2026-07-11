@@ -160,7 +160,10 @@ const Home = () => {
               fontWeight: 780,
             }}
           >
-            Book your next
+            <span className="bg-linear-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+              Book
+            </span>{' '}
+            your next
             <br />
             appointment
           </h1>

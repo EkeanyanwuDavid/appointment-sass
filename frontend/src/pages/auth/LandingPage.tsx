@@ -158,29 +158,33 @@ const LandingPage = () => {
 
       {/* Hero */}
       <FadeUp>
-        <div className="relative">
+        <div className="relative overflow-hidden">
+          <div className="absolute inset-0 bg-linear-to-br from-blue-300/70 via-blue-100 to-white -z-10" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl -z-10" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
             <div className="inline-flex items-center gap-1.5  bg-blue-50 text-blue-700 text-sm font-medium px-3 py-1.5 rounded-full mb-6">
               <Sparkles size={13} />
               No more waiting rooms
             </div>
-            <h1
-              className="text-5xl sm:text-5xl lg:text-6xl leading-[1.1] text-zinc-900  mx-auto tracking-[-0.01em]"
-              style={{
-                fontFamily: "'Google Sans Flex', sans-serif",
-                fontWeight: 750,
-              }}
-            >
-              <span className="bg-linear-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                Book
-              </span>{' '}
-              a professional who comes to you
-            </h1>
-            <p className="text-lg text-zinc-500 mt-5 max-w-2xl mx-auto leading-8">
-              Bkly connects you with barbers, caterers, stylists, and more
-              booked in minutes, delivered at your door.
-            </p>
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              <h1
+                className="text-5xl sm:text-5xl lg:text-6xl leading-[1.1] text-zinc-900  mx-auto tracking-[-0.01em]"
+                style={{
+                  fontFamily: "'Google Sans Flex', sans-serif",
+                  fontWeight: 750,
+                }}
+              >
+                <span className="bg-linear-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                  Book
+                </span>{' '}
+                a professional who comes to you
+              </h1>
+              <p className="text-lg text-zinc-500 mt-5 max-w-2xl mx-auto leading-8">
+                Bkly connects you with barbers, caterers, stylists, and more
+                booked in minutes, delivered at your door.
+              </p>
+            </motion.div>
+
             <div className="flex flex-col  sm:flex-row items-center justify-center gap-3 mt-8">
               <motion.div
                 whileHover={{ scale: 1.03 }}
