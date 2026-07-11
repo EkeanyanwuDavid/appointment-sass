@@ -39,7 +39,7 @@ export const initializePayment = asyncHandler(
     const business = booking.businessId as unknown as {
       paystackSubaccountCode: string;
     };
-    const amountInKobo = service.price * 100; // Paystack expects amount in kobo
+    const amountInKobo = service.price * 100;
 
     try {
       const response = await axios.post(
@@ -51,9 +51,7 @@ export const initializePayment = asyncHandler(
             bookingId: booking._id.toString(),
           },
           callback_url: `${env.clientUrl}/payment/callback`,
-          // Only split if the business owner has completed payout setup.
-          // Otherwise the full amount settles to the platform account, same
-          // as before — no payment gets blocked just because setup is pending.
+          //no payment gets blocked just because setup is pending.
           ...(business.paystackSubaccountCode && {
             subaccount: business.paystackSubaccountCode,
           }),
@@ -148,7 +146,6 @@ export const verifyPayment = asyncHandler(
         }),
       });
 
-      // Notify the business owner
       sendEmail({
         to: business.ownerId.email,
         subject: "New paid booking on Bkly",
