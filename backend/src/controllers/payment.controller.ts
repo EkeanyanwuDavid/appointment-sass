@@ -132,6 +132,7 @@ export const verifyPayment = asyncHandler(
         currency: string;
       };
 
+      // to the customer
       sendEmail({
         to: req.user!.email,
         subject: "Your Bkly booking is confirmed",
