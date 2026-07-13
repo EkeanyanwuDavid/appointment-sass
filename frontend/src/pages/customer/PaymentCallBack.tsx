@@ -36,7 +36,7 @@ const PaymentCallback = () => {
           <div className="bg-blue-600 text-white p-2 rounded-xl">
             <CalendarCheck size={22} />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
             Bkly
           </h1>
         </div>
@@ -57,18 +57,18 @@ const PaymentCallback = () => {
 
           {status === 'success' && (
             <>
-              <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Check size={24} className="text-green-600" />
+              <div className="w-14 h-14 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Check size={40} className="text-green-600" />
               </div>
-              <h2 className="text-base font-semibold text-zinc-900">
+              <h2 className="text-2xl font-bold text-zinc-900">
                 Payment successful!
               </h2>
-              <p className="text-sm text-zinc-500 mt-1 mb-6">
+              <p className="text-lg text-zinc-500 mt-1 mb-6">
                 Your booking has been paid for
               </p>
               <Link
                 to="/my-bookings"
-                className="inline-block bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors"
+                className="inline-block bg-blue-600 text-white rounded-lg px-4 py-3 text-base font-base hover:bg-blue-700 transition-colors"
               >
                 View my bookings
               </Link>
