@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react'
 import BusinessLayout from '../../components/layout/BusinessLayout'
-import { getStaff, addStaff, removeStaff } from '../../api/staff.api'
+import {
+  getStaff,
+  addStaff,
+  updateStaff,
+  removeStaff,
+} from '../../api/staff.api'
 import { getAvailability, setAvailability } from '../../api/availability.api'
 import type { Staff } from '../../types/index'
 import { toast } from 'sonner'
-import { Plus, Trash2, Loader2, X, Clock, Users } from 'lucide-react'
+import { Plus, Trash2, Loader2, X, Clock, Users, Pencil } from 'lucide-react'
 
 const DAYS = [
   'Sunday',
@@ -27,6 +32,9 @@ const ManageStaff = () => {
   const [staff, setStaff] = useState<Staff[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [showAddModal, setShowAddModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editingStaffId, setEditingStaffId] = useState<string | null>(null)
+  const [editForm, setEditForm] = useState({ name: '', email: '', phone: '' })
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false)
   const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -64,6 +72,33 @@ const ManageStaff = () => {
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } }
       toast.error(error.response?.data?.message || 'Failed to add staff')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const openEditModal = (staffMember: Staff) => {
+    setEditingStaffId(staffMember._id)
+    setEditForm({
+      name: staffMember.name,
+      email: staffMember.email,
+      phone: staffMember.phone,
+    })
+    setShowEditModal(true)
+  }
+
+  const handleUpdateStaff = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editingStaffId) return
+    setIsSubmitting(true)
+    try {
+      await updateStaff(editingStaffId, editForm)
+      toast.success('Staff details updated')
+      setShowEditModal(false)
+      fetchStaff()
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } }
+      toast.error(error.response?.data?.message || 'Failed to update staff')
     } finally {
       setIsSubmitting(false)
     }
@@ -171,18 +206,27 @@ const ManageStaff = () => {
                     <Trash2 size={15} />
                   </button>
                 </div>
-                <p className="font-semibold text-base text-zinc-900 text-sm">
+                <p className="font-semibold text-base text-zinc-900 ">
                   {member.name}
                 </p>
                 <p className="text-sm text-zinc-400 mt-0.5">{member.email}</p>
                 <p className="text-sm text-zinc-400">{member.phone}</p>
-                <button
-                  onClick={() => openAvailabilityModal(member)}
-                  className="mt-4 flex items-center gap-1.5 text-sm text-blue-600 font-base hover:underline"
-                >
-                  <Clock size={13} />
-                  Set availability
-                </button>
+                <div className="flex items-center gap-4 mt-4">
+                  <button
+                    onClick={() => openAvailabilityModal(member)}
+                    className="flex items-center gap-1.5 text-sm text-blue-600 font-base hover:underline"
+                  >
+                    <Clock size={13} />
+                    Set availability
+                  </button>
+                  <button
+                    onClick={() => openEditModal(member)}
+                    className="flex items-center gap-1.5 text-sm text-zinc-500 font-base hover:underline"
+                  >
+                    <Pencil size={13} />
+                    Edit
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -223,7 +267,7 @@ const ManageStaff = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm text-base font-medium text-zinc-900 mb-1.5">
+                <label className="block  text-base font-medium text-zinc-900 mb-1.5">
                   Email
                 </label>
                 <input
@@ -259,6 +303,86 @@ const ManageStaff = () => {
                   </>
                 ) : (
                   'Add staff member'
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Staff Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setShowEditModal(false)}
+          />
+          <div className="relative bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-lg font-semibold text-zinc-900">
+                Edit staff member
+              </h2>
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="text-zinc-400 hover:text-zinc-700"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <form onSubmit={handleUpdateStaff} className="space-y-4">
+              <div>
+                <label className="block text-base font-medium text-zinc-900 mb-1.5">
+                  Full name
+                </label>
+                <input
+                  type="text"
+                  value={editForm.name}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, name: e.target.value })
+                  }
+                  required
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-medium text-zinc-900 mb-1.5">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={editForm.email}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, email: e.target.value })
+                  }
+                  required
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-medium text-zinc-900 mb-1.5">
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  value={editForm.phone}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, phone: e.target.value })
+                  }
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 text-white rounded-lg px-4 py-3 text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  'Save changes'
                 )}
               </button>
             </form>
