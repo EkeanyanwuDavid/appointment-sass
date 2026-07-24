@@ -166,7 +166,11 @@ const LandingPage = () => {
               <Sparkles size={13} />
               No more waiting rooms
             </div>
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <motion.div
+              className="outline-none focus:outline-none"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+            >
               <h1
                 className="text-5xl sm:text-5xl lg:text-6xl leading-[1.1] text-zinc-900  mx-auto tracking-[-0.01em]"
                 style={{

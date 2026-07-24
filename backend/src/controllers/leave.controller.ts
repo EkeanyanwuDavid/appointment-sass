@@ -19,12 +19,10 @@ export const requestLeave = asyncHandler(
       date: new Date(date),
     });
     if (existingLeave) {
-      res
-        .status(400)
-        .json({
-          success: false,
-          message: "Leave already requested for this date",
-        });
+      res.status(400).json({
+        success: false,
+        message: "Leave already requested for this date",
+      });
       return;
     }
 
