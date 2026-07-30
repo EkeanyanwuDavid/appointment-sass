@@ -141,14 +141,14 @@ const LandingPage = () => {
           <div className="flex items-center gap-4">
             <Link
               to="/login"
-              className="text-base font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+              className="text-base font-medium text-zinc-600 focus:outline-none hover:text-zinc-900 transition-colors"
             >
               Sign in
             </Link>
 
             <Link
               to="/register"
-              className="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              className="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium focus:outline-none hover:bg-blue-700 transition-colors"
             >
               Get started
             </Link>
@@ -162,8 +162,8 @@ const LandingPage = () => {
           <div className="absolute inset-0 bg-linear-to-b from-blue-50 via-white to-transparent -z-10" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl -z-10" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
-            <div className="inline-flex items-center gap-1.5  bg-blue-50 text-blue-700 text-sm font-medium px-3 py-1.5 rounded-full mb-6">
-              <Sparkles size={13} />
+            <div className="inline-flex items-center gap-1.5 bg-linear-to-r from-blue-50 to-cyan-50 border border-blue-100/70 text-blue-700 text-sm font-medium px-3.5 py-1.5 rounded-full mb-6 shadow-sm shadow-blue-600/5">
+              <Sparkles size={13} className="text-blue-500" />
               No more waiting rooms
             </div>
             <motion.div
@@ -202,6 +202,7 @@ const LandingPage = () => {
                   <ArrowRight size={16} />
                 </Link>
               </motion.div>
+
               <motion.div
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
@@ -218,6 +219,76 @@ const LandingPage = () => {
         </div>
       </FadeUp>
 
+      {/* Floating  visual */}
+      <div className="relative mt-8 sm:mt-4 max-w-3xl mx-auto hidden sm:block px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20, rotate: -10 }}
+          animate={{ opacity: 1, y: 0, rotate: -6 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          whileHover={{ rotate: -3, y: -4 }}
+          className="absolute -left-4 top-4 w-40 bg-white rounded-xl border border-zinc-200 shadow-lg p-3 z-10"
+        >
+          <div className="h-14 rounded-lg bg-linear-to-br from-pink-500 to-rose-600 mb-2 relative overflow-hidden">
+            <Sparkles
+              size={44}
+              strokeWidth={1.25}
+              className="absolute -right-2 -bottom-2 text-white/20"
+            />
+          </div>
+          <p className="text-xs font-semibold text-zinc-800">Debbie's Touch</p>
+          <p className="text-[10px] text-zinc-400">Salon • Port Harcourt</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20, rotate: 8 }}
+          animate={{ opacity: 1, y: 0, rotate: 4 }}
+          transition={{ duration: 0.6, delay: 0.55 }}
+          whileHover={{ rotate: 2, y: -4 }}
+          className="absolute -right-10 -bottom-4 w-40 bg-white rounded-xl border border-zinc-200 shadow-lg p-3 z-10"
+        >
+          <div className="h-14 rounded-lg bg-linear-to-br from-slate-600 to-slate-800 mb-2 relative overflow-hidden">
+            <Scale
+              size={44}
+              strokeWidth={1.25}
+              className="absolute -right-2 -bottom-2 text-white/20"
+            />
+          </div>
+          <p className="text-xs font-semibold text-zinc-800">
+            Kingsley's Agency
+          </p>
+          <p className="text-[10px] text-zinc-400">Legal Services • Lagos</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="mx-auto w-full max-w-md bg-white rounded-2xl border border-zinc-200 shadow-xl p-5 relative z-20"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-9 h-9 rounded-full bg-linear-to-br from-blue-600 to-cyan-500 flex items-center justify-center shrink-0">
+              <CalendarCheck size={16} className="text-white" />
+            </div>
+            <div className="text-left">
+              <p className="text-sm font-semibold text-zinc-900">
+                Booking confirmed
+              </p>
+              <p className="text-xs text-zinc-400">Today, 2:30 PM</p>
+            </div>
+            <span className="ml-auto text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full">
+              Paid
+            </span>
+          </div>
+          <div className="h-2 rounded-full bg-zinc-100 overflow-hidden">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: '75%' }}
+              transition={{ duration: 1, delay: 0.6, ease: 'easeOut' }}
+              className="h-full rounded-full bg-linear-to-r from-blue-600 to-cyan-500"
+            />
+          </div>
+        </motion.div>
+      </div>
       {/* Early Access */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         <motion.div whileHover={{ y: -3 }}>

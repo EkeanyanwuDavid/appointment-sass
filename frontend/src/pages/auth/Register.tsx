@@ -50,7 +50,7 @@ const Register = () => {
       <div className="w-full max-w-md sm:max-w-lg">
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center gap-2 mb-5">
-            <div className="bg-blue-600 text-white p-2 rounded-xl">
+            <div className="bg-linear-to-br from-blue-600 to-cyan-500 text-white p-2 rounded-xl">
               <CalendarCheck size={22} />
             </div>
             <h1
@@ -174,7 +174,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white rounded-lg px-4 py-3.5 text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-linear-to-r from-blue-600 to-blue-700 text-white rounded-lg py-3.5 text-base font-semibold hover:from-blue-700 hover:to-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>

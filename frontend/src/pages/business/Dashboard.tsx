@@ -389,9 +389,9 @@ const Dashboard = () => {
 
           <button
             onClick={() => navigate('/business/ratings')}
-            className="text-xs text-blue-600 hover:text-blue-700 mt-3 font-medium"
+            className="text-sm text-blue-600 cursor-pointer hover:text-blue-700 mt-3 font-medium"
           >
-            View ratings →
+            View ratings
           </button>
         </div>
       </div>

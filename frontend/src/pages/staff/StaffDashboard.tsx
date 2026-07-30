@@ -136,7 +136,7 @@ const StaffDashboard = () => {
       <div className="bg-white border-b border-zinc-200 px-4 sm:px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="bg-blue-600 text-white p-1.5 rounded-lg">
+            <div className="bg-linear-to-br from-blue-600 to-cyan-500 text-white p-1.5 rounded-lg">
               <CalendarCheck size={18} />
             </div>
             <span

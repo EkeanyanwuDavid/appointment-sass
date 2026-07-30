@@ -39,7 +39,7 @@ const Sidebar = ({
 }: SidebarProps) => (
   <div className="flex flex-col h-full bg-zinc-900 text-white w-64 p-4">
     <div className="flex items-center gap-2 mb-8 px-2">
-      <div className="bg-blue-600 text-white p-1.5 rounded-lg">
+      <div className="bg-linear-to-br from-blue-600 to-cyan-500 text-white p-1.5 rounded-lg">
         <CalendarCheck size={18} />
       </div>
       <span className="text-lg font-bold tracking-tight">Bkly</span>
