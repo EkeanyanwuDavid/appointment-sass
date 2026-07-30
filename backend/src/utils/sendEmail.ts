@@ -10,12 +10,9 @@ interface SendEmailParams {
 export const transporter = nodemailer.createTransport({
   host: env.emailHost,
   port: env.emailPort,
-  auth: {
-    user: env.emailUser,
-    pass: env.emailPass,
-  },
+  secure: env.emailPort === 465,
+  auth: { user: env.emailUser, pass: env.emailPass },
 });
-
 const sendEmail = async ({
   to,
   subject,

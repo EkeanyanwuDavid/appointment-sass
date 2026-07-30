@@ -17,6 +17,7 @@ import bookingRoutes from "./src/routes/booking.routes";
 import leaveRoutes from "./src/routes/leave.routes";
 import holidayRoutes from "./src/routes/holiday.routes";
 import paymentRoutes from "./src/routes/payment.routes";
+import { paystackWebhook } from "./src/controllers/payment.controller";
 import reviewRoutes from "./src/routes/review.routes";
 import feedbackRoutes from "./src/routes/feedback.routes";
 import adminRoutes from "./src/routes/admin.routes";
@@ -28,6 +29,13 @@ connectDB();
 // middleware
 app.use(cors());
 app.use(helmet());
+
+app.post(
+  "/api/payments/webhook",
+  express.raw({ type: "application/json" }),
+  paystackWebhook,
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(

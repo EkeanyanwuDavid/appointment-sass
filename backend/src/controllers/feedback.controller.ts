@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { validationResult } from "express-validator";
-import Feedback from "../models/FeedBack";
+import Feedback from "../models/Feedback";
 import Business from "../models/Business";
 import { AuthRequest } from "../types";
 import sendEmail from "../utils/sendEmail";

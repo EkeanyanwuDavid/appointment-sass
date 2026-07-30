@@ -1,6 +1,7 @@
-import { Response } from "express";
+import { Request, Response } from "express";
+import crypto from "crypto";
 import axios from "axios";
-import Booking from "../models/Booking";
+import Booking, { IBooking } from "../models/Booking";
 import { AuthRequest } from "../types/index";
 import asyncHandler from "../utils/asyncHandler";
 import { env } from "../config/env";
@@ -11,6 +12,76 @@ import {
 } from "../utils/emailTemplates";
 
 const PAYSTACK_BASE_URL = "https://api.paystack.co";
+
+const markBookingPaidAndNotify = async (
+  booking: IBooking,
+  reference: string,
+  amountPaid: number,
+) => {
+  if (booking.paymentStatus === "paid") {
+    return booking;
+  }
+
+  booking.paymentStatus = "paid";
+  booking.paymentRef = reference;
+  booking.amountPaid = amountPaid;
+  await booking.save();
+
+  const populated = await Booking.findById(booking._id)
+    .populate({
+      path: "businessId",
+      select: "name ownerId",
+      populate: { path: "ownerId", select: "name email" },
+    })
+    .populate("serviceId", "name price currency")
+    .populate("customerId", "name email");
+
+  if (!populated) return booking;
+
+  const business = populated.businessId as unknown as {
+    name: string;
+    ownerId: { name: string; email: string };
+  };
+  const service = populated.serviceId as unknown as {
+    name: string;
+    price: number;
+    currency: string;
+  };
+  const customer = populated.customerId as unknown as {
+    name: string;
+    email: string;
+  };
+
+  sendEmail({
+    to: customer.email,
+    subject: "Your Bkly booking is confirmed",
+    html: bookingConfirmationTemplate({
+      customerName: customer.name,
+      businessName: business.name,
+      serviceName: service.name,
+      date: populated.date.toDateString(),
+      startTime: populated.startTime,
+      price: service.price,
+      currency: service.currency,
+    }),
+  });
+
+  sendEmail({
+    to: business.ownerId.email,
+    subject: "New paid booking on Bkly",
+    html: newBookingNotificationTemplate({
+      ownerName: business.ownerId.name,
+      customerName: customer.name,
+      serviceName: service.name,
+      date: populated.date.toDateString(),
+      startTime: populated.startTime,
+      price: service.price,
+      currency: service.currency,
+    }),
+  });
+
+  return populated;
+};
 
 export const initializePayment = asyncHandler(
   async (req: AuthRequest, res: Response) => {
@@ -51,7 +122,7 @@ export const initializePayment = asyncHandler(
             bookingId: booking._id.toString(),
           },
           callback_url: `${env.clientUrl}/payment/callback`,
-          //no payment gets blocked just because setup is pending.
+
           ...(business.paystackSubaccountCode && {
             subaccount: business.paystackSubaccountCode,
           }),
@@ -104,64 +175,24 @@ export const verifyPayment = asyncHandler(
       }
 
       const bookingId = data.metadata?.bookingId;
-      const booking = await Booking.findById(bookingId)
-        .populate({
-          path: "businessId",
-          select: "name ownerId",
-          populate: { path: "ownerId", select: "name email" },
-        })
-        .populate("serviceId", "name price currency");
+
+      const booking = await Booking.findOne({
+        _id: bookingId,
+        customerId: req.user?._id,
+      });
 
       if (!booking) {
         res.status(404).json({ success: false, message: "Booking not found" });
         return;
       }
 
-      booking.paymentStatus = "paid";
-      booking.paymentRef = reference as string;
-      booking.amountPaid = data.amount;
-      await booking.save();
+      const updated = await markBookingPaidAndNotify(
+        booking,
+        reference as string,
+        data.amount,
+      );
 
-      const business = booking.businessId as unknown as {
-        name: string;
-        ownerId: { name: string; email: string };
-      };
-      const service = booking.serviceId as unknown as {
-        name: string;
-        price: number;
-        currency: string;
-      };
-
-      // to the customer
-      sendEmail({
-        to: req.user!.email,
-        subject: "Your Bkly booking is confirmed",
-        html: bookingConfirmationTemplate({
-          customerName: req.user!.name,
-          businessName: business.name,
-          serviceName: service.name,
-          date: booking.date.toDateString(),
-          startTime: booking.startTime,
-          price: service.price,
-          currency: service.currency,
-        }),
-      });
-
-      sendEmail({
-        to: business.ownerId.email,
-        subject: "New paid booking on Bkly",
-        html: newBookingNotificationTemplate({
-          ownerName: business.ownerId.name,
-          customerName: req.user!.name,
-          serviceName: service.name,
-          date: booking.date.toDateString(),
-          startTime: booking.startTime,
-          price: service.price,
-          currency: service.currency,
-        }),
-      });
-
-      res.status(200).json({ success: true, booking });
+      res.status(200).json({ success: true, booking: updated });
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
       res.status(500).json({
@@ -171,6 +202,39 @@ export const verifyPayment = asyncHandler(
     }
   },
 );
+
+export const paystackWebhook = async (req: Request, res: Response) => {
+  const hash = crypto
+    .createHmac("sha512", env.paystackSecretKey)
+    .update(req.body) // raw Buffer
+    .digest("hex");
+
+  if (hash !== req.headers["x-paystack-signature"]) {
+    res.status(401).end();
+    return;
+  }
+
+  const event = JSON.parse(req.body.toString());
+
+  if (event.event === "charge.success") {
+    const bookingId = event.data.metadata?.bookingId;
+    const booking = await Booking.findById(bookingId);
+
+    if (booking) {
+      try {
+        await markBookingPaidAndNotify(
+          booking,
+          event.data.reference,
+          event.data.amount,
+        );
+      } catch (err) {
+        console.error("Webhook processing error:", err);
+      }
+    }
+  }
+
+  res.status(200).end();
+};
 
 export const refundPayment = async (
   paymentRef: string,
@@ -189,5 +253,16 @@ export const refundPayment = async (
       },
     },
   );
+
+  if (
+    response.data?.status !== true ||
+    response.data?.data?.status === "failed" ||
+    response.data?.data?.status === "reversed"
+  ) {
+    throw new Error(
+      response.data?.message || "Paystack rejected the refund request",
+    );
+  }
+
   return response.data;
 };

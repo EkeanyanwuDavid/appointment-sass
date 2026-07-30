@@ -8,6 +8,14 @@ interface BookingEmailData {
   currency: string;
 }
 
+const escapeHtml = (value: string): string =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 const wrapper = (title: string, bodyHtml: string): string => `
   <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
     <h2 style="margin-bottom: 8px;">${title}</h2>
@@ -20,10 +28,10 @@ export const bookingConfirmationTemplate = (data: BookingEmailData): string =>
   wrapper(
     "Your booking is confirmed",
     `
-    <p>Hi ${data.customerName},</p>
-    <p>Your booking with <strong>${data.businessName}</strong> has been confirmed.</p>
+    <p>Hi ${escapeHtml(data.customerName)},</p>
+    <p>Your booking with <strong>${escapeHtml(data.businessName)}</strong> has been confirmed.</p>
     <table style="width: 100%; border-collapse: collapse; margin-top: 12px;">
-      <tr><td style="padding: 6px 0; color: #555;">Service</td><td style="text-align: right;">${data.serviceName}</td></tr>
+      <tr><td style="padding: 6px 0; color: #555;">Service</td><td style="text-align: right;">${escapeHtml(data.serviceName)}</td></tr>
       <tr><td style="padding: 6px 0; color: #555;">Date</td><td style="text-align: right;">${data.date}</td></tr>
       <tr><td style="padding: 6px 0; color: #555;">Time</td><td style="text-align: right;">${data.startTime}</td></tr>
       <tr><td style="padding: 6px 0; color: #555;">Amount Paid</td><td style="text-align: right;">${data.currency} ${data.price.toLocaleString()}</td></tr>
@@ -38,8 +46,8 @@ export const bookingCancellationTemplate = (
   wrapper(
     "Your booking has been cancelled",
     `
-    <p>Hi ${data.customerName},</p>
-    <p>Your booking with <strong>${data.businessName}</strong> for <strong>${data.serviceName}</strong> on ${data.date} at ${data.startTime} has been cancelled.</p>
+    <p>Hi ${escapeHtml(data.customerName)},</p>
+    <p>Your booking with <strong>${escapeHtml(data.businessName)}</strong> for <strong>${escapeHtml(data.serviceName)}</strong> on ${data.date} at ${data.startTime} has been cancelled.</p>
     <p style="margin-top: 16px;">If this wasn't you, or you'd like to rebook, just head back to the booking page.</p>
   `,
   );
@@ -51,7 +59,7 @@ export const passwordResetTemplate = (data: {
   wrapper(
     "Reset your password",
     `
-    <p>Hi ${data.name},</p>
+    <p>Hi ${escapeHtml(data.name)},</p>
     <p>We got a request to reset your Bkly password. This link expires in 30 minutes.</p>
     <p style="margin-top: 16px;">
       <a href="${data.resetUrl}" style="display: inline-block; background: #2563eb; color: #fff; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-weight: 500;">
@@ -78,10 +86,10 @@ export const newBookingNotificationTemplate = (
   wrapper(
     "You've got a new paid booking",
     `
-    <p>Hi ${data.ownerName},</p>
-    <p><strong>${data.customerName}</strong> just paid for a booking.</p>
+    <p>Hi ${escapeHtml(data.ownerName)},</p>
+    <p><strong>${escapeHtml(data.customerName)}</strong> just paid for a booking.</p>
     <table style="width: 100%; border-collapse: collapse; margin-top: 12px;">
-      <tr><td style="padding: 6px 0; color: #555;">Service</td><td style="text-align: right;">${data.serviceName}</td></tr>
+      <tr><td style="padding: 6px 0; color: #555;">Service</td><td style="text-align: right;">${escapeHtml(data.serviceName)}</td></tr>
       <tr><td style="padding: 6px 0; color: #555;">Date</td><td style="text-align: right;">${data.date}</td></tr>
    <tr><td style="padding: 6px 0; color: #555;">Time</td><td style="text-align: right;">${data.startTime}</td></tr>
       <tr><td style="padding: 6px 0; color: #555;">Amount</td><td style="text-align: right;">${data.currency} ${data.price.toLocaleString()}</td></tr>
