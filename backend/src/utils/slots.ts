@@ -1,8 +1,9 @@
 import Availability from "../models/Availability";
 import Booking from "../models/Booking";
 import Leave from "../models/Leave";
+import Holiday from "../models/Holiday";
+import Staff from "../models/Staff";
 import Service from "../models/Service";
-
 interface GetAvailableSlotsParams {
   staffId: string;
   serviceId: string;
@@ -35,9 +36,25 @@ export const getAvailableSlots = async ({
 
   const onLeave = await Leave.findOne({
     staffId,
-    date: bookingDate,
     status: "approved",
+    startDate: { $lte: bookingDate },
+    endDate: { $gte: bookingDate },
   });
+
+  if (onLeave) {
+    return [];
+  }
+
+  const staff = await Staff.findById(staffId);
+  if (staff) {
+    const holiday = await Holiday.findOne({
+      businessId: staff.businessId,
+      date: bookingDate,
+    });
+    if (holiday) {
+      return [];
+    }
+  }
 
   if (onLeave) {
     return [];

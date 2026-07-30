@@ -15,6 +15,7 @@ import serviceRoutes from "./src/routes/service.routes";
 import availabilityRoutes from "./src/routes/availability.routes";
 import bookingRoutes from "./src/routes/booking.routes";
 import leaveRoutes from "./src/routes/leave.routes";
+import holidayRoutes from "./src/routes/holiday.routes";
 import paymentRoutes from "./src/routes/payment.routes";
 import reviewRoutes from "./src/routes/review.routes";
 import feedbackRoutes from "./src/routes/feedback.routes";
@@ -46,6 +47,7 @@ app.use("/api/services", serviceRoutes);
 app.use("/api/availability", availabilityRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/leaves", leaveRoutes);
+app.use("/api/holidays", holidayRoutes);
 app.use("/api/payments", paymentRoutes);
 
 // reviews

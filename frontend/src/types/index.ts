@@ -38,6 +38,7 @@ export interface Staff {
   email: string
   phone: string
   isActive: boolean
+  annualLeaveDays: number
 }
 
 export interface Booking {
@@ -66,10 +67,32 @@ export interface Booking {
 
 export interface Leave {
   _id: string
-  staffId: { _id: string; name: string; email: string }
-  date: string
+  staffId: { _id: string; name: string; email: string; annualLeaveDays?: number }
+  startDate: string
+  endDate: string
+  days: number
   reason: 'sick' | 'annual_leave' | 'personal'
   status: 'pending' | 'approved' | 'rejected'
+  createdAt: string
+}
+
+export interface LeaveBalance {
+  annualLeaveDays: number
+  usedDays: number
+  remainingDays: number
+}
+
+export interface StaffLeaveBalance extends LeaveBalance {
+  staffId: string
+  name: string
+  email: string
+}
+
+export interface Holiday {
+  _id: string
+  businessId: string
+  name: string
+  date: string
   createdAt: string
 }
 

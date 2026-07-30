@@ -5,7 +5,7 @@ import { requestLeave, getMyLeaves } from '../../api/leave.api'
 import { getMyStaffReviews } from '../../api/review.api'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { logout } from '../../store/slices/authSlice'
-import type { Booking, Leave, Review } from '../../types/index'
+import type { Booking, Leave, LeaveBalance, Review } from '../../types/index'
 import { toast } from 'sonner'
 import {
   CalendarCheck,
@@ -47,7 +47,12 @@ const StaffDashboard = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [showLeaveModal, setShowLeaveModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [leaveForm, setLeaveForm] = useState({ date: '', reason: 'sick' })
+  const [leaveForm, setLeaveForm] = useState({
+    startDate: '',
+    endDate: '',
+    reason: 'sick',
+  })
+  const [leaveBalance, setLeaveBalance] = useState<LeaveBalance | null>(null)
 
   const fetchData = async () => {
     try {
@@ -57,8 +62,8 @@ const StaffDashboard = () => {
       ])
       setBookings(bookingsRes.data.bookings)
       setLeaves(leavesRes.data.leaves)
+      setLeaveBalance(leavesRes.data.balance)
 
-      // Ratings are non-critical — don't let this break the rest of the dashboard
       getMyStaffReviews()
         .then((reviewsRes) => {
           setReviews(reviewsRes.data.reviews)
@@ -92,7 +97,7 @@ const StaffDashboard = () => {
       await requestLeave(leaveForm)
       toast.success('Leave requested')
       setShowLeaveModal(false)
-      setLeaveForm({ date: '', reason: 'sick' })
+      setLeaveForm({ startDate: '', endDate: '', reason: 'sick' })
       fetchData()
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } }
@@ -189,14 +194,19 @@ const StaffDashboard = () => {
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <p className="text-[15px] font-medium text-zinc-500">
-                Leave requests
+                Leave days left
               </p>
               <div className="p-2 bg-amber-50 rounded-lg">
                 <Clock size={16} className="text-amber-600" />
               </div>
             </div>
             <p className="text-[2rem] font-bold tracking-[-0.03em] text-zinc-900">
-              {leaves.length}
+              {leaveBalance ? leaveBalance.remainingDays : '—'}
+            </p>
+            <p className="text-xs text-zinc-400 mt-2">
+              {leaveBalance
+                ? `of ${leaveBalance.annualLeaveDays} day(s) this year`
+                : ''}
             </p>
           </div>
 
@@ -306,7 +316,7 @@ const StaffDashboard = () => {
           <div className="space-y-6">
             {/* Leave requests */}
             <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-1">
                 <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-zinc-900">
                   Your leave requests
                 </h2>
@@ -318,6 +328,12 @@ const StaffDashboard = () => {
                   Request leave
                 </button>
               </div>
+              {leaveBalance && (
+                <p className="text-xs text-zinc-400 mb-4">
+                  {leaveBalance.remainingDays} of {leaveBalance.annualLeaveDays}{' '}
+                  day(s) left this year
+                </p>
+              )}
               {leaves.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-40 text-center">
                   <Clock size={28} className="text-zinc-300 mb-2" />
@@ -332,15 +348,30 @@ const StaffDashboard = () => {
                     >
                       <div>
                         <p className="text-sm text-zinc-900 capitalize">
-                          {leave.reason.replace('_', ' ')}
+                          {leave.reason.replace('_', ' ')}{' '}
+                          <span className="text-zinc-400 font-normal normal-case">
+                            ({leave.days} day{leave.days === 1 ? '' : 's'})
+                          </span>
                         </p>
                         <p className="text-xs text-zinc-500">
-                          {new Date(leave.date).toLocaleDateString('en-NG', {
-                            weekday: 'short',
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                          })}
+                          {new Date(leave.startDate).toLocaleDateString(
+                            'en-NG',
+                            { day: 'numeric', month: 'short', year: 'numeric' }
+                          )}
+                          {leave.startDate !== leave.endDate && (
+                            <>
+                              {' '}
+                              -{' '}
+                              {new Date(leave.endDate).toLocaleDateString(
+                                'en-NG',
+                                {
+                                  day: 'numeric',
+                                  month: 'short',
+                                  year: 'numeric',
+                                }
+                              )}
+                            </>
+                          )}
                         </p>
                       </div>
                       <span
@@ -434,20 +465,58 @@ const StaffDashboard = () => {
             </div>
 
             <form onSubmit={handleRequestLeave} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
-                  Date
-                </label>
-                <input
-                  type="date"
-                  value={leaveForm.date}
-                  onChange={(e) =>
-                    setLeaveForm({ ...leaveForm, date: e.target.value })
-                  }
-                  required
-                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                    Start date
+                  </label>
+                  <input
+                    type="date"
+                    value={leaveForm.startDate}
+                    onChange={(e) =>
+                      setLeaveForm({
+                        ...leaveForm,
+                        startDate: e.target.value,
+
+                        endDate:
+                          leaveForm.endDate &&
+                          leaveForm.endDate < e.target.value
+                            ? e.target.value
+                            : leaveForm.endDate,
+                      })
+                    }
+                    required
+                    className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                    End date
+                  </label>
+                  <input
+                    type="date"
+                    value={leaveForm.endDate}
+                    min={leaveForm.startDate || undefined}
+                    onChange={(e) =>
+                      setLeaveForm({ ...leaveForm, endDate: e.target.value })
+                    }
+                    required
+                    className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  />
+                </div>
               </div>
+
+              {leaveForm.startDate && leaveForm.endDate && (
+                <p className="text-xs text-zinc-400">
+                  {Math.round(
+                    (new Date(leaveForm.endDate).getTime() -
+                      new Date(leaveForm.startDate).getTime()) /
+                      86400000
+                  ) + 1}{' '}
+                  calendar day(s) — business holidays in that range won't count
+                  against your balance
+                </p>
+              )}
 
               <div>
                 <label className="block text-sm font-medium text-zinc-900 mb-1.5">

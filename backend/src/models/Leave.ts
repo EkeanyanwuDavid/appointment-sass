@@ -2,7 +2,9 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface ILeave extends Document {
   staffId: mongoose.Types.ObjectId;
-  date: Date;
+  startDate: Date;
+  endDate: Date;
+  days: number;
   reason: "sick" | "annual_leave" | "personal";
   status: "pending" | "approved" | "rejected";
   createdAt: Date;
@@ -11,7 +13,9 @@ export interface ILeave extends Document {
 const LeaveSchema = new Schema<ILeave>(
   {
     staffId: { type: Schema.Types.ObjectId, ref: "Staff", required: true },
-    date: { type: Date, required: true },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+    days: { type: Number, required: true, min: 1 },
     reason: {
       type: String,
       enum: ["sick", "annual_leave", "personal"],

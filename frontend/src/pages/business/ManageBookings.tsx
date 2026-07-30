@@ -3,7 +3,8 @@ import BusinessLayout from '../../components/layout/BusinessLayout'
 import { getMyBusiness } from '../../api/business.api'
 import { getBusinessBookings, updateBookingStatus } from '../../api/booking.api'
 import { getBusinessLeaves, updateLeaveStatus } from '../../api/leave.api'
-import type { Booking, Leave } from '../../types/index'
+import { addHoliday, getHolidays, deleteHoliday } from '../../api/holiday.api'
+import type { Booking, Leave, Holiday } from '../../types/index'
 import { toast } from 'sonner'
 import {
   CalendarDays,
@@ -13,6 +14,10 @@ import {
   X as XIcon,
   MapPin,
   PhoneCall,
+  Plus,
+  Trash2,
+  Loader2,
+  PartyPopper,
 } from 'lucide-react'
 
 const statusColors = {
@@ -25,22 +30,30 @@ const statusColors = {
 const ManageBookings = () => {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [leaves, setLeaves] = useState<Leave[]>([])
+  const [holidays, setHolidays] = useState<Holiday[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<'bookings' | 'leaves'>('bookings')
+  const [activeTab, setActiveTab] = useState<
+    'bookings' | 'leaves' | 'holidays'
+  >('bookings')
   const [filter, setFilter] = useState('all')
+  const [showHolidayModal, setShowHolidayModal] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [holidayForm, setHolidayForm] = useState({ name: '', date: '' })
 
   const fetchData = async () => {
     try {
       const businessRes = await getMyBusiness()
       const biz = businessRes.data.business
 
-      const [bookingsRes, leavesRes] = await Promise.all([
+      const [bookingsRes, leavesRes, holidaysRes] = await Promise.all([
         getBusinessBookings(biz._id),
         getBusinessLeaves(biz._id),
+        getHolidays(biz._id),
       ])
 
       setBookings(bookingsRes.data.bookings)
       setLeaves(leavesRes.data.leaves)
+      setHolidays(holidaysRes.data.holidays)
     } catch {
       toast.error('Failed to load data')
     } finally {
@@ -70,8 +83,37 @@ const ManageBookings = () => {
       await updateLeaveStatus(id, status)
       toast.success(`Leave ${status}`)
       fetchData()
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } }
+      toast.error(error.response?.data?.message || 'Failed to update leave')
+    }
+  }
+
+  const handleAddHoliday = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    try {
+      await addHoliday(holidayForm)
+      toast.success('Holiday added')
+      setShowHolidayModal(false)
+      setHolidayForm({ name: '', date: '' })
+      fetchData()
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } }
+      toast.error(error.response?.data?.message || 'Failed to add holiday')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleDeleteHoliday = async (id: string) => {
+    if (!confirm('Remove this holiday?')) return
+    try {
+      await deleteHoliday(id)
+      toast.success('Holiday removed')
+      fetchData()
     } catch {
-      toast.error('Failed to update leave')
+      toast.error('Failed to remove holiday')
     }
   }
 
@@ -125,6 +167,21 @@ const ManageBookings = () => {
             {leaves.length > 0 && (
               <span className="ml-2 bg-amber-100 text-amber-700 text-xs px-1.5 py-0.5 rounded-full">
                 {leaves.length}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('holidays')}
+            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              activeTab === 'holidays'
+                ? 'bg-white text-zinc-900 shadow-sm'
+                : 'text-zinc-500 hover:text-zinc-700'
+            }`}
+          >
+            Holidays
+            {holidays.length > 0 && (
+              <span className="ml-2 bg-zinc-200 text-zinc-700 text-xs px-1.5 py-0.5 rounded-full">
+                {holidays.length}
               </span>
             )}
           </button>
@@ -273,7 +330,7 @@ const ManageBookings = () => {
               </div>
             )}
           </div>
-        ) : (
+        ) : activeTab === 'leaves' ? (
           <div className="space-y-3">
             {leaves.length === 0 ? (
               <div className="bg-white border border-zinc-200 rounded-xl p-12 text-center shadow-sm">
@@ -294,16 +351,36 @@ const ManageBookings = () => {
                         {leave.staffId?.name}
                       </p>
                       <p className="text-xs text-zinc-500">
-                        {new Date(leave.date).toLocaleDateString('en-NG', {
-                          weekday: 'long',
+                        {new Date(leave.startDate).toLocaleDateString('en-NG', {
                           day: 'numeric',
                           month: 'long',
                           year: 'numeric',
                         })}
+                        {leave.startDate !== leave.endDate && (
+                          <>
+                            {' '}
+                            -{' '}
+                            {new Date(leave.endDate).toLocaleDateString(
+                              'en-NG',
+                              {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric',
+                              }
+                            )}
+                          </>
+                        )}{' '}
+                        · {leave.days} day{leave.days === 1 ? '' : 's'}
                       </p>
                       <p className="text-sm text-zinc-500 capitalize">
                         Reason: {leave.reason.replace('_', ' ')}
                       </p>
+                      {leave.staffId?.annualLeaveDays !== undefined && (
+                        <p className="text-xs text-zinc-400">
+                          Staff allowance: {leave.staffId.annualLeaveDays}{' '}
+                          day(s)/year
+                        </p>
+                      )}
                     </div>
                     <div className="flex gap-2">
                       <button
@@ -326,8 +403,130 @@ const ManageBookings = () => {
               ))
             )}
           </div>
+        ) : (
+          <div className="space-y-4">
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowHolidayModal(true)}
+                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
+              >
+                <Plus size={16} />
+                Add holiday
+              </button>
+            </div>
+
+            {holidays.length === 0 ? (
+              <div className="bg-white border border-zinc-200 rounded-xl p-12 text-center shadow-sm">
+                <PartyPopper size={32} className="text-zinc-300 mx-auto mb-3" />
+                <p className="text-zinc-500 text-sm font-medium">
+                  No holidays set yet
+                </p>
+                <p className="text-zinc-400 text-xs mt-1">
+                  Days marked as holidays are excluded from staff leave balances
+                  and blocked from bookings
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {holidays.map((holiday) => (
+                  <div
+                    key={holiday._id}
+                    className="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm flex items-center justify-between"
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-zinc-900">
+                        {holiday.name}
+                      </p>
+                      <p className="text-xs text-zinc-500">
+                        {new Date(holiday.date).toLocaleDateString('en-NG', {
+                          weekday: 'long',
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                        })}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteHoliday(holiday._id)}
+                      className="p-1.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         )}
       </div>
+
+      {/* Add Holiday Modal */}
+      {showHolidayModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setShowHolidayModal(false)}
+          />
+          <div className="relative bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-lg font-semibold tracking-[-0.01em] text-zinc-900">
+                Add holiday
+              </h2>
+              <button
+                onClick={() => setShowHolidayModal(false)}
+                className="text-zinc-400 hover:text-zinc-700"
+              >
+                <XIcon size={18} />
+              </button>
+            </div>
+            <form onSubmit={handleAddHoliday} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  value={holidayForm.name}
+                  onChange={(e) =>
+                    setHolidayForm({ ...holidayForm, name: e.target.value })
+                  }
+                  placeholder="Independence Day"
+                  required
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-zinc-900 mb-1.5">
+                  Date
+                </label>
+                <input
+                  type="date"
+                  value={holidayForm.date}
+                  onChange={(e) =>
+                    setHolidayForm({ ...holidayForm, date: e.target.value })
+                  }
+                  required
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Adding...
+                  </>
+                ) : (
+                  'Add holiday'
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </BusinessLayout>
   )
 }

@@ -7,8 +7,17 @@ import { getBusinessBookings } from '../../api/booking.api'
 import { getStaff } from '../../api/staff.api'
 import { getServices } from '../../api/service.api'
 import { getBusinessReviews } from '../../api/review.api'
+import { getStaffLeaveBalances } from '../../api/leave.api'
+import type { StaffLeaveBalance } from '../../types/index'
 import { useAppSelector } from '../../store/hooks'
-import { CalendarDays, Users, Scissors, TrendingUp, Star } from 'lucide-react'
+import {
+  CalendarDays,
+  Users,
+  Scissors,
+  TrendingUp,
+  Star,
+  User,
+} from 'lucide-react'
 import {
   AreaChart,
   Area,
@@ -26,6 +35,7 @@ const Dashboard = () => {
   const [serviceCount, setServiceCount] = useState(0)
   const [averageRating, setAverageRating] = useState(0)
   const [totalReviews, setTotalReviews] = useState(0)
+  const [leaveBalances, setLeaveBalances] = useState<StaffLeaveBalance[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasBusiness, setHasBusiness] = useState(true)
 
@@ -36,12 +46,13 @@ const Dashboard = () => {
         const biz = businessRes.data.business
         setHasBusiness(true)
 
-        const [bookingsRes, staffRes, servicesRes, reviewsRes] =
+        const [bookingsRes, staffRes, servicesRes, reviewsRes, balancesRes] =
           await Promise.all([
             getBusinessBookings(biz._id),
             getStaff(),
             getServices(),
             getBusinessReviews(biz._id),
+            getStaffLeaveBalances(biz._id),
           ])
 
         setBookings(bookingsRes.data.bookings)
@@ -50,6 +61,7 @@ const Dashboard = () => {
         setAverageRating(reviewsRes.data.averageRating)
 
         setTotalReviews(reviewsRes.data.totalReviews)
+        setLeaveBalances(balancesRes.data.balances)
       } catch (err: unknown) {
         const error = err as { response?: { status?: number } }
         if (error.response?.status === 404) {
@@ -310,6 +322,53 @@ const Dashboard = () => {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Staff leave balances */}
+        <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm outline-none">
+          <h2 className="text-base font-semibold text-zinc-900 mb-4">
+            Staff leave balance
+          </h2>
+          {leaveBalances.length === 0 ? (
+            <div className="flex h-24 flex-col items-center justify-center gap-2 text-zinc-400">
+              <User className="h-8 w-8 text-zinc-500" />
+              <p className="text-sm">No staff yet</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {leaveBalances.map((balance) => {
+                const usedRatio = Math.min(
+                  balance.usedDays / (balance.annualLeaveDays || 1),
+                  1
+                )
+                return (
+                  <div key={balance.staffId} className="py-1.5">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <p className="text-sm font-medium text-zinc-900">
+                        {balance.name}
+                      </p>
+                      <p className="text-xs text-zinc-500">
+                        {balance.remainingDays} of {balance.annualLeaveDays}{' '}
+                        day(s) left
+                      </p>
+                    </div>
+                    <div className="h-1.5 w-full bg-zinc-100 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${
+                          usedRatio >= 1
+                            ? 'bg-red-500'
+                            : usedRatio >= 0.75
+                              ? 'bg-amber-500'
+                              : 'bg-blue-600'
+                        }`}
+                        style={{ width: `${usedRatio * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
         {/* Recent reviews */}
         <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm outline-none">

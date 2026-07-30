@@ -34,7 +34,12 @@ const ManageStaff = () => {
   const [showAddModal, setShowAddModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [editingStaffId, setEditingStaffId] = useState<string | null>(null)
-  const [editForm, setEditForm] = useState({ name: '', email: '', phone: '' })
+  const [editForm, setEditForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    annualLeaveDays: 21,
+  })
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false)
   const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -83,6 +88,7 @@ const ManageStaff = () => {
       name: staffMember.name,
       email: staffMember.email,
       phone: staffMember.phone,
+      annualLeaveDays: staffMember.annualLeaveDays ?? 21,
     })
     setShowEditModal(true)
   }
@@ -211,6 +217,9 @@ const ManageStaff = () => {
                 </p>
                 <p className="text-sm text-zinc-400 mt-0.5">{member.email}</p>
                 <p className="text-sm text-zinc-400">{member.phone}</p>
+                <p className="text-xs text-zinc-400 mt-1">
+                  {member.annualLeaveDays ?? 21} leave day(s)/year
+                </p>
                 <div className="flex items-center gap-4 mt-4">
                   <button
                     onClick={() => openAvailabilityModal(member)}
@@ -370,6 +379,27 @@ const ManageStaff = () => {
                   }
                   className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
+              </div>
+              <div>
+                <label className="block text-base font-medium text-zinc-900 mb-1.5">
+                  Leave days per year
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  value={editForm.annualLeaveDays}
+                  onChange={(e) =>
+                    setEditForm({
+                      ...editForm,
+                      annualLeaveDays: Number(e.target.value),
+                    })
+                  }
+                  className="w-full border border-zinc-200 rounded-lg px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                />
+                <p className="text-xs text-zinc-400 mt-1">
+                  Total leave allowance for this staff member each calendar
+                  year. Default is 21.
+                </p>
               </div>
               <button
                 type="submit"

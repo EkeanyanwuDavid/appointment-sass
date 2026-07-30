@@ -7,6 +7,7 @@ export interface IStaff extends Document {
   email: string;
   phone: string;
   isActive: boolean;
+  annualLeaveDays: number;
 }
 
 const StaffSchema = new Schema<IStaff>(
@@ -21,6 +22,7 @@ const StaffSchema = new Schema<IStaff>(
     email: { type: String, required: true, lowercase: true, trim: true },
     phone: { type: String, default: "" },
     isActive: { type: Boolean, default: true },
+    annualLeaveDays: { type: Number, default: 21, min: 0 },
   },
   { timestamps: true },
 );

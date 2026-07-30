@@ -3,6 +3,7 @@ import Booking from "../models/Booking";
 import Service from "../models/Service";
 import Staff from "../models/Staff";
 import Leave from "../models/Leave";
+import Holiday from "../models/Holiday";
 import Availability from "../models/Availability";
 import { getAvailableSlots } from "../utils/slots";
 import { AuthRequest } from "../types/index";
@@ -51,12 +52,32 @@ export const createBooking = asyncHandler(
         .json({ success: false, message: "Staff not available on this day" });
       return;
     }
-
     const onLeave = await Leave.findOne({
       staffId,
-      date: bookingDate,
       status: "approved",
+      startDate: { $lte: bookingDate },
+      endDate: { $gte: bookingDate },
     });
+
+    if (onLeave) {
+      res
+        .status(400)
+        .json({ success: false, message: "Staff not available on this date" });
+      return;
+    }
+
+    const holiday = await Holiday.findOne({
+      businessId: staff.businessId,
+      date: bookingDate,
+    });
+
+    if (holiday) {
+      res.status(400).json({
+        success: false,
+        message: `Business is closed on this date (${holiday.name})`,
+      });
+      return;
+    }
 
     if (onLeave) {
       res

@@ -64,7 +64,7 @@ export const getStaff = asyncHandler(
 
 export const updateStaff = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { name, email, phone } = req.body;
+    const { name, email, phone, annualLeaveDays } = req.body;
 
     const business = await Business.findOne({ ownerId: req.user?._id });
     if (!business) {
@@ -98,18 +98,29 @@ export const updateStaff = asyncHandler(
     if (name) staff.name = name;
     if (email) staff.email = email;
     if (phone !== undefined) staff.phone = phone;
+    if (annualLeaveDays !== undefined && annualLeaveDays !== null) {
+      const parsed = Number(annualLeaveDays);
+      if (Number.isNaN(parsed) || parsed < 0) {
+        res.status(400).json({
+          success: false,
+          message: "Annual leave days must be a non-negative number",
+        });
+        return;
+      }
+      staff.annualLeaveDays = parsed;
+    }
     await staff.save();
 
     await User.findByIdAndUpdate(staff.userId, {
       ...(name && { name }),
       ...(email && { email }),
       ...(phone !== undefined && { phone }),
+      ...(annualLeaveDays !== undefined && { annualLeaveDays }),
     });
 
     res.status(200).json({ success: true, staff });
   },
 );
-
 export const removeStaff = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const business = await Business.findOne({ ownerId: req.user?._id });
