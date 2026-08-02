@@ -163,7 +163,8 @@ const BookingPage = () => {
       navigate('/home')
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } }
-      toast.error(error.response?.data?.message || 'Failed to create booking')
+      const message = error.response?.data?.message || 'Failed to create booking'
+      toast.error(message)
     } finally {
       setIsBooking(false)
     }

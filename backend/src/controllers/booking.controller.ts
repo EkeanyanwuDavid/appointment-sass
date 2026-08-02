@@ -100,9 +100,11 @@ export const createBooking = asyncHandler(
     });
 
     if (conflictingBooking) {
-      res
-        .status(400)
-        .json({ success: false, message: "Time slot not available" });
+      res.status(409).json({
+        success: false,
+        message:
+          "Someone has already booked this time slot. Please choose another time.",
+      });
       return;
     }
 
