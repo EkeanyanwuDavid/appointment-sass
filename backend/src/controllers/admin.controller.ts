@@ -43,14 +43,23 @@ export const getPlatformStats = asyncHandler(
 
 export const getAllBusinessesAdmin = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const businesses = await Business.find()
+    const { search } = req.query;
+
+    const filter: Record<string, unknown> = {};
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search as string, $options: "i" } },
+        { city: { $regex: search as string, $options: "i" } },
+      ];
+    }
+
+    const businesses = await Business.find(filter)
       .populate("ownerId", "name email")
       .sort({ createdAt: -1 });
 
     res.status(200).json({ success: true, businesses });
   },
 );
-
 export const toggleBusinessStatus = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const business = await Business.findById(req.params.id);
@@ -69,11 +78,17 @@ export const toggleBusinessStatus = asyncHandler(
 
 export const getAllUsersAdmin = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { role } = req.query;
+    const { role, search } = req.query;
 
     const filter: Record<string, unknown> = {};
     if (role && role !== "all") {
       filter.role = role;
+    }
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search as string, $options: "i" } },
+        { email: { $regex: search as string, $options: "i" } },
+      ];
     }
 
     const users = await User.find(filter)

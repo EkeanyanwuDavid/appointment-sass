@@ -5,7 +5,7 @@ import {
   toggleBusinessStatus,
 } from '../../api/admin.api'
 import { toast } from 'sonner'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, Search, Users, X } from 'lucide-react'
 
 interface AdminBusiness {
   _id: string
@@ -22,10 +22,13 @@ const AdminBusinesses = () => {
   const [businesses, setBusinesses] = useState<AdminBusiness[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [togglingId, setTogglingId] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
 
-  const fetchBusinesses = async () => {
+  const fetchBusinesses = async (searchOverride?: string) => {
+    const searchValue = searchOverride !== undefined ? searchOverride : search
+    setIsLoading(true)
     try {
-      const res = await getAllBusinessesAdmin()
+      const res = await getAllBusinessesAdmin(searchValue || undefined)
       setBusinesses(res.data.businesses)
     } catch {
       toast.error('Failed to load businesses')
@@ -34,12 +37,19 @@ const AdminBusinesses = () => {
     }
   }
 
+  // Live search — waits 400ms after the last keystroke before refetching,
+  // so it doesn't fire a request on every single character typed.
   useEffect(() => {
-    const load = async () => {
-      await fetchBusinesses()
-    }
-    void load()
-  }, [])
+    const timer = setTimeout(() => {
+      fetchBusinesses()
+    }, 400)
+    return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search])
+
+  const handleClearSearch = () => {
+    setSearch('')
+  }
 
   const handleToggle = async (id: string) => {
     setTogglingId(id)
@@ -72,9 +82,45 @@ const AdminBusinesses = () => {
           </p>
         </div>
 
+        <div className="relative">
+          <Search
+            size={16}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+          />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by business name or city..."
+            className="w-full border border-zinc-200 rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white"
+          />
+          {search && (
+            <button
+              type="button"
+              onClick={handleClearSearch}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700"
+              aria-label="Clear search"
+            >
+              <X size={15} />
+            </button>
+          )}
+        </div>
+
         {isLoading ? (
           <div className="flex items-center justify-center h-40">
             <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : businesses.length === 0 ? (
+          <div className="bg-white border border-zinc-200 rounded-xl shadow-sm p-10 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-zinc-100 text-zinc-600">
+              <Users size={24} />
+            </div>
+            <h3 className="mt-4 text-lg font-semibold text-zinc-900">
+              No businesses yet
+            </h3>
+            <p className="mt-1 text-sm text-zinc-500">
+              Once businesses join the platform, they’ll appear here.
+            </p>
           </div>
         ) : (
           <div className="bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden">
