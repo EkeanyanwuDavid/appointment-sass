@@ -116,9 +116,7 @@ const LandingPage = () => {
               whileHover={{ rotate: 5, scale: 1.05 }}
               className="bg-blue-600 text-white p-1.5 rounded-lg"
             >
-              <div className="bg-blue-600 text-white p-1.5 rounded-lg">
-                <CalendarCheck size={18} />
-              </div>
+              <CalendarCheck size={18} />
             </motion.div>
 
             <span
@@ -189,7 +187,7 @@ const LandingPage = () => {
               >
                 <Link
                   to="/register"
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 via-cyan-600 to-sky-500 text-white rounded-full px-8 py-4 text-base font-semibold shadow-lg shadow-cyan-500/20 hover:shadow-xl transition-all"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-linear-to-r from-blue-600 via-cyan-600 to-sky-500 text-white rounded-full px-8 py-4 text-base font-semibold shadow-lg shadow-cyan-500/20 hover:shadow-xl transition-all"
                 >
                   Find a service
                   <ArrowRight size={16} />
@@ -215,7 +213,7 @@ const LandingPage = () => {
       {/* Booking flow preview */}
       <FadeUp delay={0.05}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-          <div className="rounded-[2rem] border border-zinc-200 bg-white/95 shadow-xl shadow-sky-200/20 p-6">
+          <div className="rounded-4xl border border-zinc-200 bg-white/95 shadow-xl shadow-sky-200/20 p-6">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <p className="text-sm uppercase font-semibold tracking-[0.3em] text-blue-600">
@@ -264,7 +262,7 @@ const LandingPage = () => {
                     className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm hover:shadow-md transition-all"
                   >
                     <div
-                      className={`w-12 h-12 rounded-3xl bg-gradient-to-r ${step.gradient} flex items-center justify-center text-white mb-4 shadow-lg shadow-sky-200/20`}
+                      className={`w-12 h-12 rounded-3xl bg-linear-to-r ${step.gradient} flex items-center justify-center text-white mb-4 shadow-lg shadow-sky-200/20`}
                     >
                       <Icon size={20} />
                     </div>
@@ -325,7 +323,11 @@ const LandingPage = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
+          transition={{
+            duration: 2.5,
+            delay: 0.3,
+            ease: 'easeOut',
+          }}
           className="mx-auto w-full max-w-md bg-white rounded-2xl border border-zinc-200 shadow-xl p-5 relative z-20"
         >
           <div className="flex items-center gap-2 mb-4">
@@ -469,7 +471,7 @@ const LandingPage = () => {
                           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                         />
 
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent" />
 
                         <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold capitalize">
                           {business.category}
@@ -477,7 +479,7 @@ const LandingPage = () => {
                       </div>
                     ) : (
                       <div
-                        className={`relative h-40 overflow-hidden bg-gradient-to-br ${
+                        className={`relative h-40 overflow-hidden bg-linear-to-br ${
                           categoryStyles[business.category]?.gradient ??
                           categoryStyles.other.gradient
                         }`}
@@ -555,14 +557,20 @@ const LandingPage = () => {
                 <motion.div
                   key={cat.value}
                   whileHover={{ y: -4 }}
+                  whileTap={{ scale: 0.97 }}
                   className="transition-all"
                 >
                   <Link
                     to="/register"
-                    className={`bg-linear-to-br ${categoryStyles[cat.value].gradient} rounded-xl p-5 text-white flex flex-col items-center justify-center gap-2 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all`}
+                    className={`relative overflow-hidden bg-linear-to-br ${categoryStyles[cat.value].gradient} rounded-xl p-5 flex flex-col items-center justify-center gap-2 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all`}
                   >
-                    <Icon size={34} />
-                    <p className="text-lg font-medium text-center">
+                    <Icon
+                      size={72}
+                      strokeWidth={1.25}
+                      className="absolute -right-3 -bottom-3 text-white/15"
+                    />
+                    <Icon size={30} className="relative text-white" />
+                    <p className="relative text-lg font-medium text-center text-white">
                       {cat.label}
                     </p>
                   </Link>
@@ -587,6 +595,7 @@ const LandingPage = () => {
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  aria-expanded={openFaq === i}
                   className="w-full flex items-center justify-between p-4 text-left outline-none  focus-visible:ring-blue-600 focus-visible:ring-inset"
                 >
                   <span className="text-lg font-medium text-zinc-900">
@@ -645,7 +654,7 @@ const LandingPage = () => {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a
-                href="tel:+2348012345678"
+                href="tel:+2348147901386"
                 className="flex items-center justify-center gap-1 border border-zinc-200 rounded-lg px-4 py-2 text-base font-medium text-zinc-700 hover:bg-zinc-50 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
               >
                 <PhoneCall className="text-blue-600" size={16} />
