@@ -181,7 +181,7 @@ const LandingPage = () => {
               >
                 <Link
                   to="/register"
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 via-cyan-600 to-sky-500 text-white rounded-xl px-8 py-4 text-base font-semibold shadow-lg shadow-cyan-500/20 hover:shadow-xl transition-all"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 via-cyan-600 to-sky-500 text-white rounded-full px-8 py-4 text-base font-semibold shadow-lg shadow-cyan-500/20 hover:shadow-xl transition-all"
                 >
                   Find a service
                   <ArrowRight size={16} />
@@ -194,7 +194,7 @@ const LandingPage = () => {
               >
                 <Link
                   to="/register"
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 border border-blue-200 bg-white text-zinc-900 rounded-xl px-8 py-4 text-base font-semibold shadow-sm hover:bg-slate-50 hover:shadow-md transition-all"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 border border-blue-200 bg-white text-zinc-900 rounded-full px-8 py-4 text-base font-semibold shadow-sm hover:bg-slate-50 hover:shadow-md transition-all"
                 >
                   List your business
                 </Link>
