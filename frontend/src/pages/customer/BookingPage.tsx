@@ -372,6 +372,27 @@ const BookingPage = () => {
             {business.address}, {business.city}
           </div>
         </div>
+        <div className="mb-6 rounded-2xl border border-blue-100 bg-blue-50/70 p-4">
+          <div className="flex items-center gap-2 text-sm font-semibold text-blue-700">
+            <CalendarCheck size={16} />
+            Fast booking in 4 steps
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {['Service', 'Staff', 'Date', 'Confirm'].map((label, index) => (
+              <span
+                key={label}
+                className={`rounded-full px-3 py-1 text-xs font-medium ${
+                  index <= STEPS.indexOf(step)
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white text-zinc-600'
+                }`}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+        </div>
+
         {/* Step indicator */}
         <div className="flex items-center gap-2 mb-6">
           {STEPS.map((s, i) => (

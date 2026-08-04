@@ -121,7 +121,15 @@ const LandingPage = () => {
               </div>
             </motion.div>
 
-            <span className="font-bold text-xl text-zinc-900">Bkly</span>
+            <span
+              className="text-lg tracking-[-0.03em] text-zinc-900"
+              style={{
+                fontFamily: "'Google Sans Flex', sans-serif",
+                fontWeight: 800,
+              }}
+            >
+              Bkly
+            </span>
           </div>
           <div className="flex items-center gap-4">
             <Link
@@ -428,7 +436,7 @@ const LandingPage = () => {
           </h2>
 
           {loadingBusinesses ? (
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {[...Array(3)].map((_, i) => (
                 <div
                   key={i}
@@ -444,58 +452,90 @@ const LandingPage = () => {
               ))}
             </div>
           ) : businesses.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {businesses.map((business) => (
-                <motion.div
-                  key={business._id}
-                  whileHover={{ y: -5 }}
-                  className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm transition-all hover:shadow-md"
-                >
-                  {business.imageUrl ? (
-                    <div className="h-20 bg-zinc-100">
-                      <img
-                        src={business.imageUrl}
-                        alt={business.name}
-                        className="w-full h-full object-cover"
-                      />
+                <Link key={business._id} to="/login" className="block">
+                  <motion.div
+                    key={business._id}
+                    whileHover={{ y: -6 }}
+                    className="group overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition-all duration-300 hover:shadow-xl"
+                  >
+                    {/* Cover */}
+                    {business.imageUrl ? (
+                      <div className="relative h-40 overflow-hidden">
+                        <img
+                          src={business.imageUrl}
+                          alt={business.name}
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        />
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+
+                        <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold capitalize">
+                          {business.category}
+                        </span>
+                      </div>
+                    ) : (
+                      <div
+                        className={`relative h-40 overflow-hidden bg-gradient-to-br ${
+                          categoryStyles[business.category]?.gradient ??
+                          categoryStyles.other.gradient
+                        }`}
+                      >
+                        {(() => {
+                          const Icon =
+                            categoryStyles[business.category]?.icon ??
+                            categoryStyles.other.icon
+
+                          return (
+                            <>
+                              <Icon
+                                size={92}
+                                className="absolute -right-5 -bottom-5 text-white/15"
+                              />
+
+                              <Icon
+                                size={26}
+                                className="absolute left-4 bottom-4 text-white"
+                              />
+                            </>
+                          )
+                        })()}
+
+                        <span className="absolute top-3 left-3 rounded-full bg-white/15 backdrop-blur px-3 py-1 text-xs font-semibold capitalize text-white">
+                          {business.category}
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="p-5">
+                      <h3 className="text-lg font-semibold text-zinc-900">
+                        {business.name}
+                      </h3>
+
+                      <div className="mt-1 flex items-center gap-1 text-sm text-zinc-500">
+                        <MapPin size={14} />
+                        {business.city}
+                      </div>
+
+                      <p className="mt-3 text-sm leading-6 text-zinc-500 line-clamp-2">
+                        {business.description ||
+                          'Professional services available for instant booking.'}
+                      </p>
+
+                      <div className="mt-5 flex items-center justify-between">
+                        <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                          Available now
+                        </span>
+
+                        <ArrowRight
+                          size={18}
+                          className="transition-transform group-hover:translate-x-1"
+                        />
+                      </div>
                     </div>
-                  ) : (
-                    <div
-                      className={`relative h-20 overflow-hidden bg-linear-to-br ${
-                        categoryStyles[business.category]?.gradient ||
-                        categoryStyles.other.gradient
-                      }`}
-                    >
-                      {(() => {
-                        const Icon =
-                          categoryStyles[business.category]?.icon ||
-                          categoryStyles.other.icon
-                        return (
-                          <>
-                            <Icon
-                              size={72}
-                              strokeWidth={1.25}
-                              className="absolute -right-3 -bottom-4 text-white/15 -rotate-12"
-                            />
-                            <Icon
-                              size={22}
-                              strokeWidth={1.75}
-                              className="absolute left-3.5 bottom-3.5 text-white"
-                            />
-                          </>
-                        )
-                      })()}
-                    </div>
-                  )}
-                  <div className="p-4">
-                    <p className="text-lg font-medium text-zinc-900">
-                      {business.name}
-                    </p>
-                    <p className="text-sm text-zinc-500 capitalize mt-0.5">
-                      {business.category} • {business.city}
-                    </p>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                </Link>
               ))}
             </div>
           ) : null}

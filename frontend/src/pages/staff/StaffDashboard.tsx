@@ -18,6 +18,7 @@ import {
   MapPin,
   PhoneCall,
   Check,
+  Sparkles,
   Star,
 } from 'lucide-react'
 
@@ -47,6 +48,9 @@ const StaffDashboard = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [showLeaveModal, setShowLeaveModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showAllBookings, setShowAllBookings] = useState(false)
+  const [showAllLeaves, setShowAllLeaves] = useState(false)
+  const [showAllReviews, setShowAllReviews] = useState(false)
   const [leaveForm, setLeaveForm] = useState({
     startDate: '',
     endDate: '',
@@ -110,6 +114,13 @@ const StaffDashboard = () => {
   const upcomingBookings = bookings.filter(
     (b) => b.status === 'pending' || b.status === 'confirmed'
   )
+  const nextBooking = upcomingBookings[0]
+  const visibleBookings = showAllBookings ? bookings : bookings.slice(0, 5)
+  const visibleLeaves = showAllLeaves ? leaves : leaves.slice(0, 4)
+  const visibleReviews = showAllReviews ? reviews : reviews.slice(0, 3)
+  const hasMoreBookings = bookings.length > 5
+  const hasMoreLeaves = leaves.length > 4
+  const hasMoreReviews = reviews.length > 3
 
   const handleMarkComplete = async (id: string) => {
     try {
@@ -175,6 +186,33 @@ const StaffDashboard = () => {
           </p>
         </div>
 
+        <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-500 p-5 text-white shadow-sm">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="flex items-center gap-2 text-sm font-medium text-blue-100">
+                <Sparkles size={16} />
+                Today’s focus
+              </div>
+              <h2 className="mt-2 text-xl font-semibold tracking-[-0.02em]">
+                You have {upcomingBookings.length} booking
+                {upcomingBookings.length === 1 ? '' : 's'} ahead
+              </h2>
+              <p className="mt-2 text-sm text-blue-100">
+                {nextBooking
+                  ? `Next up: ${nextBooking.customerId?.name || 'Customer'} for ${nextBooking.serviceId?.name || 'your service'}`
+                  : 'Everything looks clear for now. You can take a breather or request leave.'}
+              </p>
+            </div>
+            <button
+              onClick={() => setShowLeaveModal(true)}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition hover:bg-white/25"
+            >
+              <Plus size={15} />
+              Request leave
+            </button>
+          </div>
+        </div>
+
         {/* Stats */}
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm">
@@ -230,9 +268,16 @@ const StaffDashboard = () => {
 
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2 bg-white border border-zinc-200 rounded-xl p-5 shadow-sm h-fit">
-            <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-zinc-900">
-              Your bookings
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-zinc-900">
+                Your bookings
+              </h2>
+              {upcomingBookings.length > 0 && (
+                <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-medium text-blue-700">
+                  {upcomingBookings.length} active
+                </span>
+              )}
+            </div>
             {bookings.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-40 text-center">
                 <CalendarDays size={28} className="text-zinc-300 mb-2" />
@@ -240,75 +285,88 @@ const StaffDashboard = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                {bookings.map((booking) => (
-                  <div
-                    key={booking._id}
-                    className="flex items-start justify-between gap-4 py-3 px-2 -mx-2 rounded-lg border-b border-zinc-100 last:border-0 hover:bg-zinc-50/50 transition-colors"
-                  >
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2.5 flex-wrap">
-                        <div className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-semibold text-xs shrink-0">
-                          {booking.customerId?.name?.charAt(0).toUpperCase() ||
-                            'C'}
+                <div className="max-h-[420px] overflow-y-auto pr-1">
+                  {visibleBookings.map((booking) => (
+                    <div
+                      key={booking._id}
+                      className="flex items-start justify-between gap-4 rounded-xl border border-zinc-100 bg-zinc-50/60 px-3 py-3 transition-colors hover:border-blue-200 hover:bg-blue-50/40"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2.5 flex-wrap">
+                          <div className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-semibold text-xs shrink-0">
+                            {booking.customerId?.name
+                              ?.charAt(0)
+                              .toUpperCase() || 'C'}
+                          </div>
+                          <p className="text-sm font-medium text-zinc-900">
+                            {booking.customerId?.name || 'Customer'}
+                          </p>
+                          {booking.paymentStatus === 'paid' && (
+                            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700">
+                              Paid
+                            </span>
+                          )}
+                          {booking.paymentStatus === 'refunded' && (
+                            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-zinc-100 text-zinc-500">
+                              Refunded
+                            </span>
+                          )}
                         </div>
-                        <p className="text-sm font-medium text-zinc-900">
-                          {booking.customerId?.name || 'Customer'}
+                        <p className="text-xs text-zinc-500">
+                          {booking.serviceId?.name} •{' '}
+                          {new Date(booking.date).toLocaleDateString('en-NG', {
+                            weekday: 'short',
+                            day: 'numeric',
+                            month: 'short',
+                          })}
                         </p>
-                        {booking.paymentStatus === 'paid' && (
-                          <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700">
-                            Paid
-                          </span>
-                        )}
-                        {booking.paymentStatus === 'refunded' && (
-                          <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-zinc-100 text-zinc-500">
-                            Refunded
-                          </span>
+                        <p className="text-xs text-zinc-500">
+                          {booking.startTime} - {booking.endTime}
+                        </p>
+                        <p className="text-xs flex items-center gap-1.5 text-zinc-500 mt-1">
+                          <MapPin size={13} />
+                          {booking.customerAddress}
+                        </p>
+
+                        <p className="text-xs flex items-center gap-1.5 text-zinc-500">
+                          <PhoneCall size={13} />
+                          {booking.customerPhone}
+                        </p>
+                        {booking.locationNotes && (
+                          <p className="text-xs text-zinc-500 italic">
+                            Note: {booking.locationNotes}
+                          </p>
                         )}
                       </div>
-                      <p className="text-xs text-zinc-500">
-                        {booking.serviceId?.name} •{' '}
-                        {new Date(booking.date).toLocaleDateString('en-NG', {
-                          weekday: 'short',
-                          day: 'numeric',
-                          month: 'short',
-                        })}
-                      </p>
-                      <p className="text-xs text-zinc-500">
-                        {booking.startTime} - {booking.endTime}
-                      </p>
-                      <p className="text-xs flex items-center gap-1.5 text-zinc-500 mt-1">
-                        <MapPin size={13} />
-                        {booking.customerAddress}
-                      </p>
-
-                      <p className="text-xs flex items-center gap-1.5 text-zinc-500">
-                        <PhoneCall size={13} />
-                        {booking.customerPhone}
-                      </p>
-                      {booking.locationNotes && (
-                        <p className="text-xs text-zinc-500 italic">
-                          Note: {booking.locationNotes}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full font-medium capitalize ${statusColors[booking.status]}`}
-                      >
-                        {booking.status}
-                      </span>
-                      {booking.status === 'confirmed' && (
-                        <button
-                          onClick={() => handleMarkComplete(booking._id)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium hover:bg-blue-100 transition-colors"
+                      <div className="flex flex-col items-end gap-2">
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full font-medium capitalize ${statusColors[booking.status]}`}
                         >
-                          <Check size={13} />
-                          Mark complete
-                        </button>
-                      )}
+                          {booking.status}
+                        </span>
+                        {booking.status === 'confirmed' && (
+                          <button
+                            onClick={() => handleMarkComplete(booking._id)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium hover:bg-blue-100 transition-colors"
+                          >
+                            <Check size={13} />
+                            Mark complete
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                {hasMoreBookings && (
+                  <button
+                    onClick={() => setShowAllBookings((prev) => !prev)}
+                    className="mt-3 text-sm font-medium text-blue-600 hover:text-blue-700"
+                  >
+                    {showAllBookings
+                      ? 'Show less'
+                      : `Show all ${bookings.length} bookings`}
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -341,10 +399,10 @@ const StaffDashboard = () => {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {leaves.map((leave) => (
+                  {visibleLeaves.map((leave) => (
                     <div
                       key={leave._id}
-                      className="flex items-center justify-between gap-4 py-3 px-2 -mx-2 rounded-lg border-b border-zinc-100 last:border-0 hover:bg-zinc-50/50 transition-colors"
+                      className="flex items-center justify-between gap-4 rounded-lg border border-zinc-100 bg-zinc-50/60 px-3 py-3"
                     >
                       <div>
                         <p className="text-sm text-zinc-900 capitalize">
@@ -381,6 +439,16 @@ const StaffDashboard = () => {
                       </span>
                     </div>
                   ))}
+                  {hasMoreLeaves && (
+                    <button
+                      onClick={() => setShowAllLeaves((prev) => !prev)}
+                      className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                    >
+                      {showAllLeaves
+                        ? 'Show less'
+                        : `Show all ${leaves.length} requests`}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -396,10 +464,10 @@ const StaffDashboard = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {reviews.slice(0, 5).map((review) => (
+                  {visibleReviews.map((review) => (
                     <div
                       key={review._id}
-                      className="py-3 border-b border-zinc-100 last:border-0"
+                      className="rounded-lg border border-zinc-100 bg-zinc-50/60 px-3 py-3"
                     >
                       <div className="flex items-center justify-between mb-1">
                         <p className="text-sm font-medium text-zinc-900">
@@ -437,6 +505,16 @@ const StaffDashboard = () => {
                       )}
                     </div>
                   ))}
+                  {hasMoreReviews && (
+                    <button
+                      onClick={() => setShowAllReviews((prev) => !prev)}
+                      className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                    >
+                      {showAllReviews
+                        ? 'Show less'
+                        : `Show all ${reviews.length} reviews`}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
