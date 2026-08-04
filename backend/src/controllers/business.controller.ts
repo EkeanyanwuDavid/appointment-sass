@@ -9,7 +9,7 @@ const PAYSTACK_BASE_URL = "https://api.paystack.co";
 
 export const createBusiness = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const { name, slug, category, description, phone, address, city } =
+    const { name, slug, category, description, phone, address, city, gallery } =
       req.body;
 
     const existingBusiness = await Business.findOne({ slug });
@@ -27,7 +27,8 @@ export const createBusiness = asyncHandler(
       phone,
       address,
       city,
-    });
+      gallery: Array.isArray(gallery) ? gallery : [],
+    } as any);
 
     res.status(201).json({ success: true, business });
   },

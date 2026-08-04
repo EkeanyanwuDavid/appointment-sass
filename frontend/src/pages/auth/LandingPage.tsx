@@ -73,16 +73,6 @@ const faqs = [
     answer:
       'Yes, you can cancel any pending or confirmed booking from your "My bookings" page before it takes place.',
   },
-  {
-    question: 'I run a business — how do I list it on Bkly?',
-    answer:
-      'Click "List your business," create an account as a business owner, and set up your profile, services, and staff in minutes.',
-  },
-  {
-    question: 'How do I become a staff member?',
-    answer:
-      "Staff accounts are created by business owners, not self-registered. If you work for a business using Bkly, ask the owner to add you as staff — you'll get a temporary password to log in, then set your own password on first login.",
-  },
 ]
 
 const TwitterIcon = () => (
@@ -184,14 +174,14 @@ const LandingPage = () => {
               </p>
             </motion.div>
 
-            <div className="flex flex-col  sm:flex-row items-center justify-center gap-3 mt-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
               <motion.div
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
                 <Link
                   to="/register"
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white rounded-lg px-8 py-4 text-base font-medium hover:bg-blue-700 transition-colors"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 via-cyan-600 to-sky-500 text-white rounded-xl px-8 py-4 text-base font-semibold shadow-lg shadow-cyan-500/20 hover:shadow-xl transition-all"
                 >
                   Find a service
                   <ArrowRight size={16} />
@@ -204,11 +194,81 @@ const LandingPage = () => {
               >
                 <Link
                   to="/register"
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 border border-zinc-200 bg-white text-zinc-700 rounded-lg px-8 py-4 text-base font-medium hover:bg-zinc-50 transition-colors"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 border border-blue-200 bg-white text-zinc-900 rounded-xl px-8 py-4 text-base font-semibold shadow-sm hover:bg-slate-50 hover:shadow-md transition-all"
                 >
                   List your business
                 </Link>
               </motion.div>
+            </div>
+          </div>
+        </div>
+      </FadeUp>
+
+      {/* Booking flow preview */}
+      <FadeUp delay={0.05}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+          <div className="rounded-[2rem] border border-zinc-200 bg-white/95 shadow-xl shadow-sky-200/20 p-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-sm uppercase font-semibold tracking-[0.3em] text-blue-600">
+                  Booking made simple
+                </p>
+                <h2 className="mt-3 text-3xl sm:text-4xl font-semibold text-zinc-900">
+                  Select service → Choose time → Confirm
+                </h2>
+              </div>
+              <p className="max-w-xl text-base text-zinc-500">
+                A clear three-step booking path that helps customers find a pro,
+                pick the best slot, and lock in service fast.
+              </p>
+            </div>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+              {[
+                {
+                  title: 'Select service',
+                  description:
+                    'Browse services, staff, and pricing before you book.',
+                  icon: Search,
+                  gradient: 'from-blue-600 to-cyan-500',
+                },
+                {
+                  title: 'Choose time',
+                  description:
+                    'Pick the slot that fits your schedule instantly.',
+                  icon: Clock,
+                  gradient: 'from-cyan-500 to-sky-500',
+                },
+                {
+                  title: 'Confirm',
+                  description:
+                    'Pay securely and get a professional sent to you.',
+                  icon: CalendarCheck,
+                  gradient: 'from-sky-500 to-blue-600',
+                },
+              ].map((step) => {
+                const Icon = step.icon
+                return (
+                  <motion.div
+                    key={step.title}
+                    whileHover={{ y: -6 }}
+                    transition={{ duration: 0.2 }}
+                    className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm hover:shadow-md transition-all"
+                  >
+                    <div
+                      className={`w-12 h-12 rounded-3xl bg-gradient-to-r ${step.gradient} flex items-center justify-center text-white mb-4 shadow-lg shadow-sky-200/20`}
+                    >
+                      <Icon size={20} />
+                    </div>
+                    <p className="text-lg font-semibold text-zinc-900">
+                      {step.title}
+                    </p>
+                    <p className="mt-2 text-sm text-zinc-500">
+                      {step.description}
+                    </p>
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -320,35 +380,42 @@ const LandingPage = () => {
             How it works
           </h2>
           <div className="grid gap-6 sm:grid-cols-3">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Search size={20} className="text-blue-600" />
-              </div>
-              <p className="text-lg font-medium text-zinc-900">Browse</p>
-              <p className="text-base text-zinc-500 mt-1">
-                Find a business and service near you
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Clock size={20} className="text-blue-600" />
-              </div>
-              <p className="text-lg font-medium text-zinc-900">Pick a time</p>
-              <p className="text-base text-zinc-500 mt-1">
-                Choose a slot that works for your schedule
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                <MapPin size={20} className="text-blue-600" />
-              </div>
-              <p className="text-lg font-medium text-zinc-900">
-                Get served at your door
-              </p>
-              <p className="text-base text-zinc-500 mt-1">
-                A professional comes to you, on time
-              </p>
-            </div>
+            {[
+              {
+                title: 'Browse',
+                description: 'Find a business and service near you',
+                icon: Search,
+              },
+              {
+                title: 'Pick a time',
+                description: 'Choose a slot that works for your schedule',
+                icon: Clock,
+              },
+              {
+                title: 'Get served at your door',
+                description: 'A professional comes to you, on time',
+                icon: MapPin,
+              },
+            ].map((item) => {
+              const Icon = item.icon
+              return (
+                <motion.div
+                  key={item.title}
+                  whileHover={{ y: -5 }}
+                  className="group rounded-3xl border border-zinc-200 bg-white p-6 text-center transition-all shadow-sm hover:shadow-md"
+                >
+                  <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3 transition-colors group-hover:bg-cyan-50">
+                    <Icon size={20} className="text-blue-600" />
+                  </div>
+                  <p className="text-lg font-medium text-zinc-900">
+                    {item.title}
+                  </p>
+                  <p className="text-base text-zinc-500 mt-1">
+                    {item.description}
+                  </p>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
       </FadeUp>
@@ -379,9 +446,10 @@ const LandingPage = () => {
           ) : businesses.length > 0 ? (
             <div className="grid gap-4 sm:grid-cols-3">
               {businesses.map((business) => (
-                <div
+                <motion.div
                   key={business._id}
-                  className="bg-white border border-zinc-200 hover:-translate-y-1 hover:shadow-md transition-all rounded-xl overflow-hidden shadow-sm"
+                  whileHover={{ y: -5 }}
+                  className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm transition-all hover:shadow-md"
                 >
                   {business.imageUrl ? (
                     <div className="h-20 bg-zinc-100">
@@ -427,7 +495,7 @@ const LandingPage = () => {
                       {business.category} • {business.city}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           ) : null}
@@ -444,14 +512,21 @@ const LandingPage = () => {
             {categoryList.map((cat) => {
               const Icon = categoryStyles[cat.value].icon
               return (
-                <Link
+                <motion.div
                   key={cat.value}
-                  to="/register"
-                  className={`bg-linear-to-br ${categoryStyles[cat.value].gradient} rounded-xl p-5 text-white flex flex-col items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-md transition-all`}
+                  whileHover={{ y: -4 }}
+                  className="transition-all"
                 >
-                  <Icon size={34} />
-                  <p className="text-lg font-medium text-center">{cat.label}</p>
-                </Link>
+                  <Link
+                    to="/register"
+                    className={`bg-linear-to-br ${categoryStyles[cat.value].gradient} rounded-xl p-5 text-white flex flex-col items-center justify-center gap-2 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all`}
+                  >
+                    <Icon size={34} />
+                    <p className="text-lg font-medium text-center">
+                      {cat.label}
+                    </p>
+                  </Link>
+                </motion.div>
               )
             })}
           </div>

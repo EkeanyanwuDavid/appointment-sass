@@ -27,6 +27,8 @@ import {
   Check,
   MapPin,
   Star,
+  X,
+  ChevronRight,
 } from 'lucide-react'
 
 const STEPS = ['service', 'staff', 'datetime', 'confirm'] as const
@@ -54,6 +56,14 @@ const BookingPage = () => {
   const [selectedDateInput, setSelectedDateInput] = useState('')
   const [slots, setSlots] = useState<string[]>([])
   const [isLoadingSlots, setIsLoadingSlots] = useState(false)
+  const [galleryOpen, setGalleryOpen] = useState(false)
+  const [galleryIndex, setGalleryIndex] = useState(0)
+
+  const galleryImages = business?.gallery?.length
+    ? business.gallery
+    : business?.imageUrl
+      ? [business.imageUrl]
+      : []
 
   useEffect(() => {
     const loadBusiness = async () => {
@@ -163,7 +173,8 @@ const BookingPage = () => {
       navigate('/home')
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } }
-      const message = error.response?.data?.message || 'Failed to create booking'
+      const message =
+        error.response?.data?.message || 'Failed to create booking'
       toast.error(message)
     } finally {
       setIsBooking(false)
@@ -228,6 +239,112 @@ const BookingPage = () => {
           <p className="text-base text-zinc-500 mt-2 leading-7 max-w-md mx-auto">
             {business.description}
           </p>
+
+          {galleryImages.length > 0 && (
+            <>
+              <div className="mt-6">
+                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-blue-600 mb-4">
+                  Service preview
+                </p>
+                <div
+                  className={`grid gap-3 ${
+                    galleryImages.length > 1 ? 'sm:grid-cols-[1.7fr_0.9fr]' : ''
+                  }`}
+                >
+                  <div
+                    className="overflow-hidden rounded-3xl bg-zinc-100 h-72 cursor-pointer"
+                    onClick={() => {
+                      setGalleryIndex(0)
+                      setGalleryOpen(true)
+                    }}
+                  >
+                    <img
+                      src={galleryImages[0]}
+                      alt={`${business.name} preview`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  {galleryImages.length > 1 && (
+                    <div className="grid gap-3">
+                      {galleryImages.slice(1, 4).map((img, index) => (
+                        <div
+                          key={img + index}
+                          className="overflow-hidden rounded-3xl bg-zinc-100 h-32 cursor-pointer"
+                          onClick={() => {
+                            setGalleryIndex(index + 1)
+                            setGalleryOpen(true)
+                          }}
+                        >
+                          <img
+                            src={img}
+                            alt={`${business.name} preview ${index + 2}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {galleryOpen && (
+                <div
+                  className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+                  onClick={() => setGalleryOpen(false)}
+                >
+                  <div
+                    className="relative w-full max-w-5xl rounded-3xl bg-zinc-950 shadow-2xl overflow-hidden"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <button
+                      className="absolute right-4 top-4 z-20 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition"
+                      onClick={() => setGalleryOpen(false)}
+                    >
+                      <X size={18} />
+                    </button>
+                    <div className="relative">
+                      <img
+                        src={galleryImages[galleryIndex]}
+                        alt={`${business.name} slide ${galleryIndex + 1}`}
+                        className="w-full h-[min(70vh,550px)] object-cover"
+                      />
+                      {galleryImages.length > 1 && (
+                        <>
+                          <button
+                            className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20 transition"
+                            onClick={() =>
+                              setGalleryIndex(
+                                (prev) =>
+                                  (prev - 1 + galleryImages.length) %
+                                  galleryImages.length
+                              )
+                            }
+                          >
+                            <ChevronLeft size={20} />
+                          </button>
+                          <button
+                            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20 transition"
+                            onClick={() =>
+                              setGalleryIndex(
+                                (prev) => (prev + 1) % galleryImages.length
+                              )
+                            }
+                          >
+                            <ChevronRight size={20} />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                    <div className="bg-zinc-950 p-4 text-center">
+                      <p className="text-sm text-zinc-200">
+                        {galleryIndex + 1} / {galleryImages.length}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
 
           {totalReviews > 0 && (
             <div className="flex items-center justify-center gap-2 text-sm mt-3">

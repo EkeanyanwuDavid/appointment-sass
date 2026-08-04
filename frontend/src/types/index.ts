@@ -8,6 +8,7 @@ export interface Business {
   address: string
   city: string
   imageUrl: string
+  gallery?: string[]
   isActive: boolean
   ownerId: string
   createdAt: string
@@ -67,7 +68,12 @@ export interface Booking {
 
 export interface Leave {
   _id: string
-  staffId: { _id: string; name: string; email: string; annualLeaveDays?: number }
+  staffId: {
+    _id: string
+    name: string
+    email: string
+    annualLeaveDays?: number
+  }
   startDate: string
   endDate: string
   days: number

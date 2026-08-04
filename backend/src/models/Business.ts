@@ -10,6 +10,7 @@ export interface IBusiness extends Document {
   address: string;
   city: string;
   imageUrl: string;
+  gallery: string[];
   isActive: boolean;
   paystackSubaccountCode: string;
   settlementBankCode: string;
@@ -36,6 +37,7 @@ const BusinessSchema = new Schema<IBusiness>(
     address: { type: String, required: true },
     city: { type: String, required: true },
     imageUrl: { type: String, default: "" },
+    gallery: { type: [String], default: [] },
     isActive: { type: Boolean, default: true },
     paystackSubaccountCode: { type: String, default: "" },
     settlementBankCode: { type: String, default: "" },

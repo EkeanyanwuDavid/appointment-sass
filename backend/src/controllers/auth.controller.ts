@@ -91,6 +91,20 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
   res.status(200).json({ success: true, user });
 });
 
+export const deleteMe = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const user = await User.findById(req.user?._id);
+    if (!user) {
+      res.status(404).json({ success: false, message: "User not found" });
+      return;
+    }
+    await User.findByIdAndDelete(req.user?._id);
+    res
+      .status(200)
+      .json({ success: true, message: "Account deleted successfully" });
+  },
+);
+
 export const forgotPassword = asyncHandler(
   async (req: Request, res: Response) => {
     const { email } = req.body;

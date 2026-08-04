@@ -4,6 +4,7 @@ import {
   login,
   getMe,
   changePassword,
+  deleteMe,
   forgotPassword,
   resetPassword,
 } from "../controllers/auth.controller";
@@ -28,6 +29,7 @@ router.put(
   protect as RequestHandler,
   changePassword as RequestHandler,
 );
+router.delete("/me", protect as RequestHandler, deleteMe as RequestHandler);
 router.post("/forgot-password", strictLimiter, forgotPassword);
 router.put("/reset-password/:token", resetPassword);
 router.get("/google", (req, res, next) => {

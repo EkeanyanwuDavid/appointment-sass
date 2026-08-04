@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import BusinessLayout from '../../components/layout/BusinessLayout'
 import {
   getMyBusiness,
@@ -6,9 +7,12 @@ import {
   getBanks,
   createSubaccount,
 } from '../../api/business.api'
+import { deleteAccount } from '../../api/auth.api'
 import type { Business } from '../../types/index'
 import { toast } from 'sonner'
 import { Loader2, Copy, Check, Search } from 'lucide-react'
+import { useAppDispatch } from '../../store/hooks'
+import { logout } from '../../store/slices/authSlice'
 
 const Settings = () => {
   const [business, setBusiness] = useState<Business | null>(null)
@@ -23,6 +27,7 @@ const Settings = () => {
     city: '',
     category: '',
     imageUrl: '',
+    gallery: '',
   })
 
   const [banks, setBanks] = useState<{ name: string; code: string }[]>([])
@@ -34,7 +39,10 @@ const Settings = () => {
   const [isConnecting, setIsConnecting] = useState(false)
   const [bankSearch, setBankSearch] = useState('')
   const [showBankDropdown, setShowBankDropdown] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const bankDropdownRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   useEffect(() => {
     const fetchBusiness = async () => {
       try {
@@ -52,7 +60,8 @@ const Settings = () => {
           address: biz.address,
           city: biz.city,
           category: biz.category,
-          imageUrl: biz.imgUrl || '',
+          imageUrl: biz.imageUrl || '',
+          gallery: Array.isArray(biz.gallery) ? biz.gallery.join('\n') : '',
         })
       } catch {
         toast.error('Failed to load business info')
@@ -83,7 +92,13 @@ const Settings = () => {
     e.preventDefault()
     setIsSubmitting(true)
     try {
-      await updateBusiness(form)
+      await updateBusiness({
+        ...form,
+        gallery: form.gallery
+          .split(/\r?\n/)
+          .map((url) => url.trim())
+          .filter(Boolean),
+      })
       toast.success('Business updated successfully')
     } catch {
       toast.error('Failed to update business')
@@ -124,6 +139,25 @@ const Settings = () => {
       )
     } finally {
       setIsConnecting(false)
+    }
+  }
+
+  const handleDeleteAccount = async () => {
+    const confirmed = window.confirm(
+      'This will permanently delete your account and sign you out. Continue?'
+    )
+    if (!confirmed) return
+
+    setIsDeleting(true)
+    try {
+      await deleteAccount()
+      dispatch(logout())
+      toast.success('Account deleted successfully')
+      navigate('/login')
+    } catch {
+      toast.error('Failed to delete account')
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -221,6 +255,21 @@ const Settings = () => {
               <p className="text-sm text-zinc-400 mt-1">
                 Paste a link to an image (e.g. from Imgur, Google Drive, or your
                 own hosting)
+              </p>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-zinc-800 mb-1.5">
+                Gallery image URLs
+              </label>
+              <textarea
+                value={form.gallery}
+                onChange={(e) => setForm({ ...form, gallery: e.target.value })}
+                placeholder="One image URL per line"
+                rows={4}
+                className="w-full border border-zinc-200 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
+              />
+              <p className="text-sm text-zinc-400 mt-1">
+                Add up to 4 image URLs to preview your business or services.
               </p>
             </div>
             <div>
@@ -419,11 +468,16 @@ const Settings = () => {
           </h2>
 
           <p className="text-sm text-zinc-500 mb-4">
-            Permanently delete your workspace and all associated data.
+            Permanently delete your account and sign out.
           </p>
 
-          <button className="bg-red-600 text-white rounded-lg px-4 py-3 text-base font-semibold hover:bg-red-700 transition-colors">
-            Delete workspace
+          <button
+            type="button"
+            onClick={handleDeleteAccount}
+            disabled={isDeleting}
+            className="bg-red-600 text-white rounded-lg px-4 py-3 text-base font-semibold hover:bg-red-700 transition-colors disabled:opacity-50"
+          >
+            {isDeleting ? 'Deleting account...' : 'Delete account'}
           </button>
         </div>
       </div>

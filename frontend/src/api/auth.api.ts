@@ -3,6 +3,8 @@ import api from './axios'
 export const changePassword = (newPassword: string) =>
   api.put('/auth/change-password', { newPassword })
 
+export const deleteAccount = () => api.delete('/auth/me')
+
 export const forgotPassword = (email: string) =>
   api.post('/auth/forgot-password', { email })
 
