@@ -1,4 +1,4 @@
-# 📅 Appointment SaaS
+# 📅 BKLY SaaS
 
 A full-stack appointment booking platform that enables customers to book appointments with businesses while providing powerful management tools for business owners, staff, and administrators.
 
